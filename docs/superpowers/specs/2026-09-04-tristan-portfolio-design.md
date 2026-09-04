@@ -5,11 +5,11 @@ Source: `tristan-portfolio-prd.pdf` (Product Requirements Document v1)
 
 ## 1. Overview
 
-High-impact, anti-mainstream personal portfolio for Tristan Edgina Rakhadewa, undergraduate Computer Engineering student at Telkom University, Bandung. Bridges physical-systems engineering with retro-dreamy visual identity. Dark-mode minimalist, tactile micro-interactions, real-time 3D mascot, cinematic scroll-driven intro.
+High-impact, anti-mainstream personal portfolio for Tristan Edgina, undergraduate Computer Engineering student at Telkom University, Bandung. Bridges physical-systems engineering with retro-dreamy visual identity. Dark-mode minimalist, tactile micro-interactions, real-time 3D mascot, cinematic scroll-driven intro.
 
 ## 2. Identity & Content
 
-- Name: Tristan Edgina Rakhadewa
+- Name: Tristan Edgina
 - Role: Computer Engineering undergraduate, Telkom University, Bandung
 - Socials: GitHub `masterdorime`, Instagram `@tristanerdd`, Facebook "Tristan Edgina", email `tristanedginarakhadewa@gmail.com`
 - Projects (all real, seed content for `/projects`):
