@@ -101,7 +101,7 @@ Content-as-code: typed interfaces in `src/data/` (`site.ts`, `projects.ts`). No 
 - `reg_riko_nanachi_from_made_in_abyss.glb` — mascot (compress, ship)
 - `retro_tv.glb` — intro TV (compress, ship)
 - `tv__old_tv__retro_tv.glb` — alternate/backup TV prop
-- `retro_8-bit_console_and_tv.glb` — optional Experiments page prop
+- `retro_8-bit_console_and_tv.glb` — candidate prop for `/experiments`; use only if compressed under 2MB, else skip
 - `just_a_girl.glb`, `162__lcd_display.glb`, `low_poly_handpump.glb` — not used
 
 ## 6. Interactive Components (Reactbits ports, recolored)
