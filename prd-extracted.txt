@@ -1,0 +1,140 @@
+--- PAGE 1 ---
+Product Requirements Document
+TRISTAN'S ANTI-MAINSTREAM CREATIVE PORTFOLIO WEBSITE
+1. Product Overview
+A high-impact, anti-mainstream personal portfolio website designed for Tristan, an undergraduate Computer
+Engineering student at Telkom University, Bandung. The platform bridges rigorous physical systems engineering
+with a deeply atmospheric, retro-dreamy visual identity. It features a dark-mode minimalist aesthetic, tactile micro-
+interactions, an immersive 3D anime girl mascot, and advanced front-end design execution that merges low-level
+engineering precision with cinematic web artistry.
+2. Core Vision & Design Philosophy
+Vibe: Industrial neo-minimalism meets nostalgic retro-dreamy surrealism. Dark, moody, precise, yet imbued with
+warm analog textures, twilight hues, and a soft, memory-like aesthetic.
+Differentiation: Rejecting sterile, template-driven developer layouts in favor of an experimental interface where
+structural systems meet poetic visual storytelling.
+Core Identity Fusion: Showcasing the dual nature of a creative builder—tangible physical systems, custom
+electronics, and real-world creations wrapped in an interface that highlights advanced front-end mastery.
+3. Target Audience
+Industry Recruiters & Tech Leads: Seeking versatile engineering talent with an eye for exceptional UI/UX,
+creative problem-solving, and unique artistic execution.
+Peers & Collaborators: Fellow creators, makers, and engineers looking for project partners in Indonesia and
+globally.
+Tech Community: Open-source maintainers and technical enthusiasts reviewing project case studies.
+4. Visual Identity & Color Palette
+Retro-Dreamy Atmospheric Layers: Subtle film grain overlays, chromatic aberration, and soft vignettes to
+evoke a nostalgic, warm-memory feeling. Typography pairs clean geometric sans-serif body copy with vintage
+technical monospace and occasional whimsical serif headers.
+Color Palette: Deep Obsidian Black (#070709) and Twilight Charcoal (#141419). Typography in Muted Cream
+(#f3f0ea) and Soft Silver (#9494a0). Accents in Dusty Rose (#d4838b), Muted Lavender (#9d8df1), and Warm
+Amber (#e5a954).
+Exclusionary Rule: Absolutely no generic green phosphor terminal colors or aggressive cyberpunk neon
+palettes. Terminal UI elements utilize cool white text with subtle warm amber accents.
+Hero Mascot: A fully optimized, real-time rendered 3D anime girl model styled with soft cel-shading and retro-
+dreamy lighting, positioned on the landing page to track cursor coordinates and respond to interaction.
+5. Front-End Design & Engineering Skillset
+The build requires full deployment of advanced front-end design and development competencies:
+UI/UX & Visual Design Systems: Advanced layout composition, custom design token creation, color theory
+execution for dark-mode contrast, and responsive typography scaling using Tailwind CSS.
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+1
+--- PAGE 2 ---
+Interaction Design & Motion Physics: Physics-based spring animations, fluid gesture handling, custom
+magnetic cursor mechanics, and scroll-linked timeline orchestration using Framer Motion.
+WebGL & Immersive Graphics: Real-time 3D rendering pipeline management, custom GLSL shader
+programming for analog grain/vignette effects, and asset optimization for .glb/.gltf 3D models via Three.js
+and React Three Fiber.
+Component Architecture & State Management: Modular, reusable React component design, clean state
+segregation, and seamless integration with headless content management sources.
+Performance Optimization & Accessibility: Asset lazy-loading, texture compression, Core Web Vitals
+optimization (Lighthouse 95+ target), and semantic HTML structure paired with ARIA attributes.
+6. Site Architecture
+Portfolio Root
+  ├── Landing Page (Hero section with 3D Mascot, retro status badge, quick reel)
+  ├── Projects & Labs (Filterable grid: Physical builds, IoT systems, custom PCB layouts)
+  ├── Experiments (Playground for custom shaders, schematics, analog-style mini-tools)
+  ├── Skills & Tech Matrix (Dedicated interactive breakdown of front-end & engineering
+competencies)
+  ├── About (Telkom University background, retro-engineering philosophy)
+  └── Contact & Terminal (Interactive contact form with a sleek command-line interface) 
+7. Detailed Feature Requirements & Assets
+Module Functional Description Technical Requirement
+3D Hero Mascot Interactive 3D anime character rendered on landing
+page with retro-dreamy lighting; head/eyes track
+cursor movement.
+Optimized .glb/.gltf model,
+Three.js, R3F, custom cel-shader.
+Interactive Cursor & Grain Custom pointer with magnetic snap, paired with
+toggleable film grain and chromatic aberration.
+Framer Motion physics, CSS SVG
+grain filters, custom shaders.
+Project Showcase Filterable grid separating physical builds and software
+projects with immersive case study modals.
+Headless CMS / JSON data,
+responsive image/video galleries.
+Terminal Contact Box Interactive command-line interface alongside standard
+form for commands (contact, status).
+Custom React state-driven
+command parser.
+Telkom Univ Badge &
+Status
+Live indicator showing current academic status at
+Telkom University, Bandung, in vintage passport
+aesthetic.
+Dynamic timestamp / local time
+widget + status state.
+8. Technical Stack
+Frontend Framework: Next.js (React) for SSR, routing, and SEO optimization.
+Styling & Design System: Tailwind CSS with custom tokens, fonts, and dark-mode variables.
+3D & Graphics: Three.js, React Three Fiber, @react-three/drei.
+Animation & Motion: Framer Motion for spring physics and layout transitions.
+Deployment & Hosting: Vercel with edge caching and custom domain support.
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+2
+--- PAGE 3 ---
+9. Phased Development Roadmap
+Phase 1: Foundation & 3D Integration — Set up Next.js skeleton, Tailwind configuration, dark-mode retro-
+dreamy color scheme, and integrate the 3D anime mascot model with cursor tracking.
+Phase 2: Project Architecture & Content — Build out project grid, case study modals, and detail pages
+highlighting physical systems and engineering assets.
+Phase 3: Micro-interactions & Polish — Implement custom cursor physics, retro terminal contact box, film
+grain shaders, performance optimization, and mobile responsiveness.
+10. AI Assistant Guidelines, skill.md Execution & Component Sourcing
+When handing over this PRD to an AI coding assistant (such as Claude), the assistant must strictly follow these
+operational directives:
+Mandatory External Component Libraries: Pull, adapt, and integrate modern, high-end components and
+animations directly from advanced community registries such as 21st.dev, Reactbits, Aceternity UI, and 
+Magic UI. Do not write boilerplate interactive elements from scratch.
+Design Token Enforcement: Reference design token rules outlined in skill.md for spacing, typography, and
+retro-dreamy color palette.
+Motion & Animation Standards: Apply exact Framer Motion spring physics presets and transition curves.
+WebGL/R3F Best Practices: Utilize memory management, canvas disposal, and shader optimization patterns
+to prevent memory leaks with the 3D mascot.
+Clean Code & Modularity: Adhere to component architecture standards (separation of concerns, TypeScript
+typing, and accessibility).
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+3
