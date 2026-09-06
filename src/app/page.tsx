@@ -24,6 +24,7 @@ const WarpText = dynamic(() => import('@/components/ui/WarpText'), { ssr: false 
 const TextLoop = dynamic(() => import('@/components/ui/TextLoop'), { ssr: false });
 const DriftWall = dynamic(() => import('@/components/ui/DriftWall'), { ssr: false });
 const ScrollReveal = dynamic(() => import('@/components/ui/ScrollReveal'), { ssr: false });
+const Lanyard = dynamic(() => import('@/components/ui/Lanyard'), { ssr: false });
 
 export default function Home() {
   const reduceMotion = useReducedMotion();
@@ -31,6 +32,7 @@ export default function Home() {
   const [entered, setEntered] = useState(false);
   const [flash, setFlash] = useState(false);
   const [filter, setFilter] = useState<ProjectFilter>('all');
+  const [heroView, setHeroView] = useState<'lanyard' | 'girl'>('lanyard');
   const visible = useMemo(() => filterProjects(PROJECTS, filter), [filter]);
 
   const showIntro = !entered && !reduceMotion;
@@ -88,9 +90,33 @@ export default function Home() {
             </div>
           </Reveal>
         </div>
-        <Reveal delay={0.1} className="hero-model">
-          <Girl />
-        </Reveal>
+        <div>
+          <div className="filter-bar" role="group" aria-label="Hero display" style={{ margin: '0 0 0.75rem' }}>
+            {(['lanyard', 'girl'] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                className="filter-btn"
+                aria-pressed={heroView === v}
+                onClick={() => setHeroView(v)}
+              >
+                {v === 'lanyard' ? 'id card' : '3d muse'}
+              </button>
+            ))}
+          </div>
+          <Reveal delay={0.1} className="hero-model">
+            {heroView === 'lanyard' ? (
+              <Lanyard
+                frontImage="/images/lanyard-photo.jpg"
+                backImage="/images/lanyard-photo.jpg"
+                strapColor={signal}
+                lanyardWidth={1}
+              />
+            ) : (
+              <Girl />
+            )}
+          </Reveal>
+        </div>
         <div className="hero-loop" aria-hidden={false}>
           <TextLoop
             text="Hardware ✦ IoT Systems ✦ AI Devices ✦ Creative Frontend"
