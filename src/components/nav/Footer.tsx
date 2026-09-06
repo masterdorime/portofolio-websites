@@ -18,6 +18,7 @@ export default function Footer() {
         ))}
       </p>
       <p>© {new Date().getFullYear()} {SITE.name} — {SITE.city}, built by hand</p>
+      <p>Set in Space Grotesk · IBM Plex Mono · Instrument Serif</p>
     </footer>
   );
 }

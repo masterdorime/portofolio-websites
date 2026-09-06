@@ -25,6 +25,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         </Link>
       </h3>
       <p>{project.tagline}</p>
+      <p className="card-desc">{project.description}</p>
       <div className="case-meta">
         <span className="tag">{project.year}</span>
         {project.tech.slice(0, 3).map((t) => (

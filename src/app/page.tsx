@@ -22,6 +22,7 @@ const Girl = dynamic(() => import('@/components/three/Girl'), { ssr: false });
 const WarpText = dynamic(() => import('@/components/ui/WarpText'), { ssr: false });
 const TextLoop = dynamic(() => import('@/components/ui/TextLoop'), { ssr: false });
 const DriftWall = dynamic(() => import('@/components/ui/DriftWall'), { ssr: false });
+const ScrollReveal = dynamic(() => import('@/components/ui/ScrollReveal'), { ssr: false });
 
 export default function Home() {
   const reduceMotion = useReducedMotion();
@@ -65,6 +66,19 @@ export default function Home() {
           <Reveal delay={0.1}>
             <p className="hero-role">computer engineering · physical systems · creative frontend — bandung, id</p>
           </Reveal>
+          <Reveal delay={0.13}>
+            <p className="hero-intro">
+              I&apos;m Tristan Edgina, a Computer Engineering undergraduate at Telkom
+              University, Bandung. I build physical things that sense the world — portable
+              laboratories, garments with opinions, water you can trust — and I present
+              them through interfaces given the same care as the circuits.
+            </p>
+            <p className="hero-meta">
+              <span><strong>{PROJECTS.length}</strong> builds documented</span>
+              <span><strong>wib</strong> utc+7, bandung</span>
+              <span><strong>open</strong> to collaborations</span>
+            </p>
+          </Reveal>
           <Reveal delay={0.15}>
             <div className="hero-cta">
               <Link href="#projects" className="btn" data-magnetic>view builds →</Link>
@@ -90,11 +104,15 @@ export default function Home() {
 
         <section id="projects" className="section" aria-label="Projects and labs">
           <Reveal>
-            <p className="page-kicker">projects & labs</p>
+            <p className="page-kicker">01 — projects & labs</p>
             <h2 className="page-title">Physical builds, IoT systems, custom silicon-adjacent tinkering.</h2>
             <p className="page-lede">
-              Every entry below is a real device: sensed, soldered, and shipped as far as a
-              student lab allows — then wrapped in an interface worth touching.
+              Every entry below is a real device: sensed, soldered, and iterated as far
+              as a student lab allows. Each one started as a stubborn real-world
+              annoyance — slow lab results, untrustworthy water, clothing that
+              can&apos;t keep up — and became a box of sensors with an opinion. Open
+              any build for the full breakdown: the problem, the engineering
+              approach, and exactly what sits inside the enclosure.
             </p>
           </Reveal>
           <Reveal delay={0.06}>
@@ -120,41 +138,52 @@ export default function Home() {
           </div>
         </section>
 
+        <div className="story-bridge" aria-label="Bridge: from builds to builder">
+          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+            Every device leaves the bench. What stays behind is the way of working — this is mine.
+          </ScrollReveal>
+        </div>
+
         <section id="about" className="section" aria-label="About">
           <Reveal>
-            <p className="page-kicker">about</p>
+            <p className="page-kicker">02 — about</p>
             <h2 className="page-title">Precision instruments, memory-soft interfaces.</h2>
-            <p className="page-lede">
-              Tristan Edgina is a Computer Engineering undergraduate at Telkom University,
-              Bandung. The work lives at the seam between tangible physical systems — custom
-              electronics, sensor rigs, real enclosures — and front-end craft that treats
-              every pixel like lab equipment: calibrated, deliberate, and quietly warm.
-            </p>
           </Reveal>
+          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+            I study Computer Engineering at Telkom University, Bandung, where I learned that a schematic and a stylesheet are the same thing: instructions for how a stranger should feel when they meet your work.
+          </ScrollReveal>
+          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+            Most weeks you will find me at the bench — soldering under a desk lamp, arguing with datasheets, coaxing an oscilloscope to confess what the firmware did last night. I like builds you can weigh in your hand, failures you can smell, and fixes that involve a screwdriver.
+          </ScrollReveal>
+          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+            And I like interfaces with the same honesty: no spinners hiding broken state, no neon shouting over weak ideas. This site is both halves at once — the devices above, presented the way I wish every datasheet looked.
+          </ScrollReveal>
+          <div className="story-bridge story-bridge--quote" aria-label="Philosophy">
+            <ScrollReveal baseOpacity={0.15} baseRotation={1.5}>
+              Structure you can measure, atmosphere you can feel — engineering with a memory.
+            </ScrollReveal>
+          </div>
           <Reveal delay={0.06}>
-            <div className="card" style={{ marginTop: '1.5rem' }}>
-              <h3>retro-engineering philosophy</h3>
-              <p>
-                Industrial neo-minimalism meets nostalgic retro-dreamy surrealism. Dark,
-                moody, precise — yet wrapped in warm analog texture and twilight hues. No
-                sterile templates, no neon clichés: structure meets poetic visual
-                storytelling, and every build has to survive both the oscilloscope and
-                the screenshot.
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
             <p className="page-kicker" style={{ marginTop: '2rem' }}>skills & tech matrix</p>
             <SkillsMatrix />
           </Reveal>
         </section>
 
+        <div className="story-bridge" aria-label="Bridge: from story to contact">
+          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+            Tools and tales are only half the circuit. The other half is people — come say hello.
+          </ScrollReveal>
+        </div>
+
         <section id="contact" className="section" aria-label="Contact">
           <Reveal>
-            <p className="page-kicker">contact</p>
+            <p className="page-kicker">03 — contact</p>
             <h2 className="page-title">Open a channel.</h2>
             <p className="page-lede">
-              A form for the polite, a terminal for the curious. Both land in the same inbox.
+              The fastest way to reach me is email — I read everything myself. Writing
+              about a collaboration? Tell me what it senses, what it moves, or what it
+              should make someone feel. Hardware people and web people are both
+              welcome; people who are a little of each get answered first.
             </p>
           </Reveal>
           <div className="contact-grid" style={{ marginTop: '1.75rem' }}>

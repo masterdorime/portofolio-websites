@@ -416,6 +416,71 @@ html.custom-cursor * {
   font-size: 0.875rem;
   margin-top: 1rem;
 }
+.hero-intro {
+  margin-top: 1.25rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.7;
+  max-width: 34rem;
+  color: var(--color-foreground);
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+.hero-meta strong {
+  color: var(--color-accent-amber);
+  font-weight: 500;
+}
+
+/* Story bridges: scroll-revealed connective tissue between sections. */
+.story-bridge {
+  max-width: 56rem;
+  margin: 4.5rem auto;
+  padding: 0 clamp(1rem, 4vw, 4rem);
+}
+.story-bridge .scroll-reveal-text {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3.4vw, 2.5rem);
+  line-height: 1.4;
+}
+.story-bridge--quote .scroll-reveal-text {
+  border-left: 2px solid var(--color-accent-amber);
+  padding-left: 1.5rem;
+}
+
+/* Project card body copy. */
+.card-desc {
+  margin-top: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+}
+
+/* Case-study prev/next walk. */
+.case-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid color-mix(in oklab, var(--color-muted) 25%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+.case-nav a {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+.case-nav a:hover {
+  color: var(--color-accent-amber);
+}
 .hero-cta {
   display: flex;
   flex-wrap: wrap;
