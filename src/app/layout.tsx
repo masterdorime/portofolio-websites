@@ -3,6 +3,8 @@ import { Space_Grotesk, IBM_Plex_Mono, Instrument_Serif } from 'next/font/google
 import './globals.css';
 import GrainOverlay from '@/components/atmosphere/GrainOverlay';
 import MagneticCursor from '@/components/cursor/MagneticCursor';
+import NavBar from '@/components/nav/NavBar';
+import Footer from '@/components/nav/Footer';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -38,7 +40,9 @@ export default function RootLayout({
       <body className="min-h-screen bg-background text-foreground antialiased vignette">
         <GrainOverlay />
         <MagneticCursor />
+        <NavBar />
         {children}
+        <Footer />
       </body>
     </html>
   );
