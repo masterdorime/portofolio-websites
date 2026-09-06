@@ -26,6 +26,24 @@ const TextLoop = dynamic(() => import('@/components/ui/TextLoop'), { ssr: false 
 const DriftWall = dynamic(() => import('@/components/ui/DriftWall'), { ssr: false });
 const ScrollReveal = dynamic(() => import('@/components/ui/ScrollReveal'), { ssr: false });
 const Lanyard = dynamic(() => import('@/components/ui/Lanyard'), { ssr: false });
+const DepthCarousel = dynamic(() => import('@/components/ui/DepthCarousel'), { ssr: false });
+
+const PHONE_PHOTOS: Array<{ slug: string; alt: string }> = [
+  { slug: 'malas-edit', alt: 'Too lazy to edit, black and white' },
+  { slug: 'terlalu-banyak-nama', alt: 'Too many names on wood, untold stories' },
+  { slug: 'jellyfish-1', alt: 'Jellyfish study part one' },
+  { slug: 'tribute', alt: 'Tribute' },
+  { slug: 'self-less', alt: 'Self less' },
+  { slug: 'jellyfish-2', alt: 'Jellyfish study part two' },
+  { slug: 'tribute-2', alt: 'Tribute, second frame' },
+  { slug: 'tuk-suatu', alt: 'For something that never existed' },
+  { slug: 'bento-preman', alt: 'Bento the stray bruiser cat' },
+  { slug: 'bobby', alt: 'Bobby' },
+  { slug: 'bento-namanya', alt: 'His name is Bento' },
+  { slug: 'nippon', alt: 'Nippon' },
+  { slug: 'jellyfish-3', alt: 'Jellyfish study part three' },
+  { slug: 'fuyu', alt: 'Fuyu' },
+];
 
 export default function Home() {
   const reduceMotion = useReducedMotion();
@@ -183,6 +201,38 @@ export default function Home() {
                 <ProjectCard key={p.slug} project={p} />
               ))}
             </AnimatePresence>
+          </div>
+
+          <div style={{ marginTop: '4.236rem' }}>
+            <Reveal>
+              <p className="page-kicker">{t.phone.kicker}</p>
+              <h2 className="page-title">
+                {t.phone.titleA} <s>{t.phone.struck}</s> {t.phone.titleB}
+              </h2>
+              <p className="page-lede">{t.phone.sub}</p>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <div style={{ marginTop: '1.75rem' }}>
+                <DepthCarousel
+                  items={PHONE_PHOTOS.map(({ slug, alt }) => ({
+                    image: `/images/phoneography/${slug}.webp`,
+                    alt,
+                  }))}
+                  cardWidth={280}
+                  cardHeight={360}
+                  tint={paper}
+                  autoplay
+                  autoplayDelay={2800}
+                />
+              </div>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <div className="hero-cta">
+                <a href={SITE.instagram} target="_blank" rel="noreferrer noopener" className="btn" data-magnetic>
+                  {t.phone.cta}
+                </a>
+              </div>
+            </Reveal>
           </div>
         </section>
 

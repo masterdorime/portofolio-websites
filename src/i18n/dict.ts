@@ -57,6 +57,14 @@ export interface Dict {
     hardware: string;
   };
   filters: { all: string };
+  phone: {
+    kicker: string;
+    titleA: string;
+    struck: string;
+    titleB: string;
+    sub: string;
+    cta: string;
+  };
   bridgePeople: string;
   contact: {
     kicker: string;
@@ -179,6 +187,14 @@ export const dict: Record<Lang, Dict> = {
       hardware: 'Hardware breakdown',
     },
     filters: { all: 'all' },
+    phone: {
+      kicker: 'side quest',
+      titleA: 'i also do',
+      struck: 'photography',
+      titleB: 'phone’ography',
+      sub: '(i don’t have a camera yet — everything here was captured on my mobile phone) these are some of the photos i took',
+      cta: 'visit my insta for more →',
+    },
     bridgePeople:
       'Tools and code are cool, but talking to people is better. Hit me up.',
     contact: {
@@ -269,6 +285,14 @@ export const dict: Record<Lang, Dict> = {
       hardware: 'Bedah hardware',
     },
     filters: { all: 'semua' },
+    phone: {
+      kicker: 'misi sampingan',
+      titleA: 'gue juga bisa',
+      struck: 'fotografi',
+      titleB: 'phone’ography',
+      sub: '(belum punya kamera — semua ini dijepret pakai HP) ini beberapa foto gue',
+      cta: 'mampir ke insta buat lebih banyak →',
+    },
     bridgePeople:
       'Ngoprek kode sama hardware emang seru, tapi kenalan sama orang baru jauh lebih asik. Sapa gue aja.',
     contact: {
