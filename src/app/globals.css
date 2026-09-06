@@ -328,7 +328,7 @@ html.custom-cursor * {
   line-height: 1.7;
 }
 .section {
-  margin-top: 3.5rem;
+  margin-top: 2.5rem;
 }
 .card {
   border: 1px solid color-mix(in oklab, var(--color-muted) 25%, transparent);
@@ -384,9 +384,9 @@ html.custom-cursor * {
 /* Hero (landing) */
 .hero {
   display: grid;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: center;
-  padding: 7.5rem clamp(1rem, 4vw, 4rem) 2rem;
+  padding: 5rem clamp(1rem, 4vw, 4rem) 1rem;
 }
 @media (min-width: 900px) {
   .hero { grid-template-columns: 1.1fr 0.9fr; }
@@ -489,7 +489,7 @@ html.custom-cursor * {
 }
 .hero-model {
   position: relative;
-  min-height: min(78vh, 620px);
+  min-height: min(62vh, 500px);
   height: 100%;
 }
 /* faint aura bleeding into the page — atmosphere, not a container */
