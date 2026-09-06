@@ -51,11 +51,26 @@ function TetoModel() {
   const rig = useMemo(() => {
     const eyes: THREE.Object3D[] = [];
     let head: THREE.Object3D | null = null;
+    const meshes: THREE.Mesh[] = [];
     gltf.scene.traverse((obj) => {
+      const mesh = obj as THREE.Mesh;
+      if (mesh.isMesh && mesh.geometry) meshes.push(mesh);
       if (!(obj as THREE.Bone).isBone) return;
       if (/eye/i.test(obj.name)) eyes.push(obj);
       else if (!head && /head/i.test(obj.name)) head = obj;
     });
+    // Drop outlier shells: any mesh >3x the median size (backdrop/stage
+    // volumes dwarfing the character — measured one at 4x median here).
+    // Rendered framing uses only what remains.
+    const sizes = meshes.map((m) => {
+      const b = new THREE.Box3().setFromObject(m);
+      return b.getSize(new THREE.Vector3()).length();
+    });
+    const sorted = [...sizes].sort((a, b) => a - b);
+    const median = sorted[Math.floor(sorted.length / 2)] || 1;
+    for (let i = 0; i < meshes.length; i++) {
+      if (sizes[i] > median * 3) meshes[i].visible = false;
+    }
     return {
       eyes,
       head,
@@ -66,7 +81,15 @@ function TetoModel() {
   }, [gltf]);
 
   const fit = useMemo(() => {
-    const box = new THREE.Box3().setFromObject(gltf.scene);
+    const box = new THREE.Box3();
+    const tmp = new THREE.Box3();
+    gltf.scene.updateWorldMatrix(true, true);
+    gltf.scene.traverse((obj) => {
+      const mesh = obj as THREE.Mesh;
+      if (!mesh.isMesh || !mesh.visible || !mesh.geometry) return;
+      tmp.setFromObject(mesh);
+      if (!tmp.isEmpty()) box.union(tmp);
+    });
     const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
     const s = 2.4 / Math.max(size.x, size.y, size.z);
