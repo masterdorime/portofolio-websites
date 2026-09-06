@@ -106,7 +106,7 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
   }, [scrollYProgress]);
 
   const glowOpacity = useTransform(scrollYProgress, [0.3, 1], [0, 1]);
-  const bg = theme === 'light' ? '#fafafa' : '#070709';
+  const bg = theme === 'light' ? '#fafafa' : '#0e0e10';
 
   return (
     <div ref={wrapRef} className="intro-wrap">
@@ -120,9 +120,9 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
             <color attach="background" args={[bg]} />
             <fog attach="fog" args={[bg, 9, 26]} />
             <ambientLight intensity={0.35} />
-            <directionalLight position={[3, 4, 5]} intensity={1.1} color="#e5a954" />
-            <directionalLight position={[-4, 1, 3]} intensity={0.4} color="#9d8df1" />
-            <pointLight position={[0, 0.4, 1.6]} intensity={1.5 + phase * 9} color="#e5a954" distance={8} />
+            <directionalLight position={[3, 4, 5]} intensity={1.1} color="#ff4d00" />
+            <directionalLight position={[-4, 1, 3]} intensity={0.4} color="#8e8e96" />
+            <pointLight position={[0, 0.4, 1.6]} intensity={1.5 + phase * 9} color="#ff4d00" distance={8} />
             <Suspense fallback={null}>
               <TvModel onEnter={onEnter} />
             </Suspense>

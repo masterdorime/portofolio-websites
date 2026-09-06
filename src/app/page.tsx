@@ -45,8 +45,9 @@ export default function Home() {
     }, 320);
   };
 
-  const ink = theme === 'light' ? '#101014' : '#f3f0ea';
-  const paper = theme === 'light' ? '#fafafa' : '#070709';
+  const ink = theme === 'light' ? '#101014' : '#f4f4f2';
+  const paper = theme === 'light' ? '#fafafa' : '#0e0e10';
+  const signal = theme === 'light' ? '#c23e00' : '#ff4d00';
   const mailto = `mailto:${SITE.email}`;
 
   return (
@@ -98,7 +99,7 @@ export default function Home() {
             curviness={20}
             ribbonWidth={64}
             color={ink}
-            ribbonColor="#d4838b"
+            ribbonColor={signal}
           />
         </div>
       </div>
