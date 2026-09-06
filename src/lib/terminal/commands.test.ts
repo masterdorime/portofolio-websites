@@ -37,7 +37,7 @@ describe('runCommand', () => {
 
   it('projects answers with all three project names', () => {
     const text = runCommand('projects').lines.map((l) => l.text).join('\n');
-    expect(text).toContain('Uricheck');
+    expect(text).toContain('Urocheck');
     expect(text).toContain('Puresip');
     expect(text).toContain('Techware');
   });
@@ -75,12 +75,12 @@ describe('runCommand in Indonesian', () => {
   it('whoami answers in Bahasa', () => {
     const text = runCommand('whoami', new Date(), 'id').lines.map((l) => l.text).join('\n');
     expect(text).toContain('Tristan Edgina');
-    expect(text).toMatch(/mahasiswa/i);
+    expect(text).toContain('Telkom');
   });
 
   it('projects uses Indonesian taglines', () => {
     const text = runCommand('projects', new Date(), 'id').lines.map((l) => l.text).join('\n');
-    expect(text).toContain('Uricheck');
+    expect(text).toContain('Urocheck');
     expect(text).toContain('portabel');
   });
 

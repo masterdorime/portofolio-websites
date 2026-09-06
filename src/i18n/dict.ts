@@ -78,62 +78,62 @@ export interface Dict {
 }
 
 const enProjectText: Record<string, ProjectText> = {
-  uricheck: {
-    tagline: 'Portable AI urine analysis',
+  urocheck: {
+    tagline: 'Portable AI urine analysis device',
     description:
-      'Portable AI-powered urine checker device; on-device AI determines symptoms the user may have. Conceived for bedrooms and village clinics rather than laboratories — screening that fits in a drawer and answers in minutes, with its reasoning kept deliberately legible.',
+      'A portable, AI-powered urine checker designed for quick screening at home or in local clinics. It gives fast results right on the device without needing a bulky lab setup.',
     problem:
-      'Laboratory urinalysis is slow, expensive, and unavailable outside clinics. People with recurring renal-health concerns need a fast, private check at home. The gap is not just cost — it is the days of anxious waiting between giving a sample and understanding what it means, a wait that keeps people from checking at all.',
+      'Lab tests for basic urinalysis take too long and cost more than they should for quick check-ups. People dealing with recurring health tracking need something faster and private at home instead of waiting days for results.',
     approach:
-      'Sensor array captures chemical markers; an on-device inference model maps readings to likely symptom patterns, returning instant guidance with a confidence level instead of waiting days for lab results. Everything runs locally on the microcontroller: no samples leave the room, no account is required, and the output is framed as guidance toward a professional, never as a diagnosis.',
+      'Built an optical sensor array to read test strips, paired with an edge-AI model running locally on a microcontroller. It processes data right on the spot—no cloud dependency, no stored private data, just quick, practical feedback.',
   },
   puresip: {
-    tagline: 'Ultrafiltration straw with live sensors',
+    tagline: 'Ultrafiltration straw with real-time sensors',
     description:
-      'Portable ultrafiltration straw with multiple sensors ensuring safe drinkable water anywhere you go. It pairs a hollow-fiber membrane with live quality readouts, so the straw does not just filter — it testifies, sip by sip, that the water is actually safe.',
+      "A portable water filtration straw equipped with live sensors. It doesn't just filter out bad stuff; it actually tells you in real-time whether the water you're drinking is safe.",
     problem:
-      'Hikers, travelers, and disaster-zone residents cannot trust untreated water sources. Existing filter straws give no feedback on whether the water is actually safe right now. A filter is a promise you cannot verify — and when the membrane fouls or the source is worse than it looks, silence is the worst possible interface.',
+      "When you're out hiking or dealing with an emergency, standard filtration gear is basically a guessing game. You never really know if the filter is failing or if the water is actually safe to drink.",
     approach:
-      'Hollow-fiber ultrafiltration paired with live turbidity and TDS monitoring. Sensors gate the drinking path and report water quality in real time, so the user knows every sip meets safety thresholds. The electronics sip power rather than gulp it: the whole sensing chain is budgeted for multi-day trips away from any outlet.',
+      'Combines a hollow-fiber ultrafiltration membrane with live TDS and turbidity sensors. The built-in low-power MCU monitors water quality continuously and gives immediate feedback so you can drink with confidence.',
   },
   techware: {
-    tagline: 'AI-powered thermal jacket',
+    tagline: 'Smart thermal jacket',
     description:
-      'AI-powered jacket with self-determining heat and cold control, ensuring perfect body temperature. Distributed thermal elements and skin sensors close the loop around comfort itself — clothing that notices you are about to overheat before you do.',
+      'An AI-assisted smart jacket that automatically adjusts its heating and cooling elements based on your body temperature and environment, keeping you comfortable without manual adjustments.',
     problem:
-      'Layered clothing is a static compromise. Athletes and commuters in swing climates overheat mid-activity then chill at rest because garments cannot adapt. Every existing "heated jacket" is a dumb resistor with a switch; none of them know whether you are actually warm.',
+      "Traditional layered clothing is rigid. If you're commuting or exercising in changing weather, you either overheat or freeze because regular jackets can't adapt to your body's thermal shifts.",
     approach:
-      'Distributed thermal elements and skin/environment sensors feed an edge model that predicts comfort drift and actuates heating or active cooling before discomfort arrives. Inference stays on the garment over a low-energy link: the jacket keeps working in a tunnel, on a trail, or anywhere the cloud is a rumor.',
+      'Embedded skin sensors and distributed heating elements controlled by an edge algorithm. It predicts your comfort level and adjusts temperature proactively, running entirely on a small wearable battery pack.',
   },
 };
 
 const idProjectText: Record<string, ProjectText> = {
-  uricheck: {
-    tagline: 'Analisis urine AI portabel',
+  urocheck: {
+    tagline: 'Alat analisis urine AI portabel',
     description:
-      'Perangkat pemeriksa urine portabel bertenaga AI; AI di perangkat menentukan gejala yang mungkin dimiliki pengguna. Dirancang untuk kamar tidur dan klinik desa, bukan laboratorium — skrining yang muat di laci dan menjawab dalam hitungan menit, dengan penalaran yang dibuat sele gamblang.',
+      'Perangkat cek urine portabel bertenaga AI buat skrining cepat di rumah atau klinik kecil. Bisa ngasih hasil instan langsung di perangkat tanpa harus nunggu alat lab besar.',
     problem:
-      'Urinanalisis laboratorium lambat, mahal, dan tak tersedia di luar klinik. Penderita gangguan ginjal berulang butuh pemeriksaan cepat dan privat di rumah. Kesenjangannya bukan sekadar biaya — melainkan hari-hari menunggu cemas antara memberikan sampel dan memahami artinya, penantian yang membuat orang enggan memeriksa.',
+      'Tes urin standar di lab kadang kelamaan dan gak praktis buat sekadar ngecek kondisi rutin. Orang-orang yang butuh memantau kesehatan berkala butuh cara yang cepat dan privat di rumah.',
     approach:
-      'Deretan sensor menangkap penanda kimia; model inferensi di perangkat memetakan hasil bacaan ke pola gejala, memberi panduan instan beserta tingkat kepercayaan alih-alih menunggu hasil lab berhari-hari. Semuanya berjalan lokal di mikrokontroler: tak ada sampel yang keluar ruangan, tak perlu akun, dan keluarannya dibingkai sebagai panduan menuju tenaga profesional, bukan diagnosis.',
+      'Pakai susunan sensor optik buat baca strip uji, digabung sama model AI kecil yang jalan langsung di mikrokontroler. Semua pemrosesan jalan secara lokal: gak butuh internet, data aman di device, langsung keluar hasilnya.',
   },
   puresip: {
-    tagline: 'Sedotan ultrafiltrasi bersensor langsung',
+    tagline: 'Sedotan ultrafiltrasi dengan sensor kualitas air',
     description:
-      'Sedotan ultrafiltrasi portabel dengan banyak sensor yang memastikan air minum aman di mana pun Anda berada. Ia memadukan membran hollow-fiber dengan pembacaan kualitas langsung, sehingga sedotan ini tak sekadar menyaring — ia bersaksi, tegukan demi tegukan, bahwa airnya benar-benar aman.',
+      'Sedotan filter air portabel yang dilengkapi sensor digital. Jadi gak cuma nyaring kotoran doang, tapi alat ini ngasih tahu secara real-time kalau air yang lu minum beneran aman.',
     problem:
-      'Pendaki, pelancong, dan warga zona bencana tak bisa memercayai sumber air mentah. Sedotan filter yang ada tak memberi umpan balik apakah airnya benar-benar aman saat ini juga. Filter adalah janji yang tak bisa diverifikasi — dan saat membran jenuh atau sumbernya lebih buruk dari kelihatannya, diam adalah antarmuka terburuk.',
+      'Pas lagi di alam bebas atau darurat, pakai filter air biasa tuh untung-untungan. Lu gak bakal tahu kapan filternya jebol atau airnya masih layak minum apa gak.',
     approach:
-      'Ultrafiltrasi hollow-fiber dipadukan dengan pemantauan kekeruhan dan TDS langsung. Sensor menjaga jalur minum dan melaporkan kualitas air secara real-time, sehingga pengguna tahu setiap tegukan memenuhi ambang aman. Elektronikanya mengirit daya, bukan rakus: seluruh rantai sensing dianggarkan untuk perjalanan berhari-hari jauh dari colokan.',
+      'Gabungin membran ultrafiltrasi *hollow-fiber* dengan sensor TDS dan kekeruhan. MCU hemat daya mantau kualitas air terus-menerus, jadi ada indikator jelas sebelum air masuk ke mulut.',
   },
   techware: {
-    tagline: 'Jaket termal bertenaga AI',
+    tagline: 'Jaket thermal pintar',
     description:
-      'Jaket bertenaga AI dengan kontrol panas dan dingin mandiri, memastikan suhu tubuh sempurna. Elemen termal tersebar dan sensor kulit menutup loop di sekitar kenyamanan itu sendiri — pakaian yang menyadari Anda akan kepanasan sebelum Anda sadar.',
+      'Jaket pintar berbasis AI yang bisa ngatur sendiri kapan harus kasih panas atau pendinginan sesuai suhu tubuh dan lingkungan sekitar, tanpa perlu repot pencet tombol manual.',
     problem:
-      'Pakaian berlapis adalah kompromi statis. Atlet dan komuter di iklim yang berubah-ubah kepanasan saat beraktivitas lalu kedinginan saat istirahat karena pakaian tak bisa beradaptasi. Setiap "jaket pemanas" yang ada hanyalah resistor bodoh dengan saklar; tak satu pun tahu apakah Anda benar-benar hangat.',
+      'Pakai jaket berlapis-lapis itu ribet. Kalau lu lagi aktif di cuaca yang berubah-ubah, seringnya malah kepanasan pas gerak terus kedinginan pas diem, karena jaket biasa gak bisa menyesuaikan diri.',
     approach:
-      'Elemen termal tersebar dan sensor kulit/lingkungan memberi umpan pada model edge yang memprediksi pergeseran kenyamanan lalu mengaktuasi pemanas atau pendingin aktif sebelum rasa tak nyaman tiba. Inferensi tetap di pakaian melalui tautan hemat energi: jaket tetap bekerja di terowongan, di jalur pendakian, atau di mana pun cloud hanya tinggal rumor.',
+      'Nyematkan sensor suhu kulit dan elemen pemanas fleksibel yang diatur sama algoritma lokal. Sistemnya memprediksi perubahan suhu tubuh lu dan langsung menyesuaikan otomatis pakai baterai portable.',
   },
 };
 
@@ -142,36 +142,36 @@ export const dict: Record<Lang, Dict> = {
     nav: { about: 'about', projects: 'projects', contact: 'contact' },
     heroView: { lanyard: 'id card', girl: '3d muse' },
     hero: {
-      role: 'computer engineering · physical systems · creative frontend — bandung, id',
+      role: 'computer engineering · hardware & iot · frontend dev — bandung, id',
       intro:
-        "I'm Tristan Edgina, a Computer Engineering undergraduate at Telkom University, Bandung. I build physical things that sense the world — portable laboratories, garments with opinions, water you can trust — and I present them through interfaces given the same care as the circuits.",
-      buildsLabel: 'builds documented',
+        "I'm Tristan Edgina, a Computer Engineering student at Telkom University, Bandung. I build physical stuff that actually interacts with the real world and wrap them in clean, solid web interfaces.",
+      buildsLabel: 'documented builds',
       tzValue: 'utc+7, bandung',
       openLabel: 'open',
-      openValue: 'to collaborations',
-      ctaAbout: 'meet the builder →',
+      openValue: 'to collab',
+      ctaAbout: 'check out my work →',
       ctaContact: 'say hello',
     },
     badge: 'undergrad',
     marquee: 'Hardware ✦ IoT Systems ✦ AI Devices ✦ Creative Frontend',
     about: {
       kicker: '01 — about',
-      title: 'Precision instruments, memory-soft interfaces.',
+      title: 'Circuit boards and clean code.',
       story: [
-        'I study Computer Engineering at Telkom University, Bandung, where I learned that a schematic and a stylesheet are the same thing: instructions for how a stranger should feel when they meet your work.',
-        'Most weeks you will find me at the bench — soldering under a desk lamp, arguing with datasheets, coaxing an oscilloscope to confess what the firmware did last night. I like builds you can weigh in your hand, failures you can smell, and fixes that involve a screwdriver.',
-        'And I like interfaces with the same honesty: no spinners hiding broken state, no neon shouting over weak ideas. This site is both halves at once — the person above, the devices below, presented the way I wish every datasheet looked.',
+        'I’m Tristan. When I’m not buried under assignments for my Computer Engineering degree at Telkom University in Bandung, you’ll usually find me knee-deep in electronics and physical prototypes.',
+        'I like building things that exist in the physical space—devices with actual sensors, inputs, and real-world constraints. There’s a very specific kind of satisfaction when a custom-built circuit board finally boots up and works the way you planned.',
+        'That same practical mindset spills over into my web work. I treat frontend development the same way I treat hardware: keep it clean, cut out the fluff, and make sure it actually does what it’s supposed to do.',
       ],
-      quote: 'Structure you can measure, atmosphere you can feel — engineering with a memory.',
+      quote: 'Build things that work, wrap them in interfaces that make sense.',
       skillsKicker: 'skills & tech matrix',
     },
     bridgeBuilds:
-      'Every device leaves the bench. These three made it out into the world — here is the proof.',
+      'Ideas are nice, but hardware has to leave the desk. Here are three projects that actually made it out.',
     projects: {
       kicker: '02 — projects & labs',
-      title: 'Physical builds, IoT systems, custom silicon-adjacent tinkering.',
+      title: 'Physical builds, IoT systems, and custom tinkering.',
       lede:
-        "Every entry below is a real device: sensed, soldered, and iterated as far as a student lab allows. Each one started as a stubborn real-world annoyance — slow lab results, untrustworthy water, clothing that can't keep up — and became a box of sensors with an opinion. Open any build for the full breakdown: the problem, the engineering approach, and exactly what sits inside the enclosure.",
+        "Every project here is a real device I've built, soldered, and tested as a student. They usually start from everyday annoyances and turn into functioning prototypes. Click any build to see the full documentation, schematic, and parts list.",
       back: '← projects',
       allBuilds: 'all builds',
       problem: 'Problem',
@@ -180,16 +180,16 @@ export const dict: Record<Lang, Dict> = {
     },
     filters: { all: 'all' },
     bridgePeople:
-      'Tools and tales are only half the circuit. The other half is people — come say hello.',
+      'Tools and code are cool, but talking to people is better. Hit me up.',
     contact: {
       kicker: '03 — contact',
-      title: 'Open a channel.',
+      title: "Let's talk.",
       lede:
-        'The fastest way to reach me is email — I read everything myself. Writing about a collaboration? Tell me what it senses, what it moves, or what it should make someone feel. Hardware people and web people are both welcome; people who are a little of each get answered first.',
+        "Drop me an email if you want to chat about hardware, web dev, or potential collaborations. I read everything myself. Whether you're a tech person or just want to talk about building cool stuff, my inbox is open.",
       name: 'name',
       namePh: 'ada lovelace',
       message: 'message',
-      messagePh: "let's build something strange…",
+      messagePh: "let's build something cool…",
       submit: 'send via mail →',
       socials: 'elsewhere',
       terminalLabel: 'Interactive terminal — type help for commands',
@@ -198,8 +198,8 @@ export const dict: Record<Lang, Dict> = {
     footer: { rights: 'built by hand' },
     notfound: {
       kicker: '404 · signal lost',
-      title: 'static.',
-      lede: 'Nothing broadcasts on this frequency. The tuning dial suggests heading home.',
+      title: 'nothing here.',
+      lede: 'Looks like you took a wrong turn. Better head back home.',
       back: '← back to landing',
     },
     terminal: {
@@ -215,15 +215,15 @@ export const dict: Record<Lang, Dict> = {
         '  clear      wipe the screen',
       ],
       whoami: [
-        'Tristan Edgina — Computer Engineering undergraduate, Telkom University, Bandung.',
-        'Builds physical systems, then wraps them in interfaces worth touching.',
+        'Tristan Edgina — Computer Engineering undergraduate at Telkom University, Bandung.',
+        'I build hardware systems and wrap them in experimental web interfaces.',
       ],
       statusCity: 'location: Bandung, Indonesia',
       statusTime: 'local time: ',
-      statusState: 'status: undergrad, building hardware + web',
+      statusState: 'status: student, building hardware + web',
       contactEmail: 'email: ',
-      contactForm: 'or use the form right next to this terminal.',
-      projectsTail: 'open /projects for the full breakdowns.',
+      contactForm: 'or use the contact form next door.',
+      projectsTail: 'check out /projects for full build details.',
       unknown: (input: string) => `command not found: ${input.trim()} — type "help" for the list`,
     },
     projectText: enProjectText,
@@ -232,36 +232,36 @@ export const dict: Record<Lang, Dict> = {
     nav: { about: 'tentang', projects: 'proyek', contact: 'kontak' },
     heroView: { lanyard: 'kartu id', girl: 'muse 3d' },
     hero: {
-      role: 'teknik komputer · sistem fisik · frontend kreatif — bandung, id',
+      role: 'teknik komputer · hardware & iot · frontend dev — bandung, id',
       intro:
-        'Saya Tristan Edgina, mahasiswa sarjana Teknik Komputer di Telkom University, Bandung. Saya membangun benda fisik yang bisa merasakan dunia — laboratorium portabel, pakaian yang punya pendirian, air yang bisa dipercaya — dan saya membungkusnya dalam antarmuka yang dibuat dengan ketelitian yang sama seperti rangkaiannya.',
+        'Gue Tristan Edgina, anak Teknik Komputer Telkom University di Bandung. Gue suka bikin perangkat keras yang beneran jalan di dunia nyata — dari alat cek kesehatan, sensor air, sampai perangkat IoT — lengkap dengan antarmuka web yang digarap serius.',
       buildsLabel: 'build terdokumentasi',
       tzValue: 'utc+7, bandung',
       openLabel: 'terbuka',
-      openValue: 'untuk kolaborasi',
-      ctaAbout: 'kenalan dulu →',
-      ctaContact: 'sapa saya',
+      openValue: 'buat kolaborasi',
+      ctaAbout: 'lihat karya gue →',
+      ctaContact: 'sapa gue',
     },
     badge: 'mahasiswa',
     marquee: 'Perangkat Keras ✦ Sistem IoT ✦ Perangkat AI ✦ Frontend Kreatif',
     about: {
       kicker: '01 — tentang',
-      title: 'Instrumen presisi, antarmuka selembut memori.',
+      title: 'Papan sirkuit dan kode yang rapi.',
       story: [
-        'Saya kuliah Teknik Komputer di Telkom University, Bandung, tempat saya belajar bahwa skematik dan stylesheet pada dasarnya sama: instruksi tentang bagaimana seharusnya orang asing merasa saat pertama kali bertemu karya Anda.',
-        'Hampir setiap minggu saya bisa ditemukan di meja kerja — menyolder di bawah lampu meja, berdebat dengan datasheet, membujuk osiloskop agar mau mengaku apa yang dilakukan firmware semalam. Saya suka rakitan yang bisa ditimbang dengan tangan, kegagalan yang bisa dicium baunya, dan perbaikan yang melibatkan obeng.',
-        'Dan saya suka antarmuka yang sama jujurnya: tanpa spinner yang menyembunyikan state rusak, tanpa neon yang berteriak menutupi ide lemah. Situs ini adalah kedua belahan itu sekaligus — orangnya di atas, perangkatnya di bawah, disajikan seperti saya berharap setiap datasheet tampil.',
+        'Kenalin, gue Tristan. Kalau lagi gak pusing mikirin tugas kuliah Teknik Komputer di Telkom University, Bandung, kegiatan gue biasanya gak jauh-jauh dari ngerakit sirkuit dan bikin purwarupa fisik.',
+        'Gue suka bikin sesuatu yang wujudnya nyata di dunia fisik — perangkat yang ada sensornya, tombolnya, dan punya tantangan teknis tersendiri. Rasanya puas banget pas rangkaian PCB buatan sendiri akhirnya nyala dan berfungsi sesuai rencana.',
+        'Pola pikir praktis itu juga yang nempel ke cara gue bikin web. Buat gue, frontend itu mirip hardware: bikin sesimpel mungkin, buang elemen yang gak berguna, dan pastikan fungsinya jalan mulus.',
       ],
-      quote: 'Struktur yang bisa diukur, suasana yang bisa dirasakan — rekayasa yang punya memori.',
+      quote: 'Bikin alat yang jalan, bungkus dengan tampilan yang masuk akal.',
       skillsKicker: 'matriks skill & teknologi',
     },
     bridgeBuilds:
-      'Setiap perangkat meninggalkan meja kerja. Tiga di antaranya berhasil keluar ke dunia — inilah buktinya.',
+      'Ide emang gampang diomongin, tapi hardware harus dibuktikan. Tiga proyek ini berhasil jadi barang jadi — cek di bawah.',
     projects: {
       kicker: '02 — proyek & lab',
-      title: 'Rakitan fisik, sistem IoT, otak-atik mendekati silikon.',
+      title: 'Rakitan fisik, sistem IoT, dan hasil otak-atik di lab.',
       lede:
-        'Setiap entri di bawah ini adalah perangkat nyata: disensor, disolder, dan diiterasi sejauh laboratorium kampus memungkinkan. Semuanya berawal dari kejengkelan dunia nyata yang membandel — hasil lab yang lambat, air yang tak bisa dipercaya, pakaian yang tak bisa mengimbangi — lalu menjadi sekotak sensor yang punya pendirian. Buka setiap build untuk bedah lengkapnya: masalahnya, pendekatan rekayasanya, dan tepat apa yang duduk di dalam enklosur.',
+        'Semua yang ada di sini adalah perangkat beneran yang gue rakit, solder, dan tes sendiri selama sekolah. Biasanya berawal dari masalah sepele terus dibikin proto-nya. Klik salah satu buat lihat detail lengkap, masalah yang diselesaikas, sampai komponen di dalamnya.',
       back: '← proyek',
       allBuilds: 'semua proyek',
       problem: 'Masalah',
@@ -270,51 +270,51 @@ export const dict: Record<Lang, Dict> = {
     },
     filters: { all: 'semua' },
     bridgePeople:
-      'Perkakas dan kisah hanyalah separuh rangkaian. Separuh lainnya adalah manusia — mampir dan sapa.',
+      'Ngoprek kode sama hardware emang seru, tapi kenalan sama orang baru jauh lebih asik. Sapa gue aja.',
     contact: {
       kicker: '03 — kontak',
-      title: 'Buka sebuah kanal.',
+      title: 'Ngobrol yuk.',
       lede:
-        'Cara tercepat menghubungi saya adalah email — saya baca semuanya sendiri. Menulis soal kolaborasi? Ceritakan apa yang ia rasakan, apa yang ia gerakkan, atau apa yang seharusnya ia buat orang rasakan. Baik kubu hardware maupun kubu web sama-sama diterima; yang sedikit dari keduanya dijawab paling dulu.',
+        'Kirim email aja kalau lu mau ngobrolin soal hardware, web development, atau mau kolaborasi. Semuanya bakal gue baca sendiri. Mau ngomongin soal teknik atau sekadar nanya-nanya proyek, sikat aja.',
       name: 'nama',
       namePh: 'ada lovelace',
       message: 'pesan',
-      messagePh: 'mari membangun sesuatu yang aneh…',
+      messagePh: 'yuk, bikin sesuatu yang seru…',
       submit: 'kirim via email →',
       socials: 'di tempat lain',
       terminalLabel: 'Terminal interaktif — ketik help untuk perintah',
       terminalInput: 'Input perintah terminal',
     },
-    footer: { rights: 'dibuat dengan tangan' },
+    footer: { rights: 'dirakit sendiri' },
     notfound: {
-      kicker: '404 · sinyal hilang',
-      title: 'statis.',
-      lede: 'Tidak ada siaran di frekuensi ini. Putaran tuning menyarankan untuk pulang.',
+      kicker: '404 · sinyal ilang',
+      title: 'gak ada apa-apa di sini.',
+      lede: 'Kayaknya lu salah jalan deh. Mending balik ke halaman utama.',
       back: '← kembali ke awal',
     },
     terminal: {
-      greeting: ['tristan@bandung:~ shell tamu', 'ketik "help" untuk daftar perintah'],
+      greeting: ['tristan@bandung:~ shell tamu', 'ketik "help" buat lihat daftar perintah'],
       help: [
         'perintah yang tersedia:',
         '  help       daftar ini',
         '  whoami     siapa di balik situs ini',
-        '  status     lokasi + waktu lokal saat ini',
-        '  contact    cara menghubungi saya',
-        '  socials    saya di internet',
-        '  projects   daftar rakitan',
-        '  clear      bersihkan layar',
+        '  status     lokasi + waktu lokal',
+        '  contact    cara kontak gue',
+        '  socials    akun sosmed gue',
+        '  projects   daftar rakitan hardware',
+        '  clear      bersihin layar',
       ],
       whoami: [
-        'Tristan Edgina — mahasiswa sarjana Teknik Komputer, Telkom University, Bandung.',
-        'Merakit sistem fisik, lalu membungkusnya dengan antarmuka yang layak disentuh.',
+        'Tristan Edgina — anak Teknik Komputer Telkom University, Bandung.',
+        'Suka ngoprek hardware dan bikin web interface yang eksperimental.',
       ],
       statusCity: 'lokasi: Bandung, Indonesia',
       statusTime: 'waktu lokal: ',
-      statusState: 'status: mahasiswa, merakit hardware + web',
+      statusState: 'status: mahasiswa, ngerjain hardware + web',
       contactEmail: 'email: ',
-      contactForm: 'atau gunakan formulir di sebelah terminal ini.',
-      projectsTail: 'buka /projects untuk bedah lengkapnya.',
-      unknown: (input: string) => `perintah tak dikenal: ${input.trim()} — ketik "help" untuk daftarnya`,
+      contactForm: 'atau pakai form di sebelah terminal ini.',
+      projectsTail: 'buka /projects buat lihat dokumentasi lengkapnya.',
+      unknown: (input: string) => `perintah gak dikenal: ${input.trim()} — ketik "help" buat lihat daftarnya`,
     },
     projectText: idProjectText,
   },

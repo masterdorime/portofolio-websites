@@ -3,7 +3,7 @@ import { PROJECTS, filterProjects, type ProjectFilter } from './projects';
 
 describe('PROJECTS', () => {
   it('has 3 seed projects with slugs', () => {
-    expect(PROJECTS.map((p) => p.slug)).toEqual(['uricheck', 'puresip', 'techware']);
+    expect(PROJECTS.map((p) => p.slug)).toEqual(['urocheck', 'puresip', 'techware']);
   });
 
   it('every project has full case-study content', () => {
@@ -23,7 +23,7 @@ describe('filterProjects', () => {
   });
 
   it('filters by category preserving order', () => {
-    expect(filterProjects(PROJECTS, 'ai').map((p) => p.slug)).toEqual(['uricheck']);
+    expect(filterProjects(PROJECTS, 'ai').map((p) => p.slug)).toEqual(['urocheck']);
     expect(filterProjects(PROJECTS, 'iot').map((p) => p.slug)).toEqual(['techware']);
     expect(filterProjects(PROJECTS, 'hardware').map((p) => p.slug)).toEqual(['puresip']);
   });

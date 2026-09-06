@@ -16,17 +16,17 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    slug: 'uricheck',
-    name: 'Uricheck',
-    tagline: 'Portable AI urine analysis',
+    slug: 'urocheck',
+    name: 'Urocheck',
+    tagline: 'Portable AI urine analysis device',
     description:
-      'Portable AI-powered urine checker device; on-device AI determines symptoms the user may have. Conceived for bedrooms and village clinics rather than laboratories — screening that fits in a drawer and answers in minutes, with its reasoning kept deliberately legible.',
+      'A portable, AI-powered urine checker designed for quick screening at home or in local clinics. It gives fast results right on the device without needing a bulky lab setup.',
     category: 'ai',
     tech: ['Embedded C', 'AI inference', 'Sensor array', 'UART/I2C'],
     problem:
-      'Laboratory urinalysis is slow, expensive, and unavailable outside clinics. People with recurring renal-health concerns need a fast, private check at home. The gap is not just cost — it is the days of anxious waiting between giving a sample and understanding what it means, a wait that keeps people from checking at all.',
+      'Lab tests for basic urinalysis take too long and cost more than they should for quick check-ups. People dealing with recurring health tracking need something faster and private at home instead of waiting days for results.',
     approach:
-      'Sensor array captures chemical markers; an on-device inference model maps readings to likely symptom patterns, returning instant guidance with a confidence level instead of waiting days for lab results. Everything runs locally on the microcontroller: no samples leave the room, no account is required, and the output is framed as guidance toward a professional, never as a diagnosis.',
+      'Built an optical sensor array to read test strips, paired with an edge-AI model running locally on a microcontroller. It processes data right on the spot—no cloud dependency, no stored private data, just quick, practical feedback.',
     hardware: ['Optical sensor array', 'Microcontroller', 'Custom sampling cartridge', 'Rechargeable LiPo'],
     year: 2025,
   },
