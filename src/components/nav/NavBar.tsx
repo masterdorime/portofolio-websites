@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { SITE } from '@/data/site';
-import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import AnimatedThemeToggle from '@/components/theme/AnimatedThemeToggle';
 
 const LINKS: Array<{ href: string; label: string }> = [
   { href: '/#about', label: 'about' },
@@ -27,7 +27,7 @@ export default function NavBar() {
             </li>
           ))}
         </ul>
-        <ThemeToggle />
+        <AnimatedThemeToggle />
       </nav>
     </header>
   );

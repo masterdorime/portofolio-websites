@@ -20,6 +20,16 @@ html {
   scrollbar-color: var(--color-muted) var(--color-background);
 }
 
+/* Magic-UI-style animated theme wipe (View Transitions API). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html[data-magicui-theme-vt='active']::view-transition-new(root) {
+  clip-path: var(--magicui-theme-vt-clip-from);
+}
+
 /* Stark-white light mode (retro Apple paper). Dark obsidian stays default. */
 html[data-theme='light'] {
   --color-background: #fafafa;
@@ -516,7 +526,7 @@ html.custom-cursor * {
 .hero-loop {
   grid-column: 1 / -1;
   position: relative;
-  height: clamp(150px, 24vh, 210px);
+  height: clamp(180px, 28vh, 250px);
   overflow: hidden;
 }
 .hero-loop .text-loop {

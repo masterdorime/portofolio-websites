@@ -94,8 +94,9 @@ export default function Home() {
           <TextLoop
             text="Hardware ✦ IoT Systems ✦ AI Devices ✦ Creative Frontend"
             shape="wave"
-            fontSize={26}
-            curviness={40}
+            fontSize={24}
+            curviness={20}
+            ribbonWidth={64}
             color={ink}
             ribbonColor="#d4838b"
           />
