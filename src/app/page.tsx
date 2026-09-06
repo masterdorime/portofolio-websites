@@ -109,13 +109,13 @@ export default function Home() {
             <p className="page-kicker">01 — about</p>
             <h2 className="page-title">Precision instruments, memory-soft interfaces.</h2>
           </Reveal>
-          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+          <ScrollReveal baseOpacity={0.12} baseRotation={2} containerClassName="story-zig story-zig--right">
             I study Computer Engineering at Telkom University, Bandung, where I learned that a schematic and a stylesheet are the same thing: instructions for how a stranger should feel when they meet your work.
           </ScrollReveal>
-          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+          <ScrollReveal baseOpacity={0.12} baseRotation={2} containerClassName="story-zig story-zig--left">
             Most weeks you will find me at the bench — soldering under a desk lamp, arguing with datasheets, coaxing an oscilloscope to confess what the firmware did last night. I like builds you can weigh in your hand, failures you can smell, and fixes that involve a screwdriver.
           </ScrollReveal>
-          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+          <ScrollReveal baseOpacity={0.12} baseRotation={2} containerClassName="story-zig story-zig--right">
             And I like interfaces with the same honesty: no spinners hiding broken state, no neon shouting over weak ideas. This site is both halves at once — the person above, the devices below, presented the way I wish every datasheet looked.
           </ScrollReveal>
           <div className="story-bridge story-bridge--quote" aria-label="Philosophy">
