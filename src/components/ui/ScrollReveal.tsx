@@ -74,11 +74,13 @@ const ScrollReveal = ({
     return text.split(/(\s+)/);
   }, [children]);
 
-  // One window per paragraph: starts igniting near the viewport bottom,
-  // fully lit by the time it reaches mid-viewport. Paragraphs never overlap.
+  // One window per paragraph, anchored to its TOP edge on both ends:
+  // progress runs as the top travels 88% → 60% of the viewport (~28% travel),
+  // always shorter than the spacing between paragraphs. Windows can never
+  // overlap, so paragraphs ignite strictly top-to-bottom, one at a time.
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start 0.9', 'end 0.45'],
+    offset: ['start 0.88', 'start 0.6'],
   });
   const rotate = useTransform(scrollYProgress, [0, 1], [baseRotation, 0]);
 
