@@ -26,6 +26,7 @@ const TextLoop = dynamic(() => import('@/components/ui/TextLoop'), { ssr: false 
 const DriftWall = dynamic(() => import('@/components/ui/DriftWall'), { ssr: false });
 const ScrollReveal = dynamic(() => import('@/components/ui/ScrollReveal'), { ssr: false });
 const Lanyard = dynamic(() => import('@/components/ui/Lanyard'), { ssr: false });
+const Teto = dynamic(() => import('@/components/three/Teto'), { ssr: false });
 const DomeGallery = dynamic(() => import('@/components/ui/DomeGallery'), { ssr: false });
 
 const PHONE_PHOTOS: Array<{ slug: string; alt: string }> = [
@@ -151,12 +152,17 @@ export default function Home() {
             <p className="page-kicker">{t.about.kicker}</p>
             <h2 className="page-title">{t.about.title}</h2>
           </Reveal>
-          <div className="story-flow">
-            {t.about.story.map((paragraph) => (
-              <ScrollReveal key={paragraph.slice(0, 24)} baseOpacity={0.12} baseRotation={2}>
-                {paragraph}
-              </ScrollReveal>
-            ))}
+          <div className="about-grid">
+            <div className="story-flow">
+              {t.about.story.map((paragraph) => (
+                <ScrollReveal key={paragraph.slice(0, 24)} baseOpacity={0.12} baseRotation={2}>
+                  {paragraph}
+                </ScrollReveal>
+              ))}
+            </div>
+            <aside className="about-muse" aria-label="Teto watches the cursor">
+              <Teto />
+            </aside>
           </div>
           <div className="story-bridge story-bridge--quote" aria-label="Philosophy">
             <ScrollReveal baseOpacity={0.15} baseRotation={1.5}>

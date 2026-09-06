@@ -8,60 +8,9 @@ import { AdaptiveDpr } from '@react-three/drei';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'meshoptimizer';
 import * as THREE from 'three';
+import { disposeScene, flattenScene, measureUnion } from './modelUtils';
 
 const MODEL_URL = '/models/girl.glb';
-
-// Bakes every world transform into geometry and reparents all meshes under a
-// fresh identity group (same flatten trick proven on the Nanachi diorama:
-// never trust a Sketchfab node graph for measuring or framing).
-function flattenScene(scene: THREE.Object3D): THREE.Group {
-  const flat = new THREE.Group();
-  const baked = new Set<THREE.BufferGeometry>();
-  scene.updateWorldMatrix(true, true);
-  const meshes: THREE.Mesh[] = [];
-  scene.traverse((obj) => {
-    const mesh = obj as THREE.Mesh;
-    if (mesh.isMesh && mesh.geometry) meshes.push(mesh);
-  });
-  for (const mesh of meshes) {
-    if (!baked.has(mesh.geometry)) {
-      mesh.geometry.applyMatrix4(mesh.matrixWorld);
-      mesh.geometry.computeBoundingBox();
-      mesh.geometry.computeBoundingSphere();
-      baked.add(mesh.geometry);
-    }
-    mesh.position.set(0, 0, 0);
-    mesh.quaternion.identity();
-    mesh.scale.set(1, 1, 1);
-    mesh.updateMatrix();
-    mesh.removeFromParent();
-    flat.add(mesh);
-  }
-  return flat;
-}
-
-// Union of per-mesh LOCAL bounds. Safe after flattenScene (identity hierarchy).
-function characterBounds(scene: THREE.Object3D): THREE.Box3 {
-  const box = new THREE.Box3();
-  const corner = new THREE.Vector3();
-  scene.traverse((obj) => {
-    const mesh = obj as THREE.Mesh;
-    if (!mesh.isMesh || !mesh.visible || !mesh.geometry) return;
-    mesh.updateMatrix();
-    const bb = mesh.geometry.boundingBox ?? mesh.geometry.computeBoundingBox();
-    if (!bb) return;
-    for (let i = 0; i < 8; i++) {
-      corner.set(
-        i & 1 ? bb.max.x : bb.min.x,
-        i & 2 ? bb.max.y : bb.min.y,
-        i & 4 ? bb.max.z : bb.min.z
-      );
-      corner.applyMatrix4(mesh.matrix);
-      box.expandByPoint(corner);
-    }
-  });
-  return box;
-}
 
 export function PosterFallback() {
   return (
@@ -88,7 +37,7 @@ function GirlModel() {
   }, [flat]);
 
   const fit = useMemo(() => {
-    const box = characterBounds(flat);
+    const box = measureUnion(flat);
     const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
     const s = 2.3 / Math.max(size.x, size.y, size.z);
@@ -97,13 +46,7 @@ function GirlModel() {
 
   useEffect(() => {
     return () => {
-      flat.traverse((obj) => {
-        const mesh = obj as THREE.Mesh;
-        if (mesh.geometry) mesh.geometry.dispose();
-        const mat = (mesh as THREE.Mesh).material as THREE.Material | THREE.Material[] | undefined;
-        if (Array.isArray(mat)) mat.forEach((m) => m.dispose());
-        else if (mat) mat.dispose();
-      });
+      disposeScene(flat);
     };
   }, [flat]);
 

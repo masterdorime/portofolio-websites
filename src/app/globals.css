@@ -457,6 +457,31 @@ html[data-theme='light'] .vignette::after {
   margin-top: 2.618rem;
 }
 
+/* About grid: story flows on the left, Teto keeps watch on the right. */
+.about-grid {
+  display: grid;
+  gap: 2rem;
+  margin-top: 1.75rem;
+}
+.about-muse {
+  position: relative;
+  min-height: 420px;
+}
+.about-muse canvas {
+  display: block;
+}
+@media (min-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr 360px;
+    align-items: start;
+  }
+  .about-muse {
+    position: sticky;
+    top: 5.5rem;
+    height: min(68vh, 560px);
+  }
+}
+
 /* Project card body copy. */
 .card-desc {
   margin-top: 0.625rem;
