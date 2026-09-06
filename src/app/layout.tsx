@@ -29,15 +29,20 @@ export const metadata: Metadata = {
     'Anti-mainstream portfolio of Tristan Edgina, Computer Engineering undergraduate at Telkom University, Bandung. Physical systems engineering meets retro-dreamy front-end artistry.',
 };
 
+// Runs before first paint: restores the persisted theme so there is no flash.
+const THEME_INIT = `try{var t=localStorage.getItem('tristan-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark';}catch(e){document.documentElement.dataset.theme='dark';}`;
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
+      data-theme="dark"
       className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} ${instrumentSerif.variable}`}
     >
       <body className="min-h-screen bg-background text-foreground antialiased vignette">
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <GrainOverlay />
         <MagneticCursor />
         <NavBar />

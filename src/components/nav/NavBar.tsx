@@ -1,39 +1,34 @@
-// Fixed nav (spec §4). usePathname drives active state; brand replays intro.
+// Fixed nav: anchor links into the single-scroll page + theme toggle (spec §4).
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { SITE } from '@/data/site';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 const LINKS: Array<{ href: string; label: string }> = [
-  { href: '/projects', label: 'projects' },
-  { href: '/experiments', label: 'experiments' },
-  { href: '/about', label: 'about' },
-  { href: '/contact', label: 'contact' },
+  { href: '/#projects', label: 'projects' },
+  { href: '/#experiments', label: 'experiments' },
+  { href: '/#about', label: 'about' },
+  { href: '/#contact', label: 'contact' },
 ];
 
 export default function NavBar() {
-  const pathname = usePathname();
-
   return (
     <header className="nav-bar">
       <Link href="/" className="nav-brand">
         {SITE.name.toLowerCase().replace(' ', '.')}
       </Link>
-      <nav aria-label="Primary">
+      <nav aria-label="Primary" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
         <ul className="nav-links">
           {LINKS.map(({ href, label }) => (
             <li key={href}>
-              <Link
-                href={href}
-                className={`nav-link${pathname === href ? ' nav-link--active' : ''}`}
-                aria-current={pathname === href ? 'page' : undefined}
-              >
+              <Link href={href} className="nav-link">
                 {label}
               </Link>
             </li>
           ))}
         </ul>
+        <ThemeToggle />
       </nav>
     </header>
   );

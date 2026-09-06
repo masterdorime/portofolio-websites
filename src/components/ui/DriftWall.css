@@ -125,3 +125,8 @@
     will-change: auto;
   }
 }
+
+/* Stark-white mode: paper tiles instead of near-black. */
+html[data-theme='light'] .drift-wall__inner {
+  background: #e9e6df;
+}

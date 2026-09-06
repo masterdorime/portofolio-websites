@@ -1,5 +1,5 @@
-// Retro TV boot intro: scroll dolly from fog toward the TV, screen boots
-// static → sync → amber glow, click-to-enter with CRT flash (spec §5).
+// Retro TV boot intro: a far-away television in fog, scroll dollies the camera
+// from deep space to close-up while the screen glows awake. Click to enter.
 'use client';
 
 import { Suspense, useEffect, useMemo, useRef, useState, Component, type ReactNode, type MutableRefObject } from 'react';
@@ -9,8 +9,15 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import * as THREE from 'three';
+import { useTheme } from '@/components/theme/ThemeToggle';
 
 const MODEL_URL = '/models/retro-tv.glb?v=2';
+
+// Yaw so the screen faces the approaching camera (tuned against screenshots).
+const TV_YAW = -Math.PI / 2;
+
+const CAM_FAR: [number, number, number] = [0, 2.6, 15];
+const CAM_NEAR: [number, number, number] = [0, 0.5, 3.6];
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -35,7 +42,7 @@ function TvModel({ onEnter }: { onEnter: () => void }) {
     const box = new THREE.Box3().setFromObject(gltf.scene);
     const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
-    const s = 2.2 / Math.max(size.x, size.y, size.z);
+    const s = 2.4 / Math.max(size.x, size.y, size.z);
     return { s, center };
   }, [gltf]);
 
@@ -55,6 +62,7 @@ function TvModel({ onEnter }: { onEnter: () => void }) {
     <group
       scale={fit.s}
       position={[-fit.center.x * fit.s, -fit.center.y * fit.s, -fit.center.z * fit.s]}
+      rotation={[0, TV_YAW, 0]}
       onClick={(e) => {
         e.stopPropagation();
         onEnter();
@@ -69,52 +77,23 @@ function CameraRig({ progressRef }: { progressRef: MutableRefObject<number> }) {
   useFrame((state) => {
     const p = THREE.MathUtils.clamp(progressRef.current, 0, 1);
     const eased = p * p * (3 - 2 * p);
-    state.camera.position.set(0, 0.6 + (1 - eased) * 1.6, 9 - eased * 5.8);
+    // Long dolly in, gentle vertical settle, faint breathing sway.
+    const sway = Math.sin(state.clock.elapsedTime * 0.4) * 0.08 * (1 - eased);
+    state.camera.position.set(
+      sway,
+      CAM_FAR[1] + (CAM_NEAR[1] - CAM_FAR[1]) * eased,
+      CAM_FAR[2] + (CAM_NEAR[2] - CAM_FAR[2]) * eased
+    );
     state.camera.lookAt(0, 0.2, 0);
   });
   return null;
-}
-
-// 2D static-noise overlay: opacity fades as the scroll-driven boot progresses.
-function StaticNoise({ opacity }: { opacity: MotionValue<number> }) {
-  const ref = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    let raf = 0;
-    let last = 0;
-    const paint = (now: number) => {
-      if (now - last > 120) {
-        last = now;
-        const w = (canvas.width = canvas.clientWidth || 300);
-        const h = (canvas.height = canvas.clientHeight || 300);
-        const img = ctx.createImageData(w, h);
-        const d = img.data;
-        for (let i = 0; i < d.length; i += 4) {
-          const v = (Math.random() * 255) | 0;
-          d[i] = v;
-          d[i + 1] = v;
-          d[i + 2] = v;
-          d[i + 3] = 255;
-        }
-        ctx.putImageData(img, 0, 0);
-      }
-      raf = requestAnimationFrame(paint);
-    };
-    raf = requestAnimationFrame(paint);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  return <motion.canvas ref={ref} className="intro-noise" style={{ opacity }} aria-hidden />;
 }
 
 export default function IntroScene({ onEnter }: { onEnter: () => void }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
   const reduceMotion = useReducedMotion();
+  const theme = useTheme();
   const { scrollYProgress } = useScroll({ target: wrapRef, offset: ['start start', 'end end'] });
   const [phase, setPhase] = useState(0);
 
@@ -126,8 +105,8 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
     return unsub;
   }, [scrollYProgress]);
 
-  const noiseOpacity = useScrollOpacity(scrollYProgress);
-  const glowOpacity = useGlowOpacity(scrollYProgress);
+  const glowOpacity = useTransform(scrollYProgress, [0.3, 1], [0, 1]);
+  const bg = theme === 'light' ? '#fafafa' : '#070709';
 
   return (
     <div ref={wrapRef} className="intro-wrap">
@@ -135,15 +114,15 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
         <ErrorBoundary>
           <Canvas
             dpr={[1, 1.5]}
-            camera={{ position: [0, 2.2, 9], fov: 42 }}
+            camera={{ position: CAM_FAR, fov: 42 }}
             aria-label="Retro television in fog, scroll to approach"
           >
-            <color attach="background" args={['#070709']} />
-            <fog attach="fog" args={['#070709', 6, 16]} />
+            <color attach="background" args={[bg]} />
+            <fog attach="fog" args={[bg, 9, 26]} />
             <ambientLight intensity={0.35} />
             <directionalLight position={[3, 4, 5]} intensity={1.1} color="#e5a954" />
             <directionalLight position={[-4, 1, 3]} intensity={0.4} color="#9d8df1" />
-            <pointLight position={[0, 0.4, 1.4]} intensity={2 + phase * 6} color="#e5a954" distance={6} />
+            <pointLight position={[0, 0.4, 1.6]} intensity={1.5 + phase * 9} color="#e5a954" distance={8} />
             <Suspense fallback={null}>
               <TvModel onEnter={onEnter} />
             </Suspense>
@@ -151,9 +130,38 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
             <AdaptiveDpr />
           </Canvas>
         </ErrorBoundary>
-        {!reduceMotion && <StaticNoise opacity={noiseOpacity} />}
         <motion.div className="intro-glow" style={{ opacity: glowOpacity }} aria-hidden />
-        {phase > 0.72 && (
+        <motion.div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '2px',
+            background: 'var(--color-accent-amber)',
+            transformOrigin: '0 50%',
+            scaleX: scrollYProgress,
+          }}
+        />
+        <p
+          aria-hidden
+          className="font-mono"
+          style={{
+            position: 'absolute',
+            left: '50%',
+            bottom: '16vh',
+            transform: 'translateX(-50%)',
+            fontSize: '0.75rem',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'var(--color-muted)',
+            opacity: phase > 0.6 ? 0 : 1,
+          }}
+        >
+          scroll to tune in
+        </p>
+        {phase > 0.6 && (
           <button type="button" className="intro-hint" onClick={onEnter} data-magnetic>
             ◉ click the TV to enter
           </button>
@@ -164,12 +172,4 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
       </div>
     </div>
   );
-}
-
-function useScrollOpacity(scrollYProgress: MotionValue<number>) {
-  return useTransform(scrollYProgress, [0, 0.65], [0.5, 0]);
-}
-
-function useGlowOpacity(scrollYProgress: MotionValue<number>) {
-  return useTransform(scrollYProgress, [0.35, 1], [0, 1]);
 }

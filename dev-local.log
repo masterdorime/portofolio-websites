@@ -1,0 +1,274 @@
+
+> tristan-portfolio@0.1.0 dev
+> next dev
+
+▲ Next.js 16.3.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.56.1:3000
+✓ Ready in 509ms
+✓ Running next.config.ts took 106ms
+
+ GET / 200 in 1720ms (next.js: 804ms, application-code: 916ms)
+ GET / 200 in 214ms (next.js: 20ms, application-code: 194ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                    ...
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" className="space_grot...">
+                          <body
+                            className="min-h-screen bg-background text-foreground antialiased vignette"
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_c638ae3d-56ae-4917-8d74-e6c9921c4af4__="true"
+                          >
+                            <GrainOverlay>
+                              <div
+                                aria-hidden={true}
+                                className="grain-overlay"
+-                               bis_skin_checked="1"
+                              >
+                              ...
+                            <MagneticCursor>
+                            <NavBar>
+                            ...
+                              <ClientPageRoot Component={function Home} serverProvidedParams={{...}}>
+                                <Home params={Promise} searchParams={Promise}>
+                                  <main>
+                                    <AnimatePresence>
+                                    <LoadableComponent>
+                                    <div
+                                      className="hero"
+-                                     bis_skin_checked="1"
+                                    >
+                                      <div
+-                                       bis_skin_checked="1"
+                                      >
+                                        <Reveal>
+                                          <motion.div className={undefined} initial={{opacity:0,y:24}} ...>
+                                            <div
+                                              className={undefined}
+                                              style={{opacity:0,transform:"translateY..."}}
+                                              ref={function useMotionRef.useCallback}
+-                                             bis_skin_checked="1"
+                                            >
+                                        <h1>
+                                        <div
+                                          aria-hidden={false}
+-                                         bis_skin_checked="1"
+                                        >
+                                        <Reveal delay={0.1}>
+                                          <motion.div className={undefined} initial={{opacity:0,y:24}} ...>
+                                            <div
+                                              className={undefined}
+                                              style={{opacity:0,transform:"translateY..."}}
+                                              ref={function useMotionRef.useCallback}
+-                                             bis_skin_checked="1"
+                                            >
+                                        <Reveal delay={0.15}>
+                                          <motion.div className={undefined} initial={{opacity:0,y:24}} ...>
+                                            <div
+                                              className={undefined}
+                                              style={{opacity:0,transform:"translateY..."}}
+                                              ref={function useMotionRef.useCallback}
+-                                             bis_skin_checked="1"
+                                            >
+                                              <div
+                                                className="hero-cta"
+-                                               bis_skin_checked="1"
+                                              >
+                                      <Reveal delay={0.1} className="hero-stage">
+                                        <motion.div className="hero-stage" initial={{opacity:0,y:24}} ...>
+                                          <div
+                                            className="hero-stage"
+                                            style={{opacity:0,transform:"translateY..."}}
+                                            ref={function useMotionRef.useCallback}
+-                                           bis_skin_checked="1"
+                                          >
+                                    <div
+                                      className="page"
+                                      style={{paddingTop:0}}
+-                                     bis_skin_checked="1"
+                                    >
+                                      <Reveal>
+                                        <motion.div className={undefined} initial={{opacity:0,y:24}} ...>
+                                          <div
+                                            className={undefined}
+                                            style={{opacity:0,transform:"translateY..."}}
+                                            ref={function useMotionRef.useCallback}
+-                                           bis_skin_checked="1"
+                                          >
+                                      <section className="section" aria-label="Selected b...">
+                                        <Reveal>
+                                          <motion.div className={undefined} initial={{opacity:0,y:24}} ...>
+                                            <div
+                                              className={undefined}
+                                              style={{opacity:0,transform:"translateY..."}}
+                                              ref={function useMotionRef.useCallback}
+-                                             bis_skin_checked="1"
+                                            >
+                                        <div
+                                          className="quick-reel"
+-                                         bis_skin_checked="1"
+                                        >
+                                          <Reveal delay={0}>
+                                            <motion.div className={undefined} initial={{opacity:0,y:24}} ...>
+                                              <div
+                                                className={undefined}
+                                                style={{opacity:0,transform:"translateY..."}}
+                                                ref={function useMotionRef.useCallback}
+-                                               bis_skin_checked="1"
+                                              >
+                                          <Reveal delay={0.06}>
+                                            <motion.div className={undefined} initial={{opacity:0,y:24}} ...>
+                                              <div
+                                                className={undefined}
+                                                style={{opacity:0,transform:"translateY..."}}
+                                                ref={function useMotionRef.useCallback}
+-                                               bis_skin_checked="1"
+                                              >
+                                          <Reveal delay={0.12}>
+                                            <motion.div className={undefined} initial={{opacity:0,y:24}} ...>
+                                              <div
+                                                className={undefined}
+                                                style={{opacity:0,transform:"translateY..."}}
+                                                ref={function useMotionRef.useCallback}
+-                                               bis_skin_checked="1"
+                                              >
+                            ...
+                  ...
+ 
+[browser] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[browser] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+ GET /projects 200 in 233ms (next.js: 155ms, application-code: 77ms)
+ GET /experiments 200 in 232ms (next.js: 159ms, application-code: 73ms)
+[browser] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+ GET /about 200 in 230ms (next.js: 146ms, application-code: 84ms)
+ GET /contact 200 in 234ms (next.js: 130ms, application-code: 105ms)
+ GET /projects 200 in 68ms (next.js: 14ms, application-code: 54ms)
+ GET / 200 in 50ms (next.js: 9ms, application-code: 41ms)
+[browser] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+[browser] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+ GET /contact 200 in 103ms (next.js: 19ms, application-code: 84ms)
+ GET /experiments 200 in 96ms (next.js: 18ms, application-code: 78ms)
+[browser] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+ GET /about 200 in 102ms (next.js: 29ms, application-code: 73ms)
+ GET /projects 200 in 89ms (next.js: 32ms, application-code: 57ms)
+✓ Compiled in 1732ms
+ GET /projects 200 in 149ms (next.js: 58ms, application-code: 91ms)
+✓ Compiled in 887ms
+✓ Compiled in 777ms
+✓ Compiled in 332ms
+ GET /projects 200 in 83ms (next.js: 19ms, application-code: 63ms)
+ GET /projects 404 in 1321ms (next.js: 1189ms, application-code: 132ms)
+ GET /projects 404 in 1002ms (next.js: 31ms, application-code: 971ms)
+ GET /projects 404 in 877ms (next.js: 39ms, application-code: 838ms)
+ GET /projects 404 in 879ms (next.js: 717ms, application-code: 162ms)
+⨯ The directory at "C:\Users\TRISTAN\personal portofolio tristan\.next\dev" was deleted.
+
+Deleting this directory while Next.js is running can lead to undefined behavior. Restarting the server to recover...
+▲ Next.js 16.3.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.56.1:3000
+✓ Ready in 488ms
+✓ Running next.config.ts took 65ms
+
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/projects" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <meta>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                    ...
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" data-theme="dark" className="space_grot...">
+                          <body
+                            className="min-h-screen bg-background text-foreground antialiased vignette"
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_8c1a8145-864f-4e3c-8a61-de6020a73366__="true"
+                          >
+                            <script>
+                            <GrainOverlay>
+                              <div
+                                aria-hidden={true}
+                                className="grain-overlay"
+-                               bis_skin_checked="1"
+                              >
+                              ...
+                            ...
+                  ...
+ 
+    at <unknown> (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3241:25)
+    at runWithFiberInDEV (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:761:74)
+    at emitPendingHydrationWarnings (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3240:13)
+    at completeWork (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6712:102)
+    at runWithFiberInDEV (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:761:131)
+    at completeUnitOfWork (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9452:23)
+    at performUnitOfWork (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9387:28)
+    at workLoopConcurrentByScheduler (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9381:58)
+    at renderRootConcurrent (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9364:71)
+    at performWorkOnRoot (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:8891:150)
+    at performWorkOnRootViaSchedulerTask (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10085:9)
+    at MessagePort.performWorkUntilDeadline (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://C:/Users/TRISTAN/personal portofolio tristan/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3241:25)
+ GET /projects 404 in 4.0s (next.js: 3.2s, application-code: 814ms)
+○ Compiling / ...
+ GET / 200 in 3.8s (next.js: 3.5s, application-code: 350ms)

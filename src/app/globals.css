@@ -20,6 +20,27 @@ html {
   scrollbar-color: var(--color-muted) var(--color-background);
 }
 
+/* Stark-white light mode (retro Apple paper). Dark obsidian stays default. */
+html[data-theme='light'] {
+  --color-background: #fafafa;
+  --color-surface: #ffffff;
+  --color-foreground: #101014;
+  --color-muted: #62666e;
+  --color-accent-rose: #b3555e;
+  --color-accent-lavender: #5f52e0;
+  --color-accent-amber: #a86e14;
+}
+
+/* Single-scroll page: smooth anchor travel, offset for the fixed nav. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+section[id] {
+  scroll-margin-top: 4rem;
+}
+
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -48,6 +69,13 @@ body {
     rgba(7, 7, 9, 0.55) 100%
   );
   z-index: 5;
+}
+html[data-theme='light'] .vignette::after {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 62%,
+    rgba(16, 16, 20, 0.12) 100%
+  );
 }
 
 /* Film grain overlay (spec §3/§7) */
@@ -276,11 +304,9 @@ html.custom-cursor * {
   }
 }
 
-/* ---- Shared page furniture (spec §4) ---- */
+/* ---- Shared page furniture (spec §4) — full-bleed, edge to edge ---- */
 .page {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 6.5rem 1.5rem 3rem;
+  padding: 6.5rem clamp(1rem, 4vw, 4rem) 3rem;
 }
 .page-kicker {
   font-family: var(--font-mono);
@@ -360,9 +386,7 @@ html.custom-cursor * {
   display: grid;
   gap: 2rem;
   align-items: center;
-  padding: 7.5rem 1.5rem 2rem;
-  max-width: 72rem;
-  margin: 0 auto;
+  padding: 7.5rem clamp(1rem, 4vw, 4rem) 2rem;
 }
 @media (min-width: 900px) {
   .hero { grid-template-columns: 1.1fr 0.9fr; }
@@ -448,7 +472,7 @@ html.custom-cursor * {
 /* Intro overlay (boot sequence) */
 .intro-wrap {
   position: relative;
-  height: 220vh;
+  height: 300vh;
 }
 .intro-sticky {
   position: sticky;
@@ -485,13 +509,6 @@ html.custom-cursor * {
   cursor: pointer;
 }
 .intro-skip:hover { color: var(--color-foreground); }
-.intro-noise {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
 .intro-glow {
   position: absolute;
   inset: 0;
