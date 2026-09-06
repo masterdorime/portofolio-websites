@@ -71,6 +71,22 @@ function TetoModel() {
     for (let i = 0; i < meshes.length; i++) {
       if (sizes[i] > median * 3) meshes[i].visible = false;
     }
+    // Unlit pure-black cloth/skin vanishes on a near-black page. Give mapless
+    // dark surfaces a real lit material (dark gray, rough fabric) so the
+    // directionals can sculpt folds — outlines stay unlit by design.
+    for (const m of meshes) {
+      if (!m.visible) continue;
+      const mat = m.material as THREE.MeshBasicMaterial | null;
+      if (!mat || mat.type !== 'MeshBasicMaterial' || mat.map) continue;
+      if (/edge|line|outline/i.test(mat.name)) continue;
+      const lum =
+        0.2126 * mat.color.r + 0.7152 * mat.color.g + 0.0722 * mat.color.b;
+      m.material = new THREE.MeshStandardMaterial({
+        color: lum < 0.05 ? new THREE.Color('#26262c') : mat.color.clone(),
+        roughness: 0.85,
+        metalness: 0,
+      });
+    }
     return {
       eyes,
       head,
