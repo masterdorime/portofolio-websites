@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #070709;
+  --color-surface: #141419;
+  --color-foreground: #f3f0ea;
+  --color-muted: #9494a0;
+  --color-accent-rose: #d4838b;
+  --color-accent-lavender: #9d8df1;
+  --color-accent-amber: #e5a954;
+
+  --font-sans: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+  --font-display: var(--font-instrument-serif), serif;
+}
+
+html {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  scrollbar-color: var(--color-muted) var(--color-background);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent-amber);
+  color: var(--color-background);
+}
+
+/* focus-visible: cream ring (spec §9) */
+:focus-visible {
+  outline: 2px solid var(--color-foreground);
+  outline-offset: 3px;
+}
+
+/* soft vignette (spec §3 atmosphere) */
+.vignette::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(7, 7, 9, 0.55) 100%
+  );
+  z-index: 5;
+}
