@@ -563,10 +563,11 @@ html.custom-cursor * {
 }
 .projects-ambient {
   position: relative;
-  height: 300px;
-  border-radius: 1.25rem;
+  height: clamp(340px, 52vh, 560px);
+  margin-inline: calc(-1 * clamp(1rem, 4vw, 4rem));
+  border-top: 1px solid color-mix(in oklab, var(--color-muted) 20%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--color-muted) 20%, transparent);
   overflow: hidden;
-  border: 1px solid color-mix(in oklab, var(--color-muted) 25%, transparent);
   margin-bottom: 1.5rem;
 }
 .case-meta {

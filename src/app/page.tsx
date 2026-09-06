@@ -106,7 +106,8 @@ export default function Home() {
                   image: `https://picsum.photos/seed/${p.slug}/400/264`,
                   title: p.name,
                 }))}
-                columns={4}
+                columns={6}
+                tileWidth={220}
                 overlayColor={paper}
               />
             </div>
