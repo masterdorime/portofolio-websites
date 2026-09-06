@@ -20,7 +20,7 @@ import { PROJECTS, filterProjects, type ProjectFilter } from '@/data/projects';
 import { SITE } from '@/data/site';
 
 const IntroScene = dynamic(() => import('@/components/three/IntroScene'), { ssr: false });
-const Nanachi = dynamic(() => import('@/components/three/Nanachi'), { ssr: false });
+const Girl = dynamic(() => import('@/components/three/Girl'), { ssr: false });
 const WarpText = dynamic(() => import('@/components/ui/WarpText'), { ssr: false });
 const TextLoop = dynamic(() => import('@/components/ui/TextLoop'), { ssr: false });
 const DriftWall = dynamic(() => import('@/components/ui/DriftWall'), { ssr: false });
@@ -74,8 +74,8 @@ export default function Home() {
             </div>
           </Reveal>
         </div>
-        <Reveal delay={0.1} className="hero-stage">
-          <Nanachi />
+        <Reveal delay={0.1} className="hero-model">
+          <Girl />
         </Reveal>
       </div>
 

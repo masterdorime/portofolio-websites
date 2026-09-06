@@ -1,4 +1,5 @@
-// Nanachi mascot: toon-friendly lighting, cursor tracking, idle float (spec §5).
+// Girl mascot: single Sketchfab character, seamless in-page (no card/box).
+// Cursor parallax + idle float; transparent canvas blends into the page.
 'use client';
 
 import { Suspense, useEffect, useMemo, useRef, useState, Component, type ReactNode } from 'react';
@@ -8,24 +9,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'meshoptimizer';
 import * as THREE from 'three';
 
-const MODEL_URL = '/models/nanachi.glb?v=2';
+const MODEL_URL = '/models/girl.glb';
 
-// Sketchfab diorama ships Reg + Riko + Nanachi as one scene. The mascot is
-// Nanachi solo: keep NanachiBody, Nanachi eyes (Na-Reye/Na-Leye), buck teeth
-// and their toon outline shells; hide everything else (spec §5 mascot).
-const NANACHI_KEEP = /nanachi|na-reye|na-leye|teeth/i;
-
-function isolateNanachi(scene: THREE.Object3D) {
-  scene.traverse((obj) => {
-    const mesh = obj as THREE.Mesh;
-    if (mesh.isMesh && !NANACHI_KEEP.test(mesh.name)) mesh.visible = false;
-  });
-}
-
-// Flatten helper: bakes every world transform into geometry and reparents all
-// meshes under a fresh identity group. Verified necessary for this asset —
-// node transforms in the shipped file do not match the source hierarchy, so
-// measuring or rendering the raw graph places meshes behind the camera.
+// Bakes every world transform into geometry and reparents all meshes under a
+// fresh identity group (same flatten trick proven on the Nanachi diorama:
+// never trust a Sketchfab node graph for measuring or framing).
 function flattenScene(scene: THREE.Object3D): THREE.Group {
   const flat = new THREE.Group();
   const baked = new Set<THREE.BufferGeometry>();
@@ -52,8 +40,7 @@ function flattenScene(scene: THREE.Object3D): THREE.Group {
   return flat;
 }
 
-// Union of per-mesh LOCAL bounds. Safe to use after flattenScene (identity
-// hierarchy): measures baked geometry directly, no world-graph surprises.
+// Union of per-mesh LOCAL bounds. Safe after flattenScene (identity hierarchy).
 function characterBounds(scene: THREE.Object3D): THREE.Box3 {
   const box = new THREE.Box3();
   const corner = new THREE.Vector3();
@@ -78,26 +65,20 @@ function characterBounds(scene: THREE.Object3D): THREE.Box3 {
 
 export function PosterFallback() {
   return (
-    <div className="poster-fallback" role="img" aria-label="Nanachi mascot illustration placeholder">
-      nanachi.exe failed to boot — imagine a small abyss-dweller waving here.
+    <div className="poster-fallback" role="img" aria-label="Mascot illustration placeholder">
+      muse.exe failed to boot — imagine someone waving here.
       <br />
       (3D unavailable on this device)
     </div>
   );
 }
 
-function RiggedModel() {
+function GirlModel() {
   const gltf = useLoader(GLTFLoader, MODEL_URL, (loader) => {
     loader.setMeshoptDecoder(MeshoptDecoder);
   });
   const group = useRef<THREE.Group>(null);
-  // Flatten once: bakes the file's node transforms into geometry so the
-  // raw graph (which places meshes behind the camera) never renders.
-  const flat = useMemo(() => {
-    const f = flattenScene(gltf.scene);
-    isolateNanachi(f);
-    return f;
-  }, [gltf]);
+  const flat = useMemo(() => flattenScene(gltf.scene), [gltf]);
   const bones = useMemo(() => {
     const found: THREE.Object3D[] = [];
     flat.traverse((obj) => {
@@ -110,7 +91,7 @@ function RiggedModel() {
     const box = characterBounds(flat);
     const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
-    const s = 1.9 / Math.max(size.x, size.y, size.z);
+    const s = 2.3 / Math.max(size.x, size.y, size.z);
     return { s, center };
   }, [flat]);
 
@@ -158,7 +139,7 @@ function RiggedModel() {
   );
 }
 
-export default function Nanachi() {
+export default function Girl() {
   const [inView, setInView] = useState(true);
   const [reduced] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -174,19 +155,19 @@ export default function Nanachi() {
   }, []);
 
   return (
-    <div ref={wrapRef} style={{ width: '100%', height: '100%', minHeight: 380 }}>
+    <div ref={wrapRef} style={{ width: '100%', height: '100%', minHeight: 'inherit' }}>
       <ErrorBoundary>
         <Canvas
           dpr={[1, 1.75]}
-          camera={{ position: [0, 0.5, 5.4], fov: 38 }}
+          camera={{ position: [0, 0.4, 5.6], fov: 38 }}
           frameloop={inView && !reduced ? 'always' : 'never'}
           aria-label="Interactive 3D mascot"
         >
-          <ambientLight intensity={0.7} />
+          <ambientLight intensity={0.75} />
           <directionalLight position={[3, 4, 4]} intensity={1.4} color="#e5a954" />
           <directionalLight position={[-4, 2, 2]} intensity={0.6} color="#9d8df1" />
           <Suspense fallback={null}>
-            <RiggedModel />
+            <GirlModel />
           </Suspense>
           <AdaptiveDpr />
         </Canvas>

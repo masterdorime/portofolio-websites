@@ -422,18 +422,25 @@ html.custom-cursor * {
   gap: 0.75rem;
   margin-top: 1.75rem;
 }
-.hero-stage {
+.hero-model {
   position: relative;
-  min-height: 420px;
+  min-height: min(78vh, 620px);
   height: 100%;
-  border: 1px solid color-mix(in oklab, var(--color-muted) 25%, transparent);
-  border-radius: 1.25rem;
-  overflow: hidden;
-  background: radial-gradient(ellipse at 30% 20%, rgba(157, 141, 241, 0.12), transparent 55%),
-    radial-gradient(ellipse at 75% 85%, rgba(229, 169, 84, 0.12), transparent 55%),
-    var(--color-surface);
 }
-.hero-stage canvas { display: block; }
+/* faint aura bleeding into the page — atmosphere, not a container */
+.hero-model::before {
+  content: "";
+  position: absolute;
+  inset: -8% -12%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 55%,
+    rgba(157, 141, 241, 0.14),
+    rgba(229, 169, 84, 0.08) 45%,
+    transparent 70%
+  );
+}
+.hero-model canvas { display: block; }
 .poster-fallback {
   display: flex;
   align-items: center;
