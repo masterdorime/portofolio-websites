@@ -54,6 +54,8 @@ section[id] {
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  /* Golden ratio body rhythm: φ as the universal line-height. */
+  line-height: 1.618;
 }
 
 ::selection {
@@ -321,24 +323,28 @@ html.custom-cursor * {
 .page-kicker {
   font-family: var(--font-mono);
   font-size: 0.75rem;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-accent-amber);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.618rem;
 }
 .page-title {
   font-family: var(--font-display);
-  font-size: clamp(2.25rem, 6vw, 4rem);
-  line-height: 1.05;
+  font-size: clamp(2.618rem, 6vw, 4.236rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
   margin: 0 0 1rem;
 }
 .page-lede {
   color: var(--color-muted);
   max-width: 42rem;
-  line-height: 1.7;
+  line-height: 1.618;
+  text-wrap: pretty;
 }
 .section {
-  margin-top: 2.5rem;
+  margin-top: 2.618rem;
 }
 .card {
   border: 1px solid color-mix(in oklab, var(--color-muted) 25%, transparent);
@@ -349,11 +355,13 @@ html.custom-cursor * {
 .card h3 {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
+  line-height: 1.2;
+  text-wrap: balance;
 }
 .card p {
   margin: 0;
   color: var(--color-muted);
-  line-height: 1.65;
+  line-height: 1.618;
 }
 .btn {
   display: inline-flex;
@@ -407,6 +415,7 @@ html.custom-cursor * {
   gap: 0.625rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
   border: 1px dashed color-mix(in oklab, var(--color-accent-amber) 60%, transparent);
   border-radius: 0.5rem;
   padding: 0.5rem 0.875rem;
@@ -429,7 +438,8 @@ html.custom-cursor * {
 .hero-intro {
   margin-top: 1.25rem;
   font-size: clamp(1.05rem, 1.6vw, 1.25rem);
-  line-height: 1.7;
+  line-height: 1.618;
+  text-wrap: pretty;
   max-width: 34rem;
   color: var(--color-foreground);
 }
@@ -442,6 +452,7 @@ html.custom-cursor * {
   font-size: 0.75rem;
   letter-spacing: 0.06em;
   color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
 }
 .hero-meta strong {
   color: var(--color-accent-amber);
@@ -451,7 +462,7 @@ html.custom-cursor * {
 /* Story bridges: scroll-revealed connective tissue between sections. */
 .story-bridge {
   max-width: 56rem;
-  margin: 4.5rem auto;
+  margin: 4.236rem auto;
   padding: 0 clamp(1rem, 4vw, 4rem);
 }
 .story-bridge .scroll-reveal-text {
@@ -492,7 +503,8 @@ html.custom-cursor * {
 .card-desc {
   margin-top: 0.625rem;
   font-size: 0.875rem;
-  line-height: 1.65;
+  line-height: 1.618;
+  text-wrap: pretty;
   color: var(--color-muted);
 }
 
@@ -709,8 +721,17 @@ html.custom-cursor * {
 .case-body p, .case-body li {
   color: var(--color-muted);
   line-height: 1.75;
+  max-width: 42rem;
+  text-wrap: pretty;
 }
 .case-body ul { padding-left: 1.25rem; }
+
+/* Inputs hold 16px so iOS never auto-zooms into the form. */
+@media (max-width: 640px) {
+  .terminal {
+    font-size: 1rem;
+  }
+}
 
 /* Skills matrix */
 .matrix {
