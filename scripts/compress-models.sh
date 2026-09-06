@@ -44,15 +44,4 @@ fi
 # Retro TV (intro scene): 4.9MB raw, no hard gate, keep it lean.
 compress_one "$DL/retro_tv.glb" "retro-tv.glb" 1024
 
-# Console (experiments prop): ship ONLY if under 2MB after compression, else skip entirely (spec §5).
-compress_one "$DL/retro_8-bit_console_and_tv.glb" "console-tmp.glb" 512
-csize=$(wc -c < "$OUT/console-tmp.glb")
-if [ "$csize" -lt 2097152 ]; then
-  mv "$OUT/console-tmp.glb" "$OUT/console.glb"
-  echo "console.glb: $csize bytes (shipped)"
-else
-  rm -f "$OUT/console-tmp.glb"
-  echo "console.glb: $csize bytes (over 2MB gate, skipped per spec)"
-fi
-
 rm -rf "$TMP"

@@ -13,8 +13,6 @@ import ProjectCard from '@/components/projects/ProjectCard';
 import SkillsMatrix from '@/components/about/SkillsMatrix';
 import Terminal from '@/components/terminal/Terminal';
 import SocialLoop from '@/components/contact/SocialLoop';
-import ShaderDemos from '@/components/experiments/ShaderDemos';
-import ConsoleViewer from '@/components/experiments/ConsoleViewer';
 import { useTheme } from '@/components/theme/ThemeToggle';
 import { PROJECTS, filterProjects, type ProjectFilter } from '@/data/projects';
 import { SITE } from '@/data/site';
@@ -120,29 +118,6 @@ export default function Home() {
               ))}
             </AnimatePresence>
           </div>
-        </section>
-
-        <section id="experiments" className="section" aria-label="Experiments">
-          <Reveal>
-            <p className="page-kicker">experiments</p>
-            <h2 className="page-title">The bench where half-built ideas hum.</h2>
-            <p className="page-lede">
-              Shader toys, analog tools, and one lovingly compressed 8-bit console. Nothing
-              here is finished — that is the point.
-            </p>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <ShaderDemos />
-          </Reveal>
-          <Reveal delay={0.08}>
-            <div className="card" style={{ marginTop: '1.25rem' }}>
-              <h3>retro 8-bit console + tv</h3>
-              <p>drag to orbit · auto-rotates when idle · compressed under the 2MB gate</p>
-              <div style={{ marginTop: '1rem' }}>
-                <ConsoleViewer />
-              </div>
-            </div>
-          </Reveal>
         </section>
 
         <section id="about" className="section" aria-label="About">

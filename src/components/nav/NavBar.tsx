@@ -7,7 +7,6 @@ import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 const LINKS: Array<{ href: string; label: string }> = [
   { href: '/#projects', label: 'projects' },
-  { href: '/#experiments', label: 'experiments' },
   { href: '/#about', label: 'about' },
   { href: '/#contact', label: 'contact' },
 ];
