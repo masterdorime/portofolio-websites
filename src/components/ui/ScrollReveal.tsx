@@ -8,6 +8,14 @@ import './ScrollReveal.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Recalculates every trigger's scroll positions. Required whenever DOM above
+// a reveal changes height after mount — e.g. the 300vh intro unmounting on
+// skip, which otherwise leaves all cached positions ~300vh too low and the
+// words stuck dim forever.
+export function refreshScrollTriggers() {
+  ScrollTrigger.refresh();
+}
+
 export interface ScrollRevealProps {
   children: ReactNode;
   scrollContainerRef?: RefObject<HTMLElement | null>;

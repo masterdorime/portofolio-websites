@@ -41,6 +41,11 @@ export default function Home() {
       setEntered(true);
       setFlash(false);
       window.scrollTo({ top: 0 });
+      // The 300vh intro just left the DOM: every ScrollReveal cached its
+      // positions with it present. Refresh so words ignite at the right scroll.
+      window.setTimeout(() => {
+        void import('@/components/ui/ScrollReveal').then((m) => m.refreshScrollTriggers());
+      }, 100);
     }, 320);
   };
 
