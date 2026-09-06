@@ -26,7 +26,7 @@ const TextLoop = dynamic(() => import('@/components/ui/TextLoop'), { ssr: false 
 const DriftWall = dynamic(() => import('@/components/ui/DriftWall'), { ssr: false });
 const ScrollReveal = dynamic(() => import('@/components/ui/ScrollReveal'), { ssr: false });
 const Lanyard = dynamic(() => import('@/components/ui/Lanyard'), { ssr: false });
-const DepthCarousel = dynamic(() => import('@/components/ui/DepthCarousel'), { ssr: false });
+const MorphSlider = dynamic(() => import('@/components/ui/MorphSlider'), { ssr: false });
 
 const PHONE_PHOTOS: Array<{ slug: string; alt: string }> = [
   { slug: 'malas-edit', alt: 'Too lazy to edit, black and white' },
@@ -212,17 +212,16 @@ export default function Home() {
               <p className="page-lede">{t.phone.sub}</p>
             </Reveal>
             <Reveal delay={0.06}>
-              <div style={{ marginTop: '1.75rem' }}>
-                <DepthCarousel
+              <div style={{ marginTop: '1.75rem', height: 'clamp(420px, 62vh, 580px)' }}>
+                <MorphSlider
                   items={PHONE_PHOTOS.map(({ slug, alt }) => ({
                     image: `/images/phoneography/${slug}.webp`,
-                    alt,
+                    caption: alt,
                   }))}
-                  cardWidth={280}
-                  cardHeight={360}
-                  tint={paper}
+                  transition="melt"
+                  overlayColor={paper}
                   autoplay
-                  autoplayDelay={2800}
+                  autoplayDelay={4}
                 />
               </div>
             </Reveal>
