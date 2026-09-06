@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export-copy": "npx -y tsx scripts/export-copy.ts",
     "start": "next start",
     "test": "vitest run"
   },

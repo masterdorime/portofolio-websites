@@ -1,5 +1,5 @@
 // Skills & Tech Matrix: terminal-style monospace matrix, hover reveals (spec §7).
-const ROWS: Array<{ area: string; detail: string }> = [
+export const ROWS: Array<{ area: string; detail: string }> = [
   { area: 'react / next.js', detail: 'App Router, SSR + static hybrid, route groups, metadata API, server/client boundaries' },
   { area: 'tailwind css', detail: 'v4 CSS-first @theme tokens, dark-mode contrast ramps, responsive type scale' },
   { area: 'three.js / r3f', detail: 'R3F canvas lifecycle, meshopt + WebP GLB pipeline, DPR clamp, disposal on unmount' },
