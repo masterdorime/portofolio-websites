@@ -51,7 +51,7 @@ export interface LanyardProps {
 }
 
 export default function Lanyard({
-  position = [0, 0.5, 17],
+  position = [0, 0.5, 13],
   gravity = [0, -40, 0],
   fov = 20,
   transparent = true,
@@ -322,7 +322,7 @@ function Band({
           color={lanyardImage ? 'white' : strapColor}
           depthTest={false}
           resolution={isMobile ? [1000, 2000] : [1000, 1000]}
-          useMap
+          useMap={!!lanyardImage}
           map={texture}
           repeat={[-4, 1]}
           lineWidth={lanyardWidth}
