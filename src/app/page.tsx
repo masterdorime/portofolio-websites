@@ -90,19 +90,19 @@ export default function Home() {
         <Reveal delay={0.1} className="hero-model">
           <Girl />
         </Reveal>
-      </div>
-
-      <div className="page" style={{ paddingTop: 0 }}>
-        <Reveal>
+        <div className="hero-loop" aria-hidden={false}>
           <TextLoop
             text="Hardware ✦ IoT Systems ✦ AI Devices ✦ Creative Frontend"
             shape="wave"
-            fontSize={28}
+            fontSize={26}
+            curviness={40}
             color={ink}
             ribbonColor="#d4838b"
           />
-        </Reveal>
+        </div>
+      </div>
 
+      <div className="page" style={{ paddingTop: 0 }}>
         <section id="about" className="section" aria-label="About">
           <Reveal>
             <p className="page-kicker">01 — about</p>

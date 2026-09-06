@@ -489,8 +489,12 @@ html.custom-cursor * {
 }
 .hero-model {
   position: relative;
-  min-height: min(62vh, 500px);
-  height: 100%;
+  width: 100%;
+  /* Definite height from width — no percentage-height chains, so the WebGL
+     canvas always measures a real box (percentage chains collapsed it). */
+  aspect-ratio: 4 / 4.4;
+  max-height: 560px;
+  min-height: 400px;
 }
 /* faint aura bleeding into the page — atmosphere, not a container */
 .hero-model::before {
@@ -506,6 +510,22 @@ html.custom-cursor * {
   );
 }
 .hero-model canvas { display: block; }
+
+/* Marquee strip pinned to the hero bottom: a cropped band of the tall wave
+   SVG so the loop reads on first paint without pushing content down. */
+.hero-loop {
+  grid-column: 1 / -1;
+  position: relative;
+  height: clamp(150px, 24vh, 210px);
+  overflow: hidden;
+}
+.hero-loop .text-loop {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
 .poster-fallback {
   display: flex;
   align-items: center;
