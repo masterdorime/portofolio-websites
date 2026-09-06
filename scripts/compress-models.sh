@@ -41,6 +41,21 @@ if [ "$size" -ge 8388608 ]; then
   exit 1
 fi
 
+# Teto watcher: source export dropped two material links (fixed by script)
+# and ships a broken unnamed texture (detached by script). Hard gate 8MB.
+node scripts/fix-teto.mjs "$DL/demon-teto/source/demon teto.glb" "$TMP/teto-src.glb"
+compress_one "$TMP/teto-src.glb" "teto.glb" 1024
+size=$(wc -c < "$OUT/teto.glb")
+if [ "$size" -ge 8388608 ]; then
+  compress_one "$TMP/teto-src.glb" "teto.glb" 512
+fi
+size=$(wc -c < "$OUT/teto.glb")
+echo "teto.glb final: $size bytes"
+if [ "$size" -ge 8388608 ]; then
+  echo "FAIL: teto.glb still over 8MB after 512px textures" >&2
+  exit 1
+fi
+
 # Retro TV (intro scene): 4.9MB raw, no hard gate, keep it lean.
 compress_one "$DL/retro_tv.glb" "retro-tv.glb" 1024
 
