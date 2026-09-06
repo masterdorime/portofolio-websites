@@ -476,27 +476,9 @@ html.custom-cursor * {
   padding-left: 1.5rem;
 }
 
-/* Zigzag story measure: narrow column alternating sides, text aligned to
-   its side. Nothing crosses the measure line. */
-.story-zig {
-  max-width: 38rem;
-}
-.story-zig--right {
-  margin-left: auto;
-  text-align: right;
-}
-.story-zig--left {
-  margin-right: auto;
-  text-align: left;
-}
-@media (max-width: 640px) {
-  .story-zig {
-    max-width: none;
-  }
-  .story-zig--right {
-    margin-left: 0;
-    text-align: left;
-  }
+/* Story flow: full-width paragraphs, separated by generous φ spacing. */
+.story-flow > * + * {
+  margin-top: 2.618rem;
 }
 
 /* Project card body copy. */
