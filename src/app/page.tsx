@@ -1,5 +1,6 @@
-// Single-scroll experience: intro gateway → hero → projects → experiments →
-// about → contact, all in one flow (spec §4, one-scroll revision).
+// Single-scroll experience: intro gateway → hero → about → projects →
+// contact, all in one flow. About sits directly after the hero so the human
+// connects before the hardware.
 'use client';
 
 import dynamic from 'next/dynamic';
@@ -41,11 +42,6 @@ export default function Home() {
       setEntered(true);
       setFlash(false);
       window.scrollTo({ top: 0 });
-      // The 300vh intro just left the DOM: every ScrollReveal cached its
-      // positions with it present. Refresh so words ignite at the right scroll.
-      window.setTimeout(() => {
-        void import('@/components/ui/ScrollReveal').then((m) => m.refreshScrollTriggers());
-      }, 100);
     }, 320);
   };
 
@@ -86,7 +82,7 @@ export default function Home() {
           </Reveal>
           <Reveal delay={0.15}>
             <div className="hero-cta">
-              <Link href="#projects" className="btn" data-magnetic>view builds →</Link>
+              <Link href="#about" className="btn" data-magnetic>meet the builder →</Link>
               <Link href="#contact" className="btn btn--ghost" data-magnetic>say hello</Link>
             </div>
           </Reveal>
@@ -107,9 +103,40 @@ export default function Home() {
           />
         </Reveal>
 
+        <section id="about" className="section" aria-label="About">
+          <Reveal>
+            <p className="page-kicker">01 — about</p>
+            <h2 className="page-title">Precision instruments, memory-soft interfaces.</h2>
+          </Reveal>
+          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+            I study Computer Engineering at Telkom University, Bandung, where I learned that a schematic and a stylesheet are the same thing: instructions for how a stranger should feel when they meet your work.
+          </ScrollReveal>
+          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+            Most weeks you will find me at the bench — soldering under a desk lamp, arguing with datasheets, coaxing an oscilloscope to confess what the firmware did last night. I like builds you can weigh in your hand, failures you can smell, and fixes that involve a screwdriver.
+          </ScrollReveal>
+          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+            And I like interfaces with the same honesty: no spinners hiding broken state, no neon shouting over weak ideas. This site is both halves at once — the person above, the devices below, presented the way I wish every datasheet looked.
+          </ScrollReveal>
+          <div className="story-bridge story-bridge--quote" aria-label="Philosophy">
+            <ScrollReveal baseOpacity={0.15} baseRotation={1.5}>
+              Structure you can measure, atmosphere you can feel — engineering with a memory.
+            </ScrollReveal>
+          </div>
+          <Reveal delay={0.06}>
+            <p className="page-kicker" style={{ marginTop: '2rem' }}>skills & tech matrix</p>
+            <SkillsMatrix />
+          </Reveal>
+        </section>
+
+        <div className="story-bridge" aria-label="Bridge: from builder to builds">
+          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
+            Every device leaves the bench. These three made it out into the world — here is the proof.
+          </ScrollReveal>
+        </div>
+
         <section id="projects" className="section" aria-label="Projects and labs">
           <Reveal>
-            <p className="page-kicker">01 — projects & labs</p>
+            <p className="page-kicker">02 — projects & labs</p>
             <h2 className="page-title">Physical builds, IoT systems, custom silicon-adjacent tinkering.</h2>
             <p className="page-lede">
               Every entry below is a real device: sensed, soldered, and iterated as far
@@ -143,38 +170,7 @@ export default function Home() {
           </div>
         </section>
 
-        <div className="story-bridge" aria-label="Bridge: from builds to builder">
-          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
-            Every device leaves the bench. What stays behind is the way of working — this is mine.
-          </ScrollReveal>
-        </div>
-
-        <section id="about" className="section" aria-label="About">
-          <Reveal>
-            <p className="page-kicker">02 — about</p>
-            <h2 className="page-title">Precision instruments, memory-soft interfaces.</h2>
-          </Reveal>
-          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
-            I study Computer Engineering at Telkom University, Bandung, where I learned that a schematic and a stylesheet are the same thing: instructions for how a stranger should feel when they meet your work.
-          </ScrollReveal>
-          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
-            Most weeks you will find me at the bench — soldering under a desk lamp, arguing with datasheets, coaxing an oscilloscope to confess what the firmware did last night. I like builds you can weigh in your hand, failures you can smell, and fixes that involve a screwdriver.
-          </ScrollReveal>
-          <ScrollReveal baseOpacity={0.12} baseRotation={2}>
-            And I like interfaces with the same honesty: no spinners hiding broken state, no neon shouting over weak ideas. This site is both halves at once — the devices above, presented the way I wish every datasheet looked.
-          </ScrollReveal>
-          <div className="story-bridge story-bridge--quote" aria-label="Philosophy">
-            <ScrollReveal baseOpacity={0.15} baseRotation={1.5}>
-              Structure you can measure, atmosphere you can feel — engineering with a memory.
-            </ScrollReveal>
-          </div>
-          <Reveal delay={0.06}>
-            <p className="page-kicker" style={{ marginTop: '2rem' }}>skills & tech matrix</p>
-            <SkillsMatrix />
-          </Reveal>
-        </section>
-
-        <div className="story-bridge" aria-label="Bridge: from story to contact">
+        <div className="story-bridge" aria-label="Bridge: from builds to contact">
           <ScrollReveal baseOpacity={0.12} baseRotation={2}>
             Tools and tales are only half the circuit. The other half is people — come say hello.
           </ScrollReveal>

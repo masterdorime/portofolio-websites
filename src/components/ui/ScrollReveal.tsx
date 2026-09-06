@@ -1,136 +1,130 @@
 // Ported from react-bits (https://reactbits.dev) — MIT License. Recolored for Tristan's palette.
+//
+// Storyline reveal: words ignite one by one as their paragraph travels up the
+// viewport. Reimplemented on Framer Motion (useScroll scrub) instead of the
+// original GSAP ScrollTrigger wiring, which proved unreliable alongside the
+// mounting/unmounting 300vh intro — triggers measured stale positions and
+// paragraphs froze dim forever. Same props, same look, deterministic ranges:
+// each paragraph owns its own scroll window, so the story reads little by
+// little, one paragraph at a time.
 'use client';
-import { useEffect, useMemo, useRef, type ReactNode, type RefObject } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useMemo, useRef, type ReactNode } from 'react';
+import {
+  motion,
+  useMotionTemplate,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from 'framer-motion';
 
 import './ScrollReveal.css';
 
-gsap.registerPlugin(ScrollTrigger);
-
-// Recalculates every trigger's scroll positions. Required whenever DOM above
-// a reveal changes height after mount — e.g. the 300vh intro unmounting on
-// skip, which otherwise leaves all cached positions ~300vh too low and the
-// words stuck dim forever.
-export function refreshScrollTriggers() {
-  ScrollTrigger.refresh();
-}
-
 export interface ScrollRevealProps {
   children: ReactNode;
-  scrollContainerRef?: RefObject<HTMLElement | null>;
   enableBlur?: boolean;
   baseOpacity?: number;
   baseRotation?: number;
   blurStrength?: number;
   containerClassName?: string;
   textClassName?: string;
-  rotationEnd?: string;
-  wordAnimationEnd?: string;
   className?: string;
+}
+
+function Word({
+  progress,
+  range,
+  baseOpacity,
+  blurStrength,
+  enableBlur,
+  children,
+}: {
+  progress: MotionValue<number>;
+  range: [number, number];
+  baseOpacity: number;
+  blurStrength: number;
+  enableBlur: boolean;
+  children: ReactNode;
+}) {
+  const opacity = useTransform(progress, range, [baseOpacity, 1]);
+  const blurPx = useTransform(progress, range, enableBlur ? [blurStrength, 0] : [0, 0]);
+  const filter = useMotionTemplate`blur(${blurPx}px)`;
+  return (
+    <motion.span className="word" style={{ opacity, filter }}>
+      {children}
+    </motion.span>
+  );
 }
 
 const ScrollReveal = ({
   children,
-  scrollContainerRef,
   enableBlur = true,
   baseOpacity = 0.1,
   baseRotation = 3,
   blurStrength = 4,
   containerClassName = '',
   textClassName = '',
-  rotationEnd = 'bottom bottom',
-  wordAnimationEnd = 'bottom bottom',
   className = '',
 }: ScrollRevealProps) => {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLHeadingElement>(null);
+  const reduceMotion = useReducedMotion();
 
-  const splitText = useMemo(() => {
+  const words = useMemo(() => {
     const text = typeof children === 'string' ? children : '';
-    return text.split(/(\s+)/).map((word, index) => {
-      if (word.match(/^\s+$/)) return word;
+    return text.split(/(\s+)/);
+  }, [children]);
+
+  // One window per paragraph: starts igniting near the viewport bottom,
+  // fully lit by the time it reaches mid-viewport. Paragraphs never overlap.
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start 0.9', 'end 0.45'],
+  });
+  const rotate = useTransform(scrollYProgress, [0, 1], [baseRotation, 0]);
+
+  const n = Math.max(1, words.filter((w) => !/^\s+$/.test(w)).length);
+  let seen = 0;
+  const spans = words.map((word, index) => {
+    if (/^\s+$/.test(word)) return word;
+    const i = seen++;
+    const range: [number, number] = [i / n, Math.min(1, (i + 1) / n)];
+    if (reduceMotion) {
       return (
         <span className="word" key={index}>
           {word}
         </span>
       );
-    });
-  }, [children]);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return undefined;
-
-    // Spec §8: reduced-motion users get the full text, no scrub choreography.
-    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return undefined;
     }
-
-    const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;
-
-    gsap.fromTo(
-      el,
-      { transformOrigin: '0% 50%', rotate: baseRotation },
-      {
-        ease: 'none',
-        rotate: 0,
-        scrollTrigger: {
-          trigger: el,
-          scroller,
-          start: 'top bottom',
-          end: rotationEnd,
-          scrub: true
-        }
-      }
+    return (
+      <Word
+        key={index}
+        progress={scrollYProgress}
+        range={range}
+        baseOpacity={baseOpacity}
+        blurStrength={blurStrength}
+        enableBlur={enableBlur}
+      >
+        {word}
+      </Word>
     );
+  });
 
-    const wordElements = el.querySelectorAll('.word');
-
-    gsap.fromTo(
-      wordElements,
-      { opacity: baseOpacity, willChange: 'opacity' },
-      {
-        ease: 'none',
-        opacity: 1,
-        stagger: 0.05,
-        scrollTrigger: {
-          trigger: el,
-          scroller,
-          start: 'top bottom-=20%',
-          end: wordAnimationEnd,
-          scrub: true
-        }
-      }
+  if (reduceMotion) {
+    return (
+      <h2 ref={containerRef} className={[`scroll-reveal`, containerClassName, className].filter(Boolean).join(' ')}>
+        <p className={[`scroll-reveal-text`, textClassName].filter(Boolean).join(' ')}>{spans}</p>
+      </h2>
     );
-
-    if (enableBlur) {
-      gsap.fromTo(
-        wordElements,
-        { filter: `blur(${blurStrength}px)` },
-        {
-          ease: 'none',
-          filter: 'blur(0px)',
-          stagger: 0.05,
-          scrollTrigger: {
-            trigger: el,
-            scroller,
-            start: 'top bottom-=20%',
-            end: wordAnimationEnd,
-            scrub: true
-          }
-        }
-      );
-    }
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
-  }, [scrollContainerRef, enableBlur, baseRotation, baseOpacity, rotationEnd, wordAnimationEnd, blurStrength]);
+  }
 
   return (
-    <h2 ref={containerRef as RefObject<HTMLHeadingElement>} className={[`scroll-reveal`, containerClassName, className].filter(Boolean).join(' ')}>
-      <p className={[`scroll-reveal-text`, textClassName].filter(Boolean).join(' ')}>{splitText}</p>
-    </h2>
+    <motion.h2
+      ref={containerRef}
+      className={[`scroll-reveal`, containerClassName, className].filter(Boolean).join(' ')}
+      style={{ rotate, transformOrigin: '0% 50%' }}
+    >
+      <p className={[`scroll-reveal-text`, textClassName].filter(Boolean).join(' ')}>{spans}</p>
+    </motion.h2>
   );
 };
 
