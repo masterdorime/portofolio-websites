@@ -64,3 +64,34 @@ describe('runCommand', () => {
     expect(runCommand('WHOAMI').lines[0].text).toContain('Tristan');
   });
 });
+
+describe('runCommand in Indonesian', () => {
+  it('help lists commands in Bahasa', () => {
+    const text = runCommand('help', new Date(), 'id').lines.map((l) => l.text).join('\n');
+    expect(text).toContain('perintah yang tersedia');
+    expect(text).toContain('whoami');
+  });
+
+  it('whoami answers in Bahasa', () => {
+    const text = runCommand('whoami', new Date(), 'id').lines.map((l) => l.text).join('\n');
+    expect(text).toContain('Tristan Edgina');
+    expect(text).toMatch(/mahasiswa/i);
+  });
+
+  it('projects uses Indonesian taglines', () => {
+    const text = runCommand('projects', new Date(), 'id').lines.map((l) => l.text).join('\n');
+    expect(text).toContain('Uricheck');
+    expect(text).toContain('portabel');
+  });
+
+  it('unknown command gives Bahasa error', () => {
+    const { lines } = runCommand('halo', new Date(), 'id');
+    expect(lines.every((l) => l.kind === 'error')).toBe(true);
+    expect(lines[0].text).toContain('help');
+  });
+
+  it('defaults to English', () => {
+    const text = runCommand('whoami').lines.map((l) => l.text).join('\n');
+    expect(text).toMatch(/Computer Engineering/i);
+  });
+});

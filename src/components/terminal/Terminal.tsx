@@ -3,16 +3,19 @@
 
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { runCommand, type TerminalLine } from '@/lib/terminal/commands';
+import { useDict, useLanguage } from '@/i18n/LanguageProvider';
 
 let nextId = 1;
 
-const GREETING: TerminalLine[] = [
-  { id: 0, kind: 'output', text: 'tristan@bandung:~ guest shell' },
-  { id: -1, kind: 'output', text: 'type "help" to list commands' },
-];
-
 export default function Terminal() {
-  const [lines, setLines] = useState<TerminalLine[]>(GREETING);
+  const lang = useLanguage();
+  const t = useDict();
+  const greeting: TerminalLine[] = t.terminal.greeting.map((text, i) => ({
+    id: -100 - i,
+    kind: 'output' as const,
+    text,
+  }));
+  const [lines, setLines] = useState<TerminalLine[]>(greeting);
   const [value, setValue] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState<number | null>(null);
@@ -23,13 +26,21 @@ export default function Terminal() {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [lines]);
 
+  useEffect(() => {
+    setLines(t.terminal.greeting.map((text, i) => ({ id: -100 - i, kind: 'output' as const, text })));
+    setHistory([]);
+    setHistoryIdx(null);
+    setValue('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
+
   const submit = () => {
     const raw = value;
     setValue('');
     setHistoryIdx(null);
     if (raw.trim() === '') return;
     setHistory((h) => [raw, ...h]);
-    const { lines: out, clear } = runCommand(raw);
+    const { lines: out, clear } = runCommand(raw, new Date(), lang);
     if (clear) {
       setLines([]);
       return;
@@ -63,7 +74,7 @@ export default function Terminal() {
   };
 
   return (
-    <div className="terminal" role="group" aria-label="Interactive terminal — type help for commands">
+    <div className="terminal" role="group" aria-label={t.contact.terminalLabel}>
       <div className="terminal-bar" aria-hidden>
         <span className="terminal-dot" />
         <span className="terminal-dot" />
@@ -99,7 +110,7 @@ export default function Terminal() {
           onKeyDown={onKeyDown}
           autoComplete="off"
           spellCheck={false}
-          aria-label="Terminal command input"
+          aria-label={t.contact.terminalInput}
           placeholder="help"
         />
       </div>

@@ -2,13 +2,7 @@
 'use client';
 
 import type { ProjectFilter } from '@/data/projects';
-
-const OPTIONS: Array<{ value: ProjectFilter; label: string }> = [
-  { value: 'all', label: 'all' },
-  { value: 'ai', label: 'ai' },
-  { value: 'iot', label: 'iot' },
-  { value: 'hardware', label: 'hardware' },
-];
+import { useDict } from '@/i18n/LanguageProvider';
 
 export default function FilterBar({
   value,
@@ -17,6 +11,13 @@ export default function FilterBar({
   value: ProjectFilter;
   onChange: (v: ProjectFilter) => void;
 }) {
+  const t = useDict();
+  const OPTIONS: Array<{ value: ProjectFilter; label: string }> = [
+    { value: 'all', label: t.filters.all },
+    { value: 'ai', label: 'ai' },
+    { value: 'iot', label: 'iot' },
+    { value: 'hardware', label: 'hardware' },
+  ];
   return (
     <div className="filter-bar" role="group" aria-label="Filter projects by category">
       {OPTIONS.map(({ value: v, label }) => (

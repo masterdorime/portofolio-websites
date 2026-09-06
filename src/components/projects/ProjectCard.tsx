@@ -5,8 +5,14 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import type { Project } from '@/data/projects';
 import { springBase } from '@/lib/motion';
+import { useDict } from '@/i18n/LanguageProvider';
 
 export default function ProjectCard({ project }: { project: Project }) {
+  const t = useDict();
+  const text = t.projectText[project.slug] ?? {
+    tagline: project.tagline,
+    description: project.description,
+  };
   return (
     <motion.article
       layout
@@ -24,8 +30,8 @@ export default function ProjectCard({ project }: { project: Project }) {
           {project.name}
         </Link>
       </h3>
-      <p>{project.tagline}</p>
-      <p className="card-desc">{project.description}</p>
+      <p>{text.tagline}</p>
+      <p className="card-desc">{text.description}</p>
       <div className="case-meta">
         <span className="tag">{project.year}</span>
         {project.tech.slice(0, 3).map((t) => (

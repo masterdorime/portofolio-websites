@@ -4,10 +4,12 @@
 import { useEffect, useState } from 'react';
 import { SITE } from '@/data/site';
 import { formatWib } from '@/lib/time/wib';
+import { useDict } from '@/i18n/LanguageProvider';
 
 export default function HeroBadge() {
   // Null until mounted so server and client render the same placeholder (no hydration mismatch).
   const [now, setNow] = useState<Date | null>(null);
+  const t = useDict();
 
   useEffect(() => {
     setNow(new Date());
@@ -19,7 +21,7 @@ export default function HeroBadge() {
     <p className="hero-badge" aria-label={`Academic status: undergraduate at ${SITE.university}`}>
       <span className="dot" aria-hidden />
       <span>
-        {SITE.university} · undergrad · <time>{now ? formatWib(now) : '--:--:-- WIB'}</time>
+        {SITE.university} · {t.badge} · <time>{now ? formatWib(now) : '--:--:-- WIB'}</time>
       </span>
     </p>
   );

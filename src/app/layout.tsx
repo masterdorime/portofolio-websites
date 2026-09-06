@@ -5,6 +5,7 @@ import GrainOverlay from '@/components/atmosphere/GrainOverlay';
 import MagneticCursor from '@/components/cursor/MagneticCursor';
 import NavBar from '@/components/nav/NavBar';
 import Footer from '@/components/nav/Footer';
+import { LanguageProvider } from '@/i18n/LanguageProvider';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -45,9 +46,11 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <GrainOverlay />
         <MagneticCursor />
-        <NavBar />
-        {children}
-        <Footer />
+        <LanguageProvider>
+          <NavBar />
+          {children}
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );
