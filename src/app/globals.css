@@ -38,7 +38,23 @@ html[data-theme='light'] {
   --color-muted: #62666e;
   --color-accent-rose: #6e6e76;
   --color-accent-lavender: #55555e;
-  --color-accent-amber: #c23e00;
+  --color-accent-amber: #1d4ed8;
+}
+html[data-theme='light'] .intro-glow {
+  background: radial-gradient(ellipse at 50% 55%, rgba(29, 78, 216, 0.14), transparent 60%);
+}
+html[data-theme='light'] .hero-model::before {
+  background: radial-gradient(
+    ellipse at 50% 55%,
+    rgba(85, 85, 94, 0.12),
+    rgba(29, 78, 216, 0.08) 45%,
+    transparent 70%
+  );
+}
+html[data-theme='light'] .media-aberration:hover img,
+html[data-theme='light'] .media-aberration:hover video {
+  filter: drop-shadow(-2px 0 0 rgba(29, 78, 216, 0.4))
+    drop-shadow(2px 0 0 rgba(98, 102, 110, 0.45));
 }
 
 /* Single-scroll page: smooth anchor travel, offset for the fixed nav. */

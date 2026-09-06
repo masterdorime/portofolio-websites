@@ -47,7 +47,7 @@ export default function Home() {
 
   const ink = theme === 'light' ? '#101014' : '#f4f4f2';
   const paper = theme === 'light' ? '#fafafa' : '#0e0e10';
-  const signal = theme === 'light' ? '#c23e00' : '#ff4d00';
+  const signal = theme === 'light' ? '#1d4ed8' : '#ff4d00';
   const mailto = `mailto:${SITE.email}`;
 
   return (
