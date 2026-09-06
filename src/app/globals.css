@@ -49,3 +49,60 @@ body {
   );
   z-index: 5;
 }
+
+/* Film grain overlay (spec §3/§7) */
+.grain-overlay {
+  position: fixed;
+  inset: -10%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+}
+.grain-overlay svg {
+  width: 100%;
+  height: 100%;
+}
+.grain-toggle {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 95;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, var(--color-muted) 40%, transparent);
+  background: color-mix(in oklab, var(--color-surface) 80%, transparent);
+  color: var(--color-muted);
+  cursor: pointer;
+}
+.grain-toggle:hover {
+  color: var(--color-foreground);
+  border-color: color-mix(in oklab, var(--color-accent-amber) 50%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .grain-overlay {
+    animation: grain-shift 0.9s steps(4) infinite;
+  }
+  @keyframes grain-shift {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-2%, 1%); }
+    50% { transform: translate(1%, -2%); }
+    75% { transform: translate(-1%, 2%); }
+    100% { transform: translate(2%, -1%); }
+  }
+}
+
+/* Chromatic aberration on media hover (spec §3/§7) — rose/lavender channel split, no neon */
+.media-aberration img,
+.media-aberration video {
+  transition: filter 0.3s ease;
+}
+.media-aberration:hover img,
+.media-aberration:hover video {
+  filter: drop-shadow(-2px 0 0 rgba(212, 131, 139, 0.35))
+    drop-shadow(2px 0 0 rgba(157, 141, 241, 0.35));
+}

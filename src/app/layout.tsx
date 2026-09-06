@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Space_Grotesk, IBM_Plex_Mono, Instrument_Serif } from 'next/font/google';
 import './globals.css';
+import GrainOverlay from '@/components/atmosphere/GrainOverlay';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -33,7 +34,8 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${ibmPlexMono.variable} ${instrumentSerif.variable}`}
     >
-      <body className="min-h-screen bg-background text-foreground antialiased">
+      <body className="min-h-screen bg-background text-foreground antialiased vignette">
+        <GrainOverlay />
         {children}
       </body>
     </html>
