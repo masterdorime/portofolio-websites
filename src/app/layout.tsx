@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Space_Grotesk, IBM_Plex_Mono, Instrument_Serif } from 'next/font/google';
 import './globals.css';
 import GrainOverlay from '@/components/atmosphere/GrainOverlay';
-import MagneticCursor from '@/components/cursor/MagneticCursor';
+import SmoothCursor from '@/components/cursor/SmoothCursor';
 import NavBar from '@/components/nav/NavBar';
 import Footer from '@/components/nav/Footer';
 import { LanguageProvider } from '@/i18n/LanguageProvider';
@@ -45,7 +45,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-background text-foreground antialiased vignette">
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <GrainOverlay />
-        <MagneticCursor />
+        <SmoothCursor />
         <LanguageProvider>
           <NavBar />
           {children}
