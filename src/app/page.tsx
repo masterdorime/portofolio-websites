@@ -26,7 +26,7 @@ const TextLoop = dynamic(() => import('@/components/ui/TextLoop'), { ssr: false 
 const DriftWall = dynamic(() => import('@/components/ui/DriftWall'), { ssr: false });
 const ScrollReveal = dynamic(() => import('@/components/ui/ScrollReveal'), { ssr: false });
 const Lanyard = dynamic(() => import('@/components/ui/Lanyard'), { ssr: false });
-const MorphSlider = dynamic(() => import('@/components/ui/MorphSlider'), { ssr: false });
+const DomeGallery = dynamic(() => import('@/components/ui/DomeGallery'), { ssr: false });
 
 const PHONE_PHOTOS: Array<{ slug: string; alt: string }> = [
   { slug: 'malas-edit', alt: 'Too lazy to edit, black and white' },
@@ -212,16 +212,16 @@ export default function Home() {
               <p className="page-lede">{t.phone.sub}</p>
             </Reveal>
             <Reveal delay={0.06}>
-              <div style={{ marginTop: '1.75rem', height: 'clamp(420px, 62vh, 580px)' }}>
-                <MorphSlider
-                  items={PHONE_PHOTOS.map(({ slug, alt }) => ({
-                    image: `/images/phoneography/${slug}.webp`,
-                    caption: alt,
+              <div style={{ marginTop: '1.75rem', height: 'clamp(480px, 68vh, 620px)' }}>
+                <DomeGallery
+                  images={PHONE_PHOTOS.map(({ slug, alt }) => ({
+                    src: `/images/phoneography/${slug}.webp`,
+                    alt,
                   }))}
-                  transition="melt"
-                  overlayColor={paper}
-                  autoplay
-                  autoplayDelay={4}
+                  grayscale={false}
+                  overlayBlurColor={paper}
+                  openedImageWidth="min(880px, 92vw)"
+                  openedImageHeight="min(80vh, 1100px)"
                 />
               </div>
             </Reveal>
