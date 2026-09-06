@@ -1,9 +1,19 @@
-import type { Transition, Variants } from 'framer-motion';
+import type { Transition } from 'framer-motion';
 
 export const springBase: Transition = { type: 'spring', stiffness: 260, damping: 20 };
 export const springSoft: Transition = { type: 'spring', stiffness: 120, damping: 16 };
 
-export function stagger(dir: 'up' | 'down' = 'up'): Variants {
+export interface StaggerVariants {
+  hidden: Record<string, never>;
+  visible: {
+    transition: {
+      staggerChildren: number;
+      delayChildren: number;
+    };
+  };
+}
+
+export function stagger(dir: 'up' | 'down' = 'up'): StaggerVariants {
   return {
     hidden: {},
     visible: {
