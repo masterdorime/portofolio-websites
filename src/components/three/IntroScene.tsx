@@ -20,7 +20,7 @@ const MODEL_URL = '/models/trio.glb';
 const FIT_OUT = /flower|cave|plate/i;
 
 const CAM_FAR: [number, number, number] = [0, 9, 1.6];
-const CAM_NEAR: [number, number, number] = [0.5, 0.8, 3.4];
+const CAM_NEAR: [number, number, number] = [0.5, 0.45, 2.7];
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -147,18 +147,78 @@ function CameraRig({ progressRef }: { progressRef: MutableRefObject<number> }) {
       CAM_FAR[1] + (CAM_NEAR[1] - CAM_FAR[1]) * eased,
       CAM_FAR[2] + (CAM_NEAR[2] - CAM_FAR[2]) * eased
     );
-    state.camera.lookAt(0, 0.35 - eased * 0.1, 0);
+    state.camera.lookAt(0, 0.35 - eased * 0.15, 0);
   });
   return null;
+}
+
+// The flower carpet: a dense disc of glowing blooms under the trio that
+// fades in as you land, so the finale sits INSIDE the flower bed.
+function BedGlow({ progressRef, count = 520 }: { progressRef: MutableRefObject<number>; count?: number }) {
+  const ref = useRef<THREE.Points>(null);
+  const matRef = useRef<THREE.PointsMaterial>(null);
+  const { base, seeds } = useMemo(() => {
+    const base = new Float32Array(count * 3);
+    const seeds = new Float32Array(count * 2);
+    for (let i = 0; i < count; i++) {
+      // Center-weighted disc, radius ~7 in fitted units.
+      const r = 7 * Math.sqrt(Math.random());
+      const a = Math.random() * Math.PI * 2;
+      base[i * 3] = Math.cos(a) * r;
+      base[i * 3 + 1] = -1.2 + Math.random() * 2.2;
+      base[i * 3 + 2] = Math.sin(a) * r;
+      seeds[i * 2] = Math.random() * Math.PI * 2;
+      seeds[i * 2 + 1] = 0.5 + Math.random() * 0.5;
+    }
+    return { base, seeds };
+  }, [count]);
+
+  useFrame((state) => {
+    const p = THREE.MathUtils.clamp(progressRef.current, 0, 1);
+    if (matRef.current) {
+      matRef.current.opacity = THREE.MathUtils.smoothstep(p, 0.3, 0.9) * 0.9;
+    }
+    const attr = ref.current?.geometry.getAttribute('position') as THREE.BufferAttribute | undefined;
+    if (!attr) return;
+    const t = state.clock.elapsedTime;
+    const arr = attr.array as Float32Array;
+    for (let i = 0; i < count; i++) {
+      const sp = seeds[i * 2 + 1];
+      const ph = seeds[i * 2];
+      arr[i * 3] = base[i * 3] + Math.sin(t * 0.3 * sp + ph) * 0.3;
+      arr[i * 3 + 1] = base[i * 3 + 1] + Math.sin(t * 0.5 * sp + ph) * 0.15;
+      arr[i * 3 + 2] = base[i * 3 + 2] + Math.cos(t * 0.25 * sp + ph) * 0.3;
+    }
+    attr.needsUpdate = true;
+  });
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[base, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        ref={matRef}
+        size={0.11}
+        sizeAttenuation
+        color="#fffdf4"
+        transparent
+        opacity={0}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
+  );
 }
 
 function FogRig({ progressRef, fog }: { progressRef: MutableRefObject<number>; fog: THREE.Fog | null }) {
   useFrame(() => {
     if (!fog) return;
     const p = THREE.MathUtils.clamp(progressRef.current, 0, 1);
-    // The abyss closes in as you land: far fog swallows the void.
-    fog.near = 9 - p * 6.5;
-    fog.far = 26 - p * 16;
+    // The abyss closes in as you land: far fog swallows the void until the
+    // flower bed is all that's left.
+    fog.near = 9 - p * 7.5;
+    fog.far = 26 - p * 19;
   });
   return null;
 }
@@ -202,6 +262,7 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
               <TrioModel onEnter={onEnter} />
             </Suspense>
             {!reduceMotion && <Petals />}
+            {!reduceMotion && <BedGlow progressRef={progressRef} />}
             <CameraRig progressRef={progressRef} />
             <FogRig progressRef={progressRef} fog={fog} />
             <AdaptiveDpr />
