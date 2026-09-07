@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0e0e10;
-  --color-surface: #17171a;
-  --color-foreground: #f4f4f2;
-  --color-muted: #9a9aa0;
-  --color-accent-rose: #c9c9cf;
-  --color-accent-lavender: #8e8e96;
-  --color-accent-amber: #ff4d00;
+  --color-background: #070b18;
+  --color-surface: #0d1526;
+  --color-foreground: #ece7d9;
+  --color-muted: #8b93a8;
+  --color-accent-rose: #e07856;
+  --color-accent-lavender: #5eead4;
+  --color-accent-amber: #e5a954;
 
   --font-sans: var(--font-space-grotesk), system-ui, sans-serif;
   --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
@@ -32,29 +32,29 @@ html[data-magicui-theme-vt='active']::view-transition-new(root) {
 
 /* Stark-white light mode (retro Apple paper). Dark obsidian stays default. */
 html[data-theme='light'] {
-  --color-background: #fafafa;
+  --color-background: #f4f1e6;
   --color-surface: #ffffff;
-  --color-foreground: #101014;
-  --color-muted: #62666e;
-  --color-accent-rose: #6e6e76;
-  --color-accent-lavender: #55555e;
-  --color-accent-amber: #1d4ed8;
+  --color-foreground: #141a2e;
+  --color-muted: #5b6478;
+  --color-accent-rose: #b3555e;
+  --color-accent-lavender: #0e7490;
+  --color-accent-amber: #9a6b1f;
 }
 html[data-theme='light'] .intro-glow {
-  background: radial-gradient(ellipse at 50% 55%, rgba(29, 78, 216, 0.14), transparent 60%);
+  background: radial-gradient(ellipse at 50% 55%, rgba(14, 116, 144, 0.14), transparent 60%);
 }
 html[data-theme='light'] .hero-model::before {
   background: radial-gradient(
     ellipse at 50% 55%,
-    rgba(85, 85, 94, 0.12),
-    rgba(29, 78, 216, 0.08) 45%,
+    rgba(91, 100, 120, 0.12),
+    rgba(14, 116, 144, 0.08) 45%,
     transparent 70%
   );
 }
 html[data-theme='light'] .media-aberration:hover img,
 html[data-theme='light'] .media-aberration:hover video {
-  filter: drop-shadow(-2px 0 0 rgba(29, 78, 216, 0.4))
-    drop-shadow(2px 0 0 rgba(98, 102, 110, 0.45));
+  filter: drop-shadow(-2px 0 0 rgba(14, 116, 144, 0.4))
+    drop-shadow(2px 0 0 rgba(91, 100, 120, 0.45));
 }
 
 /* Single-scroll page: anchor offset for the fixed nav.
@@ -86,7 +86,10 @@ body {
 }
 
 ::selection {
-  background: var(--color-accent-amber);
+  background: var(--color-accent-lavender);
+  color: var(--color-background);
+}
+html[data-theme='light'] ::selection {
   color: #ffffff;
 }
 
@@ -105,7 +108,7 @@ body {
   background: radial-gradient(
     ellipse at center,
     transparent 55%,
-    rgba(14, 14, 16, 0.55) 100%
+    rgba(7, 11, 24, 0.6) 100%
   );
   z-index: 5;
 }
@@ -113,7 +116,7 @@ html[data-theme='light'] .vignette::after {
   background: radial-gradient(
     ellipse at center,
     transparent 62%,
-    rgba(16, 16, 20, 0.12) 100%
+    rgba(20, 18, 12, 0.1) 100%
   );
 }
 
@@ -148,7 +151,7 @@ html[data-theme='light'] .vignette::after {
 }
 .grain-toggle:hover {
   color: var(--color-foreground);
-  border-color: color-mix(in oklab, var(--color-accent-amber) 50%, transparent);
+  border-color: color-mix(in oklab, var(--color-accent-lavender) 55%, transparent);
 }
 @media (prefers-reduced-motion: no-preference) {
   .grain-overlay {
@@ -170,8 +173,8 @@ html[data-theme='light'] .vignette::after {
 }
 .media-aberration:hover img,
 .media-aberration:hover video {
-  filter: drop-shadow(-2px 0 0 rgba(255, 77, 0, 0.45))
-    drop-shadow(2px 0 0 rgba(154, 154, 160, 0.5));
+  filter: drop-shadow(-2px 0 0 rgba(94, 234, 212, 0.45))
+    drop-shadow(2px 0 0 rgba(139, 147, 168, 0.5));
 }
 
 /* Smooth cursor owns the pointer on desktop — hide the native one (spec §7). */
@@ -222,7 +225,7 @@ html.custom-cursor * {
   border-top: 1px solid color-mix(in oklab, var(--color-muted) 30%, transparent);
 }
 .terminal-prompt {
-  color: var(--color-accent-amber);
+  color: var(--color-accent-lavender);
   flex-shrink: 0;
 }
 .terminal-input {
@@ -231,7 +234,7 @@ html.custom-cursor * {
   outline: none;
   background: transparent;
   color: var(--color-foreground);
-  caret-color: var(--color-accent-amber);
+  caret-color: var(--color-accent-lavender);
   font: inherit;
 }
 
@@ -258,7 +261,7 @@ html.custom-cursor * {
   letter-spacing: 0.02em;
 }
 .nav-brand:hover {
-  color: var(--color-accent-amber);
+  color: var(--color-accent-lavender);
 }
 .nav-links {
   display: flex;
@@ -286,7 +289,7 @@ html.custom-cursor * {
   right: 0;
   bottom: -2px;
   height: 1px;
-  background: var(--color-accent-amber);
+  background: var(--color-accent-lavender);
 }
 .footer {
   border-top: 1px solid color-mix(in oklab, var(--color-muted) 20%, transparent);
@@ -300,7 +303,7 @@ html.custom-cursor * {
   text-decoration: none;
 }
 .footer a:hover {
-  color: var(--color-accent-amber);
+  color: var(--color-accent-lavender);
 }
 @media (max-width: 640px) {
   .nav-links {
@@ -360,17 +363,17 @@ html.custom-cursor * {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid color-mix(in oklab, var(--color-accent-amber) 55%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-accent-lavender) 55%, transparent);
   border-radius: 9999px;
   padding: 0.625rem 1.25rem;
   color: var(--color-foreground);
   text-decoration: none;
   font-family: var(--font-mono);
   font-size: 0.875rem;
-  background: color-mix(in oklab, var(--color-accent-amber) 10%, transparent);
+  background: color-mix(in oklab, var(--color-accent-lavender) 10%, transparent);
 }
 .btn:hover {
-  background: color-mix(in oklab, var(--color-accent-amber) 22%, transparent);
+  background: color-mix(in oklab, var(--color-accent-lavender) 22%, transparent);
 }
 .btn--ghost {
   border-color: color-mix(in oklab, var(--color-muted) 35%, transparent);
@@ -419,8 +422,8 @@ html.custom-cursor * {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 9999px;
-  background: var(--color-accent-amber);
-  box-shadow: 0 0 12px var(--color-accent-amber);
+  background: var(--color-accent-lavender);
+  box-shadow: 0 0 12px var(--color-accent-lavender);
 }
 .hero-role {
   font-family: var(--font-mono);
@@ -508,6 +511,41 @@ html.custom-cursor * {
   color: var(--color-muted);
 }
 
+/* Relic grade + depth line on cards and case studies. */
+.relic-line {
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-lavender);
+}
+
+/* Depth HUD: fixed abyss readout, bottom-left, out of the way. */
+.depth-hud {
+  position: fixed;
+  left: clamp(1rem, 4vw, 4rem);
+  bottom: 1rem;
+  z-index: 40;
+  margin: 0;
+  padding: 0.4375rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  background: color-mix(in oklab, var(--color-surface) 72%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-muted) 25%, transparent);
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  .depth-hud {
+    font-size: 0.625rem;
+    bottom: 0.75rem;
+  }
+}
+
 /* Case-study prev/next walk. */
 .case-nav {
   display: flex;
@@ -524,7 +562,7 @@ html.custom-cursor * {
   text-decoration: none;
 }
 .case-nav a:hover {
-  color: var(--color-accent-amber);
+  color: var(--color-accent-lavender);
 }
 .hero-cta {
   display: flex;
@@ -549,8 +587,8 @@ html.custom-cursor * {
   pointer-events: none;
   background: radial-gradient(
     ellipse at 50% 55%,
-    rgba(142, 142, 150, 0.14),
-    rgba(255, 77, 0, 0.08) 45%,
+    rgba(94, 234, 212, 0.12),
+    rgba(229, 169, 84, 0.08) 45%,
     transparent 70%
   );
 }
@@ -625,8 +663,8 @@ html.custom-cursor * {
   transform: translateX(-50%);
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  color: var(--color-accent-amber);
-  border: 1px solid color-mix(in oklab, var(--color-accent-amber) 55%, transparent);
+  color: var(--color-accent-lavender);
+  border: 1px solid color-mix(in oklab, var(--color-accent-lavender) 55%, transparent);
   background: rgba(7, 7, 9, 0.72);
   border-radius: 9999px;
   padding: 0.625rem 1.25rem;
@@ -679,9 +717,12 @@ html.custom-cursor * {
 }
 .filter-btn:hover { color: var(--color-foreground); }
 .filter-btn[aria-pressed='true'] {
+  color: var(--color-background);
+  background: var(--color-accent-lavender);
+  border-color: var(--color-accent-lavender);
+}
+html[data-theme='light'] .filter-btn[aria-pressed='true'] {
   color: #ffffff;
-  background: var(--color-accent-amber);
-  border-color: var(--color-accent-amber);
 }
 .project-grid {
   display: grid;

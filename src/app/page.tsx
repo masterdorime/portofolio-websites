@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import HeroBadge from '@/components/landing/HeroBadge';
+import DepthHud from '@/components/landing/DepthHud';
 import Reveal from '@/components/motion/Reveal';
 import FilterBar from '@/components/projects/FilterBar';
 import ProjectCard from '@/components/projects/ProjectCard';
@@ -21,12 +22,11 @@ import { PROJECTS, filterProjects, type ProjectFilter } from '@/data/projects';
 import { SITE } from '@/data/site';
 
 const IntroScene = dynamic(() => import('@/components/three/IntroScene'), { ssr: false });
-const Girl = dynamic(() => import('@/components/three/Girl'), { ssr: false });
+const Lanyard = dynamic(() => import('@/components/ui/Lanyard'), { ssr: false });
 const WarpText = dynamic(() => import('@/components/ui/WarpText'), { ssr: false });
 const TextLoop = dynamic(() => import('@/components/ui/TextLoop'), { ssr: false });
 const DriftWall = dynamic(() => import('@/components/ui/DriftWall'), { ssr: false });
 const ScrollReveal = dynamic(() => import('@/components/ui/ScrollReveal'), { ssr: false });
-const Lanyard = dynamic(() => import('@/components/ui/Lanyard'), { ssr: false });
 const Teto = dynamic(() => import('@/components/three/Teto'), { ssr: false });
 const DomeGallery = dynamic(() => import('@/components/ui/DomeGallery'), { ssr: false });
 
@@ -54,7 +54,6 @@ export default function Home() {
   const [entered, setEntered] = useState(false);
   const [flash, setFlash] = useState(false);
   const [filter, setFilter] = useState<ProjectFilter>('all');
-  const [heroView, setHeroView] = useState<'lanyard' | 'girl'>('lanyard');
   const visible = useMemo(() => filterProjects(PROJECTS, filter), [filter]);
 
   const showIntro = !entered && !reduceMotion;
@@ -69,9 +68,9 @@ export default function Home() {
     }, 320);
   };
 
-  const ink = theme === 'light' ? '#101014' : '#f4f4f2';
-  const paper = theme === 'light' ? '#fafafa' : '#0e0e10';
-  const signal = theme === 'light' ? '#1d4ed8' : '#ff4d00';
+  const ink = theme === 'light' ? '#141a2e' : '#ece7d9';
+  const paper = theme === 'light' ? '#f4f1e6' : '#070b18';
+  const signal = theme === 'light' ? '#0e7490' : '#5eead4';
   const mailto = `mailto:${SITE.email}`;
 
   return (
@@ -79,6 +78,7 @@ export default function Home() {
       <AnimatePresence>{flash && <motion.div className="intro-flash" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} aria-hidden />}</AnimatePresence>
 
       {showIntro && <IntroScene onEnter={enter} />}
+      {!showIntro && <DepthHud />}
 
       <div className="hero">
         <div>
@@ -108,30 +108,13 @@ export default function Home() {
           </Reveal>
         </div>
         <div>
-          <div className="filter-bar" role="group" aria-label="Hero display" style={{ margin: '0 0 0.75rem' }}>
-            {(['lanyard', 'girl'] as const).map((v) => (
-              <button
-                key={v}
-                type="button"
-                className="filter-btn"
-                aria-pressed={heroView === v}
-                onClick={() => setHeroView(v)}
-              >
-                {t.heroView[v]}
-              </button>
-            ))}
-          </div>
           <Reveal delay={0.1} className="hero-model">
-            {heroView === 'lanyard' ? (
-              <Lanyard
-                frontImage="/images/lanyard-photo.jpg"
-                backImage="/images/lanyard-photo.jpg"
-                strapColor={signal}
-                lanyardWidth={1}
-              />
-            ) : (
-              <Girl />
-            )}
+            <Lanyard
+              frontImage="/images/lanyard-photo.jpg"
+              backImage="/images/lanyard-photo.jpg"
+              strapColor={signal}
+              lanyardWidth={1}
+            />
           </Reveal>
         </div>
         <div className="hero-loop" aria-hidden={false}>

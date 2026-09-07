@@ -73,7 +73,7 @@ const DriftWall = ({
   fade = 0.6,
   dim = 0.55,
   grayscale = false,
-  overlayColor = '#070709',
+  overlayColor = '#070b18',
   className = '',
   style
 }: DriftWallProps) => {

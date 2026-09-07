@@ -32,6 +32,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       </h3>
       <p>{text.tagline}</p>
       <p className="card-desc">{text.description}</p>
+      <p className="relic-line">{text.relic}</p>
       <div className="case-meta">
         <span className="tag">{project.year}</span>
         {project.tech.slice(0, 3).map((t) => (

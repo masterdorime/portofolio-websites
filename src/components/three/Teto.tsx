@@ -206,8 +206,8 @@ export default function Teto() {
           aria-label="Demon girl watching the cursor"
         >
           <ambientLight intensity={0.75} />
-          <directionalLight position={[3, 4, 4]} intensity={1.1} color="#ff4d00" />
-          <directionalLight position={[-4, 2, 2]} intensity={0.6} color="#8e8e96" />
+          <directionalLight position={[3, 4, 4]} intensity={1.1} color="#e5a954" />
+          <directionalLight position={[-4, 2, 2]} intensity={0.6} color="#5eead4" />
           <Suspense fallback={null}>
             <TetoModel />
           </Suspense>

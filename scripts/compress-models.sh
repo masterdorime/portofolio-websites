@@ -25,19 +25,20 @@ compress_one() {
   echo "$2: $(wc -c < "$OUT/$2") bytes"
 }
 
-# Girl mascot: 5.8MB raw single character. Source already ships float
-# positions, but the meshopt pass re-quantizes, so dequantize stays mandatory
-# (see note above). Hard gate under 8MB delivered.
-compress_one "$DL/just_a_girl.glb" "girl.glb" 1024
-size=$(wc -c < "$OUT/girl.glb")
+# Trio loading scene: 46MB raw diorama. Strip the cave shell + display
+# plates (fog carries the void), keep Reg + Riko + Nanachi + flower bed.
+# Hard gate under 8MB delivered.
+node scripts/strip-trio.mjs "$DL/reg_riko_nanachi_from_made_in_abyss.glb" "$TMP/trio-src.glb"
+compress_one "$TMP/trio-src.glb" "trio.glb" 1024
+size=$(wc -c < "$OUT/trio.glb")
 if [ "$size" -ge 8388608 ]; then
   # Still over 8MB: halve texture size and redo the pipeline.
-  compress_one "$DL/just_a_girl.glb" "girl.glb" 512
+  compress_one "$TMP/trio-src.glb" "trio.glb" 512
 fi
-size=$(wc -c < "$OUT/girl.glb")
-echo "girl.glb final: $size bytes"
+size=$(wc -c < "$OUT/trio.glb")
+echo "trio.glb final: $size bytes"
 if [ "$size" -ge 8388608 ]; then
-  echo "FAIL: girl.glb still over 8MB after 512px textures" >&2
+  echo "FAIL: trio.glb still over 8MB after 512px textures" >&2
   exit 1
 fi
 
@@ -56,7 +57,6 @@ if [ "$size" -ge 8388608 ]; then
   exit 1
 fi
 
-# Retro TV (intro scene): 4.9MB raw, no hard gate, keep it lean.
-compress_one "$DL/retro_tv.glb" "retro-tv.glb" 1024
+# Retro TV retired with the TV intro — kept out of the pipeline.
 
 rm -rf "$TMP"

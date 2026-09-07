@@ -178,7 +178,7 @@ export const LogoLoop = memo(
     pauseOnHover,
     hoverSpeed,
     fadeOut = false,
-    fadeOutColor = '#070709',
+    fadeOutColor = '#070b18',
     scaleOnHover = false,
     renderItem,
     ariaLabel = 'Partner logos',

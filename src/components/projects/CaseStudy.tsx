@@ -9,6 +9,7 @@ export default function CaseStudy({ project, t }: { project: Project; t: Dict })
     description: project.description,
     problem: project.problem,
     approach: project.approach,
+    relic: '',
   };
   return (
     <article className="case-body">
@@ -20,6 +21,7 @@ export default function CaseStudy({ project, t }: { project: Project; t: Dict })
         {project.year}
       </p>
       <h1 className="page-title">{project.name}</h1>
+      <p className="relic-line">{text.relic}</p>
       <p className="page-lede">{text.description}</p>
       <div className="case-meta">
         {project.tech.map((tech) => (

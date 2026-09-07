@@ -13,7 +13,7 @@
   --dw-lift: 64px;
   --dw-dim: 0.55;
   --dw-gray: 0;
-  --dw-overlay: #070709;
+  --dw-overlay: #070b18;
   --dw-edge: 40%;
   -webkit-mask-image:
     radial-gradient(ellipse 78% 82% at 50% 46%, #000 var(--dw-edge), transparent 100%),

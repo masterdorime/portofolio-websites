@@ -8,6 +8,7 @@ export interface ProjectText {
   description: string;
   problem: string;
   approach: string;
+  relic: string;
 }
 
 export interface TerminalText {
@@ -94,6 +95,7 @@ const enProjectText: Record<string, ProjectText> = {
       'Lab tests for basic urinalysis take too long and cost more than they should for quick check-ups. People dealing with recurring health tracking need something faster and private at home instead of waiting days for results.',
     approach:
       'Built an optical sensor array to read test strips, paired with an edge-AI model running locally on a microcontroller. It processes data right on the spot—no cloud dependency, no stored private data, just quick, practical feedback.',
+    relic: 'Grade 2 relic · 1,800M',
   },
   puresip: {
     tagline: 'Ultrafiltration straw with real-time sensors',
@@ -103,6 +105,7 @@ const enProjectText: Record<string, ProjectText> = {
       "When you're out hiking or dealing with an emergency, standard filtration gear is basically a guessing game. You never really know if the filter is failing or if the water is actually safe to drink.",
     approach:
       'Combines a hollow-fiber ultrafiltration membrane with live TDS and turbidity sensors. The built-in low-power MCU monitors water quality continuously and gives immediate feedback so you can drink with confidence.',
+    relic: 'Grade 1 relic · 4,500M',
   },
   techware: {
     tagline: 'Smart thermal jacket',
@@ -112,6 +115,7 @@ const enProjectText: Record<string, ProjectText> = {
       "Traditional layered clothing is rigid. If you're commuting or exercising in changing weather, you either overheat or freeze because regular jackets can't adapt to your body's thermal shifts.",
     approach:
       'Embedded skin sensors and distributed heating elements controlled by an edge algorithm. It predicts your comfort level and adjusts temperature proactively, running entirely on a small wearable battery pack.',
+    relic: 'Special grade relic · 9,000M',
   },
 };
 
@@ -124,6 +128,7 @@ const idProjectText: Record<string, ProjectText> = {
       'Tes urin standar di lab kadang kelamaan dan gak praktis buat sekadar ngecek kondisi rutin. Orang-orang yang butuh memantau kesehatan berkala butuh cara yang cepat dan privat di rumah.',
     approach:
       'Pakai susunan sensor optik buat baca strip uji, digabung sama model AI kecil yang jalan langsung di mikrokontroler. Semua pemrosesan jalan secara lokal: gak butuh internet, data aman di device, langsung keluar hasilnya.',
+    relic: 'Relik tingkat 2 · 1.800M',
   },
   puresip: {
     tagline: 'Sedotan ultrafiltrasi dengan sensor kualitas air',
@@ -133,6 +138,7 @@ const idProjectText: Record<string, ProjectText> = {
       'Pas lagi di alam bebas atau darurat, pakai filter air biasa tuh untung-untungan. Lu gak bakal tahu kapan filternya jebol atau airnya masih layak minum apa gak.',
     approach:
       'Gabungin membran ultrafiltrasi *hollow-fiber* dengan sensor TDS dan kekeruhan. MCU hemat daya mantau kualitas air terus-menerus, jadi ada indikator jelas sebelum air masuk ke mulut.',
+    relic: 'Relik tingkat 1 · 4.500M',
   },
   techware: {
     tagline: 'Jaket thermal pintar',
@@ -142,6 +148,7 @@ const idProjectText: Record<string, ProjectText> = {
       'Pakai jaket berlapis-lapis itu ribet. Kalau lu lagi aktif di cuaca yang berubah-ubah, seringnya malah kepanasan pas gerak terus kedinginan pas diem, karena jaket biasa gak bisa menyesuaikan diri.',
     approach:
       'Nyematkan sensor suhu kulit dan elemen pemanas fleksibel yang diatur sama algoritma lokal. Sistemnya memprediksi perubahan suhu tubuh lu dan langsung menyesuaikan otomatis pakai baterai portable.',
+    relic: 'Relik kelas khusus · 9.000M',
   },
 };
 
@@ -163,7 +170,7 @@ export const dict: Record<Lang, Dict> = {
     badge: 'undergrad',
     marquee: 'Hardware ✦ IoT Systems ✦ AI Devices ✦ Creative Frontend',
     about: {
-      kicker: '01 — about',
+      kicker: '01 · EDGE OF THE ABYSS',
       title: 'Circuit boards and clean code.',
       story: [
         'I’m Tristan. When I’m not buried under assignments for my Computer Engineering degree at Telkom University in Bandung, you’ll usually find me knee-deep in electronics and physical prototypes.',
@@ -176,7 +183,7 @@ export const dict: Record<Lang, Dict> = {
     bridgeBuilds:
       'Ideas are nice, but hardware has to leave the desk. Here are three projects that actually made it out.',
     projects: {
-      kicker: '02 — projects & labs',
+      kicker: '02 · ARTIFACTS OF THE DEEP',
       title: 'Physical builds, IoT systems, and custom tinkering.',
       lede:
         "Every project here is a real device I've built, soldered, and tested as a student. They usually start from everyday annoyances and turn into functioning prototypes. Click any build to see the full documentation, schematic, and parts list.",
@@ -188,7 +195,7 @@ export const dict: Record<Lang, Dict> = {
     },
     filters: { all: 'all' },
     phone: {
-      kicker: 'side quest',
+      kicker: 'field recordings · fifth layer',
       titleA: 'i also do',
       struck: 'photography',
       titleB: 'phone’ography',
@@ -198,7 +205,7 @@ export const dict: Record<Lang, Dict> = {
     bridgePeople:
       'Tools and code are cool, but talking to people is better. Hit me up.',
     contact: {
-      kicker: '03 — contact',
+      kicker: '03 · CAPITAL OF THE UNRETURNED',
       title: "Let's talk.",
       lede:
         "Drop me an email if you want to chat about hardware, web dev, or potential collaborations. I read everything myself. Whether you're a tech person or just want to talk about building cool stuff, my inbox is open.",
@@ -261,7 +268,7 @@ export const dict: Record<Lang, Dict> = {
     badge: 'mahasiswa',
     marquee: 'Perangkat Keras ✦ Sistem IoT ✦ Perangkat AI ✦ Frontend Kreatif',
     about: {
-      kicker: '01 — tentang',
+      kicker: '01 · EDGE OF THE ABYSS',
       title: 'Papan sirkuit dan kode yang rapi.',
       story: [
         'Kenalin, gue Tristan. Kalau lagi gak pusing mikirin tugas kuliah Teknik Komputer di Telkom University, Bandung, kegiatan gue biasanya gak jauh-jauh dari ngerakit sirkuit dan bikin purwarupa fisik.',
@@ -274,7 +281,7 @@ export const dict: Record<Lang, Dict> = {
     bridgeBuilds:
       'Ide emang gampang diomongin, tapi hardware harus dibuktikan. Tiga proyek ini berhasil jadi barang jadi — cek di bawah.',
     projects: {
-      kicker: '02 — proyek & lab',
+      kicker: '02 · ARTIFAK DARI KEDALAMAN',
       title: 'Rakitan fisik, sistem IoT, dan hasil otak-atik di lab.',
       lede:
         'Semua yang ada di sini adalah perangkat beneran yang gue rakit, solder, dan tes sendiri selama sekolah. Biasanya berawal dari masalah sepele terus dibikin proto-nya. Klik salah satu buat lihat detail lengkap, masalah yang diselesaikas, sampai komponen di dalamnya.',
@@ -286,7 +293,7 @@ export const dict: Record<Lang, Dict> = {
     },
     filters: { all: 'semua' },
     phone: {
-      kicker: 'misi sampingan',
+      kicker: 'rekaman lapangan · lapisan kelima',
       titleA: 'gue juga bisa',
       struck: 'fotografi',
       titleB: 'phone’ography',
@@ -296,7 +303,7 @@ export const dict: Record<Lang, Dict> = {
     bridgePeople:
       'Ngoprek kode sama hardware emang seru, tapi kenalan sama orang baru jauh lebih asik. Sapa gue aja.',
     contact: {
-      kicker: '03 — kontak',
+      kicker: '03 · CAPITAL OF THE UNRETURNED',
       title: 'Ngobrol yuk.',
       lede:
         'Kirim email aja kalau lu mau ngobrolin soal hardware, web development, atau mau kolaborasi. Semuanya bakal gue baca sendiri. Mau ngomongin soal teknik atau sekadar nanya-nanya proyek, sikat aja.',
