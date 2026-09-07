@@ -35,3 +35,5 @@ next-env.d.ts
 # local model pipeline scratch
 scripts/.tmp-models
 dev-*.log
+
+.vercel
