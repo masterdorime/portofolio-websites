@@ -6,6 +6,7 @@ import SmoothCursor from '@/components/cursor/SmoothCursor';
 import NavBar from '@/components/nav/NavBar';
 import Footer from '@/components/nav/Footer';
 import { LanguageProvider } from '@/i18n/LanguageProvider';
+import SmoothScroll from '@/components/motion/SmoothScroll';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-background text-foreground antialiased vignette">
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <GrainOverlay />
+        <SmoothScroll />
         <SmoothCursor />
         <LanguageProvider>
           <NavBar />

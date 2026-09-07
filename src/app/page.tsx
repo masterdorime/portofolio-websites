@@ -15,6 +15,7 @@ import SkillsMatrix from '@/components/about/SkillsMatrix';
 import Terminal from '@/components/terminal/Terminal';
 import SocialLoop from '@/components/contact/SocialLoop';
 import { useTheme } from '@/components/theme/ThemeToggle';
+import { scrollTopImmediate } from '@/components/motion/SmoothScroll';
 import { useDict } from '@/i18n/LanguageProvider';
 import { PROJECTS, filterProjects, type ProjectFilter } from '@/data/projects';
 import { SITE } from '@/data/site';
@@ -64,7 +65,7 @@ export default function Home() {
     window.setTimeout(() => {
       setEntered(true);
       setFlash(false);
-      window.scrollTo({ top: 0 });
+      scrollTopImmediate();
     }, 320);
   };
 

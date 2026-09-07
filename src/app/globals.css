@@ -57,14 +57,25 @@ html[data-theme='light'] .media-aberration:hover video {
     drop-shadow(2px 0 0 rgba(98, 102, 110, 0.45));
 }
 
-/* Single-scroll page: smooth anchor travel, offset for the fixed nav. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
+/* Single-scroll page: anchor offset for the fixed nav.
+   (Smooth travel itself is Lenis-driven; no CSS smooth — they fight.) */
 section[id] {
   scroll-margin-top: 4rem;
+}
+
+/* Lenis recommended styles. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
