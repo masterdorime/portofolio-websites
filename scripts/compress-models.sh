@@ -25,8 +25,8 @@ compress_one() {
   echo "$2: $(wc -c < "$OUT/$2") bytes"
 }
 
-# Trio loading scene: 46MB raw diorama. Strip the cave shell + display
-# plates (fog carries the void), keep Reg + Riko + Nanachi + flower bed.
+# Trio loading scene: 46MB raw diorama. Strip only the display plates (keep
+# Reg + Riko + Nanachi + flower bed + cave shell), then compress.
 # Hard gate under 8MB delivered.
 node scripts/strip-trio.mjs "$DL/reg_riko_nanachi_from_made_in_abyss.glb" "$TMP/trio-src.glb"
 compress_one "$TMP/trio-src.glb" "trio.glb" 1024

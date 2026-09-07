@@ -1,10 +1,11 @@
-// Strip the trio diorama down to characters + flower bed: drops the cave
-// shell and display plates (fog + background carry the void instead).
+// Strip the trio diorama down to characters + flower bed + cave shell: drops
+// only the display plates. The cave gives the void its rocky enclosure back
+// (fog + background carry the rest).
 import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { prune } from '@gltf-transform/functions';
 
-const DROP = /cave|plate/i;
+const DROP = /plate/i;
 
 const [input, output] = process.argv.slice(2);
 if (!input || !output) {

@@ -51,16 +51,8 @@ if (probeJs === 'AUDIT') {
   try {
     const result = await page.evaluate(() => {
       const audit = { skip: null, canvases: [] };
-      const skip = document.querySelector('.intro-skip');
-      if (skip) {
-        const r = skip.getBoundingClientRect();
-        const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
-        audit.skip = {
-          rect: [Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height)],
-          hit: top ? top.tagName + '.' + (top.className || '') : 'none',
-          z: getComputedStyle(skip).zIndex,
-        };
-      }
+      const lw = document.querySelector('.lanyard-wrapper canvas');
+      if (lw) lw.style.display = 'none';
       document.querySelectorAll('canvas').forEach((c) => {
         const r = c.getBoundingClientRect();
         const path = [];

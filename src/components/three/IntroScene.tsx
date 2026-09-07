@@ -152,31 +152,64 @@ function CameraRig({ progressRef }: { progressRef: MutableRefObject<number> }) {
   return null;
 }
 
-// The flower carpet: a dense disc of glowing blooms under the trio that
-// fades in as you land, so the finale sits INSIDE the flower bed.
-function BedGlow({ progressRef, count = 520 }: { progressRef: MutableRefObject<number>; count?: number }) {
+// The flower carpet: glowing blooms under the trio that fade in as you land,
+// so the finale sits INSIDE the flower bed. Two layers: a wide sparse halo
+// visible from the top, plus a dense core that ignites near the ground.
+function mulberry(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function BedGlow({
+  progressRef,
+  seed = 1,
+  count = 520,
+  radius = 7,
+  yBase = -1.2,
+  ySpan = 2.2,
+  size = 0.11,
+  fadeIn = [0.3, 0.9] as [number, number],
+  opacity = 0.9,
+}: {
+  progressRef: MutableRefObject<number>;
+  seed?: number;
+  count?: number;
+  radius?: number;
+  yBase?: number;
+  ySpan?: number;
+  size?: number;
+  fadeIn?: [number, number];
+  opacity?: number;
+}) {
   const ref = useRef<THREE.Points>(null);
   const matRef = useRef<THREE.PointsMaterial>(null);
   const { base, seeds } = useMemo(() => {
+    const rand = mulberry(seed);
     const base = new Float32Array(count * 3);
     const seeds = new Float32Array(count * 2);
     for (let i = 0; i < count; i++) {
-      // Center-weighted disc, radius ~7 in fitted units.
-      const r = 7 * Math.sqrt(Math.random());
-      const a = Math.random() * Math.PI * 2;
+      // Center-weighted disc.
+      const r = radius * Math.sqrt(rand());
+      const a = rand() * Math.PI * 2;
       base[i * 3] = Math.cos(a) * r;
-      base[i * 3 + 1] = -1.2 + Math.random() * 2.2;
+      base[i * 3 + 1] = yBase + rand() * ySpan;
       base[i * 3 + 2] = Math.sin(a) * r;
-      seeds[i * 2] = Math.random() * Math.PI * 2;
-      seeds[i * 2 + 1] = 0.5 + Math.random() * 0.5;
+      seeds[i * 2] = rand() * Math.PI * 2;
+      seeds[i * 2 + 1] = 0.5 + rand() * 0.5;
     }
     return { base, seeds };
-  }, [count]);
+  }, [count, radius, yBase, ySpan, seed]);
 
   useFrame((state) => {
     const p = THREE.MathUtils.clamp(progressRef.current, 0, 1);
     if (matRef.current) {
-      matRef.current.opacity = THREE.MathUtils.smoothstep(p, 0.3, 0.9) * 0.9;
+      matRef.current.opacity = THREE.MathUtils.smoothstep(p, fadeIn[0], fadeIn[1]) * opacity;
     }
     const attr = ref.current?.geometry.getAttribute('position') as THREE.BufferAttribute | undefined;
     if (!attr) return;
@@ -199,7 +232,7 @@ function BedGlow({ progressRef, count = 520 }: { progressRef: MutableRefObject<n
       </bufferGeometry>
       <pointsMaterial
         ref={matRef}
-        size={0.11}
+        size={size}
         sizeAttenuation
         color="#fffdf4"
         transparent
@@ -251,6 +284,7 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
             dpr={[1, 1.5]}
             camera={{ position: CAM_FAR, fov: 42, near: 0.1, far: 80 }}
             aria-label="Reg, Riko and Nanachi in a flower bed, scroll to descend"
+            gl={{ antialias: true, alpha: false }}
           >
             <color attach="background" args={[bg]} />
             <fog attach="fog" args={[bg, 9, 26]} ref={setFog} />
@@ -261,8 +295,33 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
             <Suspense fallback={null}>
               <TrioModel onEnter={onEnter} />
             </Suspense>
-            {!reduceMotion && <Petals />}
-            {!reduceMotion && <BedGlow progressRef={progressRef} />}
+      {!reduceMotion && <Petals />}
+            {!reduceMotion && (
+              <BedGlow
+                progressRef={progressRef}
+                seed={1}
+                count={420}
+                radius={7}
+                yBase={-1.2}
+                ySpan={2.2}
+                size={0.11}
+                fadeIn={[0.1, 0.55]}
+                opacity={0.9}
+              />
+            )}
+            {!reduceMotion && (
+              <BedGlow
+                progressRef={progressRef}
+                seed={7}
+                count={260}
+                radius={3.2}
+                yBase={-0.9}
+                ySpan={1.9}
+                size={0.15}
+                fadeIn={[0.3, 0.9]}
+                opacity={0.95}
+              />
+            )}
             <CameraRig progressRef={progressRef} />
             <FogRig progressRef={progressRef} fog={fog} />
             <AdaptiveDpr />

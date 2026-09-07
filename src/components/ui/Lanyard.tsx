@@ -126,8 +126,7 @@ export default function Lanyard({
   );
 }
 
-function Band({
-  maxSpeed = 50,
+function Band({  maxSpeed = 50,
   minSpeed = 0,
   isMobile = false,
   frontImage = null,
