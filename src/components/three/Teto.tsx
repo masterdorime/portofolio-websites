@@ -121,8 +121,27 @@ function TetoModel() {
   const tmpQ = useMemo(() => new THREE.Quaternion(), []);
   const tmpE = useMemo(() => new THREE.Euler(0, 0, 0, 'YXZ'), []);
 
+  // Body animation: the shipped "Action" clip minus its eye/head/neck tracks,
+  // so the body can move while the cursor owns the gaze. Without this she
+  // stands in a permanent T-pose.
+  const mixer = useMemo(() => new THREE.AnimationMixer(gltf.scene), [gltf]);
+  useEffect(() => {
+    const clip = gltf.animations.find((a) => a.name === 'Action') ?? gltf.animations[0];
+    if (!clip) return;
+    const stripped = clip.clone();
+    // Track names look like "head_14.quaternion" — drop gaze bones only.
+    stripped.tracks = stripped.tracks.filter((tr) => !/eye|head|neck/i.test(tr.name));
+    const action = mixer.clipAction(stripped);
+    action.play();
+    return () => {
+      action.stop();
+      mixer.uncacheClip(stripped);
+    };
+  }, [gltf, mixer]);
+
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
+    mixer.update(delta);
     const px = THREE.MathUtils.clamp(state.pointer.x, -1, 1);
     const py = THREE.MathUtils.clamp(state.pointer.y, -1, 1);
     const k = Math.min(1, delta * 5);
