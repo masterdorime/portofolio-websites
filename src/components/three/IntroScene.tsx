@@ -18,9 +18,12 @@ const MODEL_URL = '/models/trio.glb';
 // Character meshes only for framing (flowers surround beyond the frame;
 // the cave shell + plates were stripped at build time).
 const FIT_OUT = /flower|cave|plate/i;
+const FLOWER_MATCH = /flower/i;
+// Warm tint for the flower bed ignition (Sketchfab-bloom feel).
+const FLOWER_WARM = new THREE.Color('#ffe9c4');
 
 const CAM_FAR: [number, number, number] = [0, 9, 1.6];
-const CAM_NEAR: [number, number, number] = [0.5, 0.45, 2.7];
+const CAM_NEAR: [number, number, number] = [0.4, 0.3, 2.3];
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -36,12 +39,61 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean
   }
 }
 
-function TrioModel({ onEnter }: { onEnter: () => void }) {
+function TrioModel({ onEnter, progressRef }: { onEnter: () => void; progressRef: MutableRefObject<number> }) {
   const gltf = useLoader(GLTFLoader, MODEL_URL, (loader) => {
     loader.setMeshoptDecoder(MeshoptDecoder);
   });
   // Static diorama: flatten once, then frame on the characters alone.
   const flat = useMemo(() => flattenScene(gltf.scene), [gltf]);
+  // Sketchfab-bloom feel for the REAL flower geometry: the shipped Flower
+  // material is an UNLIT MeshBasicMaterial (toon style — no `emissive` slot),
+  // so the bed reads flat grey under ACES tone mapping. Clone it once with a
+  // warm tint and drive an HDR color lift that ignites as the camera lands.
+  const flowerMats = useMemo(() => {
+    const cache = new Map<THREE.Material, THREE.MeshBasicMaterial>();
+    const entries = new Map<THREE.MeshBasicMaterial, { base: THREE.Color; baseOpacity: number }>();
+    const assign = (m: THREE.Material | undefined): THREE.Material | undefined => {
+      if (!(m instanceof THREE.MeshBasicMaterial)) return m;
+      let c = cache.get(m);
+      if (!c) {
+        c = m.clone();
+        c.color.multiply(FLOWER_WARM);
+        // Blooms punch through the landing fog (which closes to near=1 far=6
+        // as you touch down) — otherwise the dense fog swallows the ignition.
+        c.fog = false;
+        cache.set(m, c);
+        entries.set(c, { base: c.color.clone(), baseOpacity: c.opacity });
+      }
+      return c;
+    };
+    flat.traverse((obj) => {
+      const mesh = obj as THREE.Mesh;
+      if (!mesh.isMesh || !mesh.geometry) return;
+      if (!FLOWER_MATCH.test(mesh.name)) return;
+      if (Array.isArray(mesh.material)) mesh.material = mesh.material.map((m) => assign(m) ?? m);
+      else {
+        const c = assign(mesh.material ?? undefined);
+        if (c) mesh.material = c;
+      }
+    });
+    return [...entries.entries()].map(([mat, e]) => ({ mat, ...e }));
+  }, [flat]);
+
+  // Ignite the bed as the camera lands: dimmer up top, HDR-blooming warm
+  // white at the bottom, plus a gentle breathing pulse so petals feel alive.
+  // Opacity also rises with the landing (the quad's black surround melts into
+  // the already-dark touchdown backdrop), so petals go near-solid instead of
+  // staying 37%-glass over darkness.
+  useFrame((state) => {
+    const p = THREE.MathUtils.clamp(progressRef.current, 0, 1);
+    const landing = THREE.MathUtils.smoothstep(p, 0.3, 1);
+    const pulse = 0.9 + 0.1 * Math.sin(state.clock.elapsedTime * 1.3);
+    const k = (0.55 + landing * 2.2) * pulse;
+    for (const { mat, base, baseOpacity } of flowerMats) {
+      mat.color.copy(base).multiplyScalar(k);
+      mat.opacity = baseOpacity + landing * (0.95 - baseOpacity);
+    }
+  });
   const fit = useMemo(() => {
     const box = new THREE.Box3();
     const corner = new THREE.Vector3();
@@ -147,9 +199,79 @@ function CameraRig({ progressRef }: { progressRef: MutableRefObject<number> }) {
       CAM_FAR[1] + (CAM_NEAR[1] - CAM_FAR[1]) * eased,
       CAM_FAR[2] + (CAM_NEAR[2] - CAM_FAR[2]) * eased
     );
-    state.camera.lookAt(0, 0.35 - eased * 0.15, 0);
+    state.camera.lookAt(0, 0.35 - eased * 0.2, 0);
   });
   return null;
+}
+
+// Soft radial sprite for bloom halos (Sketchfab-bloom feel without postprocessing).
+function makeGlowTexture(): THREE.Texture {
+  const c = document.createElement('canvas');
+  c.width = 128;
+  c.height = 128;
+  const ctx = c.getContext('2d');
+  if (ctx) {
+    const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, 'rgba(255,253,244,1)');
+    g.addColorStop(0.35, 'rgba(255,253,244,0.5)');
+    g.addColorStop(1, 'rgba(255,253,244,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.needsUpdate = true;
+  return tex;
+}
+
+// Halo layer: big soft additive glows scattered through the bed. Fades in
+// late so the landing blooms like the original.
+function HaloGlow({ progressRef, count = 110 }: { progressRef: MutableRefObject<number>; count?: number }) {
+  const ref = useRef<THREE.Points>(null);
+  const matRef = useRef<THREE.PointsMaterial>(null);
+  const { base, map } = useMemo(() => {
+    const rand = mulberry(99);
+    const base = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      const r = 6.5 * Math.sqrt(rand());
+      const a = rand() * Math.PI * 2;
+      base[i * 3] = Math.cos(a) * r;
+      base[i * 3 + 1] = -1 + rand() * 2.4;
+      base[i * 3 + 2] = Math.sin(a) * r;
+    }
+    return { base, map: makeGlowTexture() };
+  }, [count]);
+
+  useEffect(() => {
+    return () => {
+      map.dispose();
+    };
+  }, [map]);
+
+  useFrame((state) => {
+    const p = THREE.MathUtils.clamp(progressRef.current, 0, 1);
+    if (matRef.current) {
+      const pulse = 0.75 + 0.25 * Math.sin(state.clock.elapsedTime * 1.3);
+      matRef.current.opacity = THREE.MathUtils.smoothstep(p, 0.45, 0.95) * 0.55 * pulse;
+    }
+  });
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[base, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        ref={matRef}
+        size={0.9}
+        sizeAttenuation
+        map={map}
+        transparent
+        opacity={0}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
+  );
 }
 
 // The flower carpet: glowing blooms under the trio that fade in as you land,
@@ -250,8 +372,8 @@ function FogRig({ progressRef, fog }: { progressRef: MutableRefObject<number>; f
     const p = THREE.MathUtils.clamp(progressRef.current, 0, 1);
     // The abyss closes in as you land: far fog swallows the void until the
     // flower bed is all that's left.
-    fog.near = 9 - p * 7.5;
-    fog.far = 26 - p * 19;
+    fog.near = 9 - p * 8;
+    fog.far = 26 - p * 20;
   });
   return null;
 }
@@ -293,7 +415,7 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
             <directionalLight position={[-4, 2, 3]} intensity={0.45} color="#5eead4" />
             <pointLight position={[0, 1.2, 2]} intensity={1 + phase * 5} color="#e5a954" distance={9} />
             <Suspense fallback={null}>
-              <TrioModel onEnter={onEnter} />
+              <TrioModel onEnter={onEnter} progressRef={progressRef} />
             </Suspense>
       {!reduceMotion && <Petals />}
             {!reduceMotion && (
@@ -322,6 +444,7 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
                 opacity={0.95}
               />
             )}
+            {!reduceMotion && <HaloGlow progressRef={progressRef} />}
             <CameraRig progressRef={progressRef} />
             <FogRig progressRef={progressRef} fog={fog} />
             <AdaptiveDpr />

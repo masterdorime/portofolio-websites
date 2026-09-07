@@ -647,7 +647,7 @@ html.custom-cursor * {
 /* Intro overlay (boot sequence) — tall enough to land all the way down. */
 .intro-wrap {
   position: relative;
-  height: 340vh;
+  height: 460vh;
 }
 .intro-sticky {
   position: sticky;
