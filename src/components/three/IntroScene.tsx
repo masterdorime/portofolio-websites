@@ -23,7 +23,12 @@ const FLOWER_MATCH = /flower/i;
 const FLOWER_WARM = new THREE.Color('#ffe9c4');
 
 const CAM_FAR: [number, number, number] = [0, 9, 1.6];
-const CAM_NEAR: [number, number, number] = [0.4, 0.3, 2.3];
+// Finale hovers between the trio and the bloom patch, gazing down at the
+// ignited carpet: near flowers fill the frame while the trio sits behind
+// the camera, out of frame. Near flowers, not near trio.
+const CAM_NEAR: [number, number, number] = [1.0, 1.6, -2.4];
+const LOOK_FAR: [number, number, number] = [0, 0.35, 0];
+const LOOK_NEAR: [number, number, number] = [0.65, -0.2, -2.4];
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -148,7 +153,7 @@ function Petals({ count = 220 }: { count?: number }) {
     const seeds = new Float32Array(count * 2);
     for (let i = 0; i < count; i++) {
       base[i * 3] = (Math.random() - 0.5) * 10;
-      base[i * 3 + 1] = Math.random() * 7;
+      base[i * 3 + 1] = -4 + Math.random() * 11;
       base[i * 3 + 2] = (Math.random() - 0.5) * 10;
       seeds[i * 2] = Math.random() * Math.PI * 2;
       seeds[i * 2 + 1] = 0.4 + Math.random() * 0.8;
@@ -165,7 +170,7 @@ function Petals({ count = 220 }: { count?: number }) {
       const sp = seeds[i * 2 + 1];
       const ph = seeds[i * 2];
       arr[i * 3] = base[i * 3] + Math.sin(t * 0.4 * sp + ph) * 0.5;
-      arr[i * 3 + 1] = ((base[i * 3 + 1] + t * 0.22 * sp) % 7 + 7) % 7;
+      arr[i * 3 + 1] = (((base[i * 3 + 1] + 4 + t * 0.22 * sp) % 11 + 11) % 11) - 4;
       arr[i * 3 + 2] = base[i * 3 + 2] + Math.cos(t * 0.3 * sp + ph) * 0.5;
     }
     attr.needsUpdate = true;
@@ -193,13 +198,20 @@ function CameraRig({ progressRef }: { progressRef: MutableRefObject<number> }) {
   useFrame((state) => {
     const p = THREE.MathUtils.clamp(progressRef.current, 0, 1);
     const eased = p * p * (3 - 2 * p);
+    // The gaze lingers on the trio for the first stretch, then swings to the
+    // blooms for the finale — the descent says goodbye before it lands.
+    const lookT = THREE.MathUtils.smoothstep((p - 0.3) / 0.7, 0, 1);
     const sway = Math.sin(state.clock.elapsedTime * 0.4) * 0.08 * (1 - eased);
     state.camera.position.set(
       CAM_FAR[0] + (CAM_NEAR[0] - CAM_FAR[0]) * eased + sway,
       CAM_FAR[1] + (CAM_NEAR[1] - CAM_FAR[1]) * eased,
       CAM_FAR[2] + (CAM_NEAR[2] - CAM_FAR[2]) * eased
     );
-    state.camera.lookAt(0, 0.35 - eased * 0.2, 0);
+    state.camera.lookAt(
+      LOOK_FAR[0] + (LOOK_NEAR[0] - LOOK_FAR[0]) * lookT,
+      LOOK_FAR[1] + (LOOK_NEAR[1] - LOOK_FAR[1]) * lookT,
+      LOOK_FAR[2] + (LOOK_NEAR[2] - LOOK_FAR[2]) * lookT
+    );
   });
   return null;
 }
@@ -235,7 +247,7 @@ function HaloGlow({ progressRef, count = 110 }: { progressRef: MutableRefObject<
       const r = 6.5 * Math.sqrt(rand());
       const a = rand() * Math.PI * 2;
       base[i * 3] = Math.cos(a) * r;
-      base[i * 3 + 1] = -1 + rand() * 2.4;
+      base[i * 3 + 1] = -1.4 + rand() * 2.4;
       base[i * 3 + 2] = Math.sin(a) * r;
     }
     return { base, map: makeGlowTexture() };
@@ -413,7 +425,7 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
             <ambientLight intensity={0.55} />
             <directionalLight position={[4, 8, 5]} intensity={1.2} color="#f3f0ea" />
             <directionalLight position={[-4, 2, 3]} intensity={0.45} color="#5eead4" />
-            <pointLight position={[0, 1.2, 2]} intensity={1 + phase * 5} color="#e5a954" distance={9} />
+            <pointLight position={[0.7, -0.5, -3.2]} intensity={1 + phase * 5} color="#e5a954" distance={9} />
             <Suspense fallback={null}>
               <TrioModel onEnter={onEnter} progressRef={progressRef} />
             </Suspense>
@@ -424,8 +436,8 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
                 seed={1}
                 count={420}
                 radius={7}
-                yBase={-1.2}
-                ySpan={2.2}
+                yBase={-2.8}
+                ySpan={3.0}
                 size={0.11}
                 fadeIn={[0.1, 0.55]}
                 opacity={0.9}
@@ -437,8 +449,8 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
                 seed={7}
                 count={260}
                 radius={3.2}
-                yBase={-0.9}
-                ySpan={1.9}
+                yBase={-1.6}
+                ySpan={2.6}
                 size={0.15}
                 fadeIn={[0.3, 0.9]}
                 opacity={0.95}
@@ -483,7 +495,7 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
         </p>
         {phase > 0.6 && (
           <button type="button" className="intro-hint" onClick={onEnter} data-magnetic>
-            ◉ click the trio to descend
+            ◉ descend into the blooms
           </button>
         )}
         <button type="button" className="intro-skip" onClick={onEnter}>
