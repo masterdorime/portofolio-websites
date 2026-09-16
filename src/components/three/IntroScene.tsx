@@ -611,9 +611,6 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
             </SpecularButton>
           </div>
         )}
-        <button type="button" className="intro-skip" onClick={onEnter}>
-          skip intro ↓
-        </button>
       </div>
     </div>
   );
