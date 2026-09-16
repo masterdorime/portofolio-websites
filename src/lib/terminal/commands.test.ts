@@ -42,6 +42,14 @@ describe('runCommand', () => {
     expect(text).toContain('Techware');
   });
 
+  it('deploy prints the finished screen', () => {
+    const text = runCommand('deploy').lines.map((l) => l.text).join('\n');
+    expect(text).toContain('deployment finished');
+    expect(text).toContain('tristanedgina-portofolio.vercel.app');
+    const id = runCommand('deploy', new Date(), 'id').lines.map((l) => l.text).join('\n');
+    expect(id).toContain('deployment selesai');
+  });
+
   it('clear sets clear flag', () => {
     const { lines, clear } = runCommand('clear');
     expect(clear).toBe(true);

@@ -40,6 +40,7 @@ export interface TerminalText {
   contactEmail: string;
   contactForm: string;
   projectsTail: string;
+  deploy: string[];
   unknown: (input: string) => string;
 }
 
@@ -377,6 +378,7 @@ export const dict: Record<Lang, Dict> = {
         '  contact    how to reach me',
         '  socials    elsewhere on the internet',
         '  projects   list of builds',
+        '  deploy     deployment-finished screen',
         '  clear      wipe the screen',
       ],
       whoami: [
@@ -389,6 +391,12 @@ export const dict: Record<Lang, Dict> = {
       contactEmail: 'email: ',
       contactForm: 'or use the contact form next door.',
       projectsTail: 'check out /projects for full build details.',
+      deploy: [
+        '— deployment finished —',
+        '✓ build clean · tests passing',
+        '✓ live: https://tristanedgina-portofolio.vercel.app',
+        'screenshot away, this one is yours.',
+      ],
       unknown: (input: string) => `command not found: ${input.trim()} — type "help" for the list`,
     },
     projectText: enProjectText,
@@ -553,6 +561,7 @@ export const dict: Record<Lang, Dict> = {
         '  contact    cara kontak gue',
         '  socials    akun sosmed gue',
         '  projects   daftar rakitan hardware',
+        '  deploy     layar deployment selesai',
         '  clear      bersihin layar',
       ],
       whoami: [
@@ -565,6 +574,12 @@ export const dict: Record<Lang, Dict> = {
       contactEmail: 'email: ',
       contactForm: 'atau pakai form di sebelah terminal ini.',
       projectsTail: 'buka /projects buat lihat dokumentasi lengkapnya.',
+      deploy: [
+        '— deployment selesai —',
+        '✓ build bersih · semua tes lolos',
+        '✓ live: https://tristanedgina-portofolio.vercel.app',
+        'silakan screenshot, yang ini buat lu.',
+      ],
       unknown: (input: string) => `perintah gak dikenal: ${input.trim()} — ketik "help" buat lihat daftarnya`,
     },
     projectText: idProjectText,

@@ -4,7 +4,7 @@ import { PROJECTS } from '../../data/projects';
 import { formatWib } from '../time/wib';
 import { dict, type Lang } from '../../i18n/dict';
 
-export const COMMANDS = ['help', 'whoami', 'status', 'contact', 'socials', 'projects', 'clear'] as const;
+export const COMMANDS = ['help', 'whoami', 'status', 'contact', 'socials', 'projects', 'deploy', 'clear'] as const;
 export type Command = (typeof COMMANDS)[number];
 
 export interface TerminalLine {
@@ -73,6 +73,11 @@ export function runCommand(raw: string, now: Date = new Date(), lang: Lang = 'en
         clear: false,
       };
     }
+    case 'deploy':
+      return {
+        lines: t.deploy.map((text) => ({ kind: 'output' as const, text })),
+        clear: false,
+      };
     default:
       return {
         lines: [
