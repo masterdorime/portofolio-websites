@@ -1,0 +1,285 @@
+/* WisprFlow — wisprflow.ai-style giant dual marquee for the footing.
+   Inspired by Aceternity UI Labs "Wispr Flow Text Animation". Palette uses
+   --color-* tokens so dark/light themes stay coherent. */
+.wispr-flow {
+  position: relative;
+  overflow: clip;
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+  /* Edge fade so the giant type dissolves instead of clipping hard. */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+/* Full-bleed variant for the footer (escapes the footer padding). */
+.wispr-flow--bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+/* SVG text-on-path — dramatic high-contrast treatment with hover surge glow.
+   Solid pass is full-foreground; outline echo is lavender; hover ignites both.
+   SVG sits under the mouth veil (z:1) and Umaru (z:3) so the stream is
+   swallowed rather than looping past her. */
+.wispr-flow__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  transition: transform 0.45s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Mouth veil: feathered veil that makes glyphs dissolve only right at
+   Umaru's mouth — small so the approach stays readable until the last 40px. */
+.wispr-flow__maw {
+  position: absolute;
+  left: 83.2%;
+  top: 52%;
+  width: 140px;
+  height: 140px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-background) 96%, transparent) 22%,
+    color-mix(in oklab, var(--color-background) 62%, transparent) 46%,
+    transparent 74%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.wispr-flow:hover .wispr-flow__svg {
+  transform: scale(1.015);
+}
+
+/* Vacuum state — click-triggered: strip leans toward Umaru's mouth at
+   the path tail (right side), type compresses, glow ignites. */
+.wispr-flow--vacuum .wispr-flow__svg {
+  transform: scale(1.03) skewX(-2deg);
+  transform-origin: 83% 55%;
+}
+
+.wispr-flow--vacuum .wispr-flow__svgtext {
+  letter-spacing: 0.1em;
+}
+
+.wispr-flow--vacuum .wispr-flow__svgtext--solid {
+  fill: var(--color-accent-amber);
+  filter: drop-shadow(0 0 14px color-mix(in oklab, var(--color-accent-amber) 65%, transparent));
+}
+
+.wispr-flow--vacuum .wispr-flow__svgtext--outline {
+  opacity: 0.12;
+  filter: none;
+}
+
+.wispr-flow__svgtext {
+  font-family:
+    var(--font-mono), 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Naskh Arabic',
+    system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  white-space: nowrap;
+  transition:
+    fill 0.25s ease,
+    stroke 0.25s ease,
+    filter 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.wispr-flow__svgtext--solid {
+  fill: var(--color-foreground);
+}
+
+.wispr-flow__svgtext--outline {
+  fill: none;
+  stroke: color-mix(in oklab, var(--color-muted) 55%, transparent);
+  stroke-width: 0.9px;
+  opacity: 0.5;
+}
+
+.wispr-flow:hover .wispr-flow__svgtext--solid,
+.wispr-flow:focus-within .wispr-flow__svgtext--solid {
+  fill: var(--color-accent-amber);
+  filter: drop-shadow(0 0 14px color-mix(in oklab, var(--color-accent-amber) 65%, transparent));
+}
+
+.wispr-flow:hover .wispr-flow__svgtext--outline,
+.wispr-flow:focus-within .wispr-flow__svgtext--outline {
+  stroke: var(--color-accent-amber);
+  opacity: 0.9;
+  filter: drop-shadow(0 0 10px color-mix(in oklab, var(--color-accent-amber) 55%, transparent));
+}
+
+html[data-theme='light'] .wispr-flow__svgtext--solid {
+  fill: #1b264f;
+}
+
+html[data-theme='light'] .wispr-flow__svgtext--outline {
+  stroke: #6b6bd6;
+}
+
+html[data-theme='light'] .wispr-flow:hover .wispr-flow__svgtext--solid,
+html[data-theme='light'] .wispr-flow:focus-within .wispr-flow__svgtext--solid {
+  fill: #b3541e;
+}
+
+@media (max-width: 640px) {
+  .wispr-flow__svgtext {
+    font-size: 12px;
+  }
+  .wispr-flow__maw {
+    left: 80%;
+    width: 110px;
+    height: 110px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wispr-flow__svgtext {
+    font-size: 12px;
+  }
+  .wispr-flow:hover .wispr-flow__svg {
+    transform: none;
+  }
+}
+
+/* Safety: if JS hasn't hidden the flow-wrap yet, never let the SVG
+   footing render on phones — avoids the tiny-scaled 14px path + veil. */
+@media (max-width: 767px) {
+  .wispr-flow,
+  .umaru-vacuum {
+    display: none !important;
+  }
+}
+
+.wispr-flow__tilt {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.25rem, 1.5vw, 0.875rem);
+  transform: rotate(-2deg) scale(1.02);
+}
+
+.wispr-flow__row {
+  overflow: clip;
+  padding-block: 0.25rem;
+}
+
+.wispr-flow__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  user-select: none;
+}
+
+.wispr-flow__set {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.wispr-flow__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  flex-shrink: 0;
+  padding-right: 0.5em;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 7.5vw, 6rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    color 0.25s ease,
+    -webkit-text-stroke-color 0.25s ease;
+}
+
+a.wispr-flow__item:hover {
+  color: var(--color-accent-lavender);
+  -webkit-text-stroke-color: var(--color-accent-lavender);
+}
+
+a.wispr-flow__item:focus-visible {
+  outline: 2px solid var(--color-accent-lavender);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.wispr-flow__row--solid .wispr-flow__item {
+  color: var(--color-foreground);
+}
+
+.wispr-flow__row--outline .wispr-flow__item {
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-muted) 75%, transparent);
+}
+
+@supports not (-webkit-text-stroke: 1px black) {
+  .wispr-flow__row--outline .wispr-flow__item {
+    color: var(--color-muted);
+  }
+}
+
+.wispr-flow__icon {
+  display: inline-flex;
+  align-items: center;
+  height: 0.62em;
+  flex-shrink: 0;
+}
+
+.wispr-flow__icon img,
+.wispr-flow__icon svg {
+  height: 0.62em;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.wispr-flow__row--solid .wispr-flow__icon {
+  opacity: 0.9;
+}
+
+.wispr-flow__row--outline .wispr-flow__icon {
+  opacity: 0.55;
+}
+
+.wispr-flow__spark {
+  color: var(--color-accent-amber);
+  font-size: 0.5em;
+  padding-left: 0.15em;
+}
+
+html[data-theme='light'] .wispr-flow__row--solid .wispr-flow__item {
+  color: var(--color-foreground);
+}
+
+html[data-theme='light'] .wispr-flow__row--outline .wispr-flow__item {
+  -webkit-text-stroke-color: color-mix(in oklab, var(--color-foreground) 45%, transparent);
+}
+
+@media (max-width: 640px) {
+  .wispr-flow__tilt {
+    transform: rotate(-2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wispr-flow__tilt {
+    transform: none;
+  }
+  .wispr-flow__track {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+  .wispr-flow__item {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+  }
+}

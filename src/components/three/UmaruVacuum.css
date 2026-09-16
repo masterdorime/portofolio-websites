@@ -1,0 +1,154 @@
+/* UmaruVacuum — footer mascot, absolute inside .footer__flow-wrap at the
+   tail of the WisprFlow path. She scrolls away with the footer and never
+   pins across the whole site. */
+.footer__flow-wrap {
+  position: relative;
+}
+
+.umaru-vacuum {
+  position: absolute;
+  right: 4%;
+  top: 53%;
+  width: clamp(170px, 23vw, 270px);
+  aspect-ratio: 1 / 1;
+  transform: translateY(-50%);
+  z-index: 3;
+  cursor: pointer;
+  outline-offset: 6px;
+}
+
+/* Legacy fixed-corner variant — unused (kept so old classNames don't
+   break styling). Do not apply: pinning her viewport-fixed covers content
+   site-wide, as reported. */
+.umaru-vacuum--corner {
+  position: absolute;
+  right: 4%;
+  top: 53%;
+  transform: translateY(-50%);
+}
+
+.umaru-vacuum:focus-visible {
+  outline: 2px solid var(--color-accent-amber);
+  border-radius: 12px;
+}
+
+.umaru-vacuum__canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  filter: drop-shadow(0 10px 28px rgb(0 0 0 / 0.45));
+}
+
+.umaru-vacuum__halo {
+  position: absolute;
+  inset: 8% 6% 22% 6%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-accent-amber) 26%, transparent),
+    transparent 70%
+  );
+  filter: blur(6px);
+  opacity: 0.7;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.umaru-vacuum--sucking .umaru-vacuum__halo {
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+/* Slurp crumbs: drift from the left edge into the mouth (~38% x, 46% y). */
+.umaru-vacuum__crumbs {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.umaru-vacuum__crumb {
+  position: absolute;
+  left: -30%;
+  top: 46%;
+  font-size: 13px;
+  color: var(--color-accent-amber);
+  opacity: 0;
+  animation: umaru-slurp 2.6s linear infinite;
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-accent-amber) 70%, transparent));
+}
+
+.umaru-vacuum__crumb--0 { animation-delay: 0s; top: 38%; }
+.umaru-vacuum__crumb--1 { animation-delay: 0.5s; top: 44%; font-size: 10px; }
+.umaru-vacuum__crumb--2 { animation-delay: 1s; top: 50%; font-size: 15px; }
+.umaru-vacuum__crumb--3 { animation-delay: 1.5s; top: 42%; font-size: 9px; }
+.umaru-vacuum__crumb--4 { animation-delay: 2s; top: 54%; font-size: 12px; }
+
+.umaru-vacuum--sucking .umaru-vacuum__crumb {
+  animation-duration: 1.1s;
+}
+
+@keyframes umaru-slurp {
+  0% {
+    transform: translate(0, 6px) scale(1) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  70% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(min(150px, 30vw)) translateY(-6px) scale(0.2);
+    opacity: 0;
+  }
+}
+
+.umaru-vacuum__caption {
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-muted);
+  background: color-mix(in oklab, var(--color-background) 72%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-muted) 30%, transparent);
+  border-radius: 999px;
+  padding: 3px 10px;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.umaru-vacuum--sucking .umaru-vacuum__caption {
+  color: var(--color-accent-amber);
+  border-color: color-mix(in oklab, var(--color-accent-amber) 60%, transparent);
+}
+
+@media (max-width: 640px) {
+  .umaru-vacuum {
+    right: -2%;
+    top: 50%;
+    width: clamp(130px, 38vw, 170px);
+  }
+  .umaru-vacuum__caption {
+    font-size: 8px;
+    bottom: -8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .umaru-vacuum__crumb {
+    animation: none;
+    opacity: 0;
+  }
+  .umaru-vacuum__halo {
+    opacity: 0.4;
+  }
+}

@@ -1,6 +1,8 @@
 // Bilingual dictionary: English + Bahasa Indonesia. Proper nouns (names,
 // places, tech terms, social labels) stay untouched in both languages.
 
+import type { SkillHubId } from '@/data/skills';
+
 export type Lang = 'en' | 'id';
 
 export interface ProjectText {
@@ -9,6 +11,23 @@ export interface ProjectText {
   problem: string;
   approach: string;
   relic: string;
+}
+
+export interface ExperienceText {
+  span: string;
+  title: string;
+  body: string;
+}
+
+export interface ExperienceUi {
+  openFolder: string;
+  photos: string;
+  close: string;
+  prev: string;
+  next: string;
+  of: string;
+  readMore: string;
+  showLess: string;
 }
 
 export interface TerminalText {
@@ -25,7 +44,16 @@ export interface TerminalText {
 }
 
 export interface Dict {
-  nav: { about: string; projects: string; contact: string };
+  nav: {
+    home: string;
+    about: string;
+    experience: string;
+    skills: string;
+    projects: string;
+    phoneography: string;
+    contact: string;
+    cv: string;
+  };
   heroView: { lanyard: string; girl: string };
   hero: {
     role: string;
@@ -36,7 +64,13 @@ export interface Dict {
     openValue: string;
     ctaAbout: string;
     ctaContact: string;
+    ctaCV: string;
+    cvEN: string;
+    cvID: string;
   };
+  lanyard: { load: string; loading: string };
+  prehero: { eyebrow: string; scroll: string };
+  miku: { hint: string; lines: string[] };
   badge: string;
   marquee: string;
   about: {
@@ -45,8 +79,18 @@ export interface Dict {
     story: [string, string, string];
     quote: string;
     skillsKicker: string;
+    experience: ExperienceText[];
+    experienceUi: ExperienceUi;
+    skillGraph: {
+      hint: string;
+      level: string;
+      linked: string;
+      close: string;
+      hubs: Record<SkillHubId, string>;
+    };
   };
   bridgeBuilds: string;
+  bridgeSkills: string;
   projects: {
     kicker: string;
     title: string;
@@ -117,6 +161,16 @@ const enProjectText: Record<string, ProjectText> = {
       'Embedded skin sensors and distributed heating elements controlled by an edge algorithm. It predicts your comfort level and adjusts temperature proactively, running entirely on a small wearable battery pack.',
     relic: 'Special grade relic · 9,000M',
   },
+  h2orizon: {
+    tagline: 'Smart water bottle with ultrafiltration + micro-pump',
+    description:
+      'H2orizon is a next-generation smart water bottle that turns virtually any freshwater source into clean, drinkable water on the go. Compact, rugged, and intelligently designed, it combines advanced ultrafiltration technology with a built-in micro-pump and real-time purity sensing—so you can hydrate with confidence wherever you are.',
+    problem:
+      'Relying on freshwater sources without treatment is a gamble, and plain filters offer no proof of safety while demanding constant effort to sip through. The risk stays invisible until it is too late.',
+    approach:
+      'Integrates a hollow-fiber ultrafiltration membrane with a quiet micro-pump that pulls water for you and inline TDS/turbidity sensing that verifies purity in real time. A low-power core handles the whole loop so the bottle stays reliable on trails, travel, and daily carry.',
+    relic: 'Grade 1 relic · 6,200M',
+  },
 };
 
 const idProjectText: Record<string, ProjectText> = {
@@ -150,11 +204,30 @@ const idProjectText: Record<string, ProjectText> = {
       'Nyematkan sensor suhu kulit dan elemen pemanas fleksibel yang diatur sama algoritma lokal. Sistemnya memprediksi perubahan suhu tubuh lu dan langsung menyesuaikan otomatis pakai baterai portable.',
     relic: 'Relik kelas khusus · 9.000M',
   },
+  h2orizon: {
+    tagline: 'Botol pintar dengan ultrafiltrasi + micro-pump',
+    description:
+      'H2orizon adalah botol minum pintar generasi terbaru yang bisa mengubah hampir semua sumber air tawar jadi air minum bersih kapan pun lu butuh. Ringkas, tangguh, dan dirancang cerdas, dia gabungin teknologi ultrafiltrasi canggih dengan micro-pump built-in dan sensor kemurnian real-time—jadi lu bisa minum dengan tenang di mana aja.',
+    problem:
+      'Ngandelin air sumber tanpa olahan tuh spekulasi, filter biasa gak ngasih bukti aman dan nyedotnya berat. Risikonya gak kelihatan sampai telat.',
+    approach:
+      'Satu paket ultrafiltrasi hollow-fiber, micro-pump senyap yang narik air buat lu, plus sensor TDS/kekeruhan yang verifikasi kemurnian secara real-time. Inti hemat daya ngatur semuanya biar tetap andal buat hiking, traveling, atau pakai harian.',
+    relic: 'Relik tingkat 1 · 6.200M',
+  },
 };
 
 export const dict: Record<Lang, Dict> = {
   en: {
-    nav: { about: 'about', projects: 'projects', contact: 'contact' },
+    nav: {
+      home: 'home',
+      about: 'about',
+      experience: 'experience',
+      skills: 'skills',
+      projects: 'projects',
+      phoneography: 'phoneography',
+      contact: 'contact',
+      cv: 'cv',
+    },
     heroView: { lanyard: 'id card', girl: '3d muse' },
     hero: {
       role: 'computer engineering · hardware & iot · frontend dev — bandung, id',
@@ -166,6 +239,20 @@ export const dict: Record<Lang, Dict> = {
       openValue: 'to collab',
       ctaAbout: 'check out my work →',
       ctaContact: 'say hello',
+      ctaCV: 'download CV ▾',
+      cvEN: 'English — Data-focused',
+      cvID: 'Indonesia',
+    },
+    lanyard: { load: '◉ summon the id card', loading: 'weaving the strap…' },
+    prehero: { eyebrow: 'portfolio · vol. 01 — bandung, id', scroll: 'scroll to reveal' },
+    miku: {
+      hint: 'tap Miku — she talks',
+      lines: [
+        "Nyaa~ hi-hi! I'm Miku, the lab cat!",
+        'Tristan digs up weird tech down here.',
+        'Urocheck, Puresip, Techware, H2orizon — all hand-built!',
+        'Nyaa, stretch those paws. Scroll gently.',
+      ],
     },
     badge: 'undergrad',
     marquee: 'Hardware ✦ IoT Systems ✦ AI Devices ✦ Creative Frontend',
@@ -179,9 +266,64 @@ export const dict: Record<Lang, Dict> = {
       ],
       quote: 'Build things that work, wrap them in interfaces that make sense.',
       skillsKicker: 'skills & tech matrix',
+      skillGraph: {
+        hint: 'drag to spin · click a node',
+        level: 'Proficiency',
+        linked: 'Linked skills',
+        close: 'Close',
+        hubs: {
+          frontend: 'Frontend',
+          backend: 'Backend',
+          tools: 'Tools',
+          infrastructure: 'Infrastructure',
+          devops: 'DevOps',
+          observability: 'Observability',
+          soft: 'Soft Skills',
+          core: 'Core Node',
+        },
+      },
+      experience: [
+        {
+          span: 'Top 10 team · 2,700+',
+          title: 'Innovation Challenge 2024',
+          body: 'In late 2024 I joined the Innovation Challenge: Generasi Terampil with my team Gentar (Tempest Tech) — me, Saif, El, Atha, and Sulthon. Against 2,700+ participants we built a solution for real community issues and made the 10 teams at Demo Day, learning to spot problems, design practical fixes, and collaborate under pressure.',
+        },
+        {
+          span: 'Gold medal · Apr 2025',
+          title: 'H2ORIZON at JISF 2025',
+          body: 'In April 2025 I designed and presented H2ORIZON, a smart adventure bottle for outdoor explorers with real-time hydration and environmental sensing. It took Gold in Innovation Science at the Jakarta International Science Fair — proof that ideas become real when tech, design, and human needs meet.',
+        },
+        {
+          span: 'Stage 4 · 10,000+',
+          title: 'Samsung Innovation Campus 6',
+          body: 'Selected from 10,000+ applicants for Samsung Innovation Campus Batch 6, I joined Team Samsutron with Saif, Atha, and Rado. The intensive AI, IoT, and programming program carried us to Stage 4 and showed me how software and hardware click together into real-world applications.',
+        },
+        {
+          span: '2nd place · Jun 2025',
+          title: 'Schools Reinventing Cities',
+          body: 'In June 2025 I entered the global C40 Cities competition with Rakha and Kafka, designing an Integrated Low-Emission Zone concept for Jakarta that placed 2nd in West Jakarta — stretching my view from single products to how tech and design shape sustainable cities.',
+        },
+        {
+          span: 'New arc · coming soon',
+          title: 'College arc: opening soon',
+          body: 'Next chapter: my college arc at the School of Electrical Engineering, Telkom University. New labs, new hardware, new builds — this folder opens as soon as the semester does.',
+        },
+      ],
+      experienceUi: {
+        openFolder: 'open folder',
+        photos: 'photos',
+        close: 'Close',
+        prev: 'Previous photo',
+        next: 'Next photo',
+        of: 'of',
+        readMore: 'Read more',
+        showLess: 'Show less',
+      },
     },
     bridgeBuilds:
-      'Ideas are nice, but hardware has to leave the desk. Here are three projects that actually made it out.',
+      'Ideas are nice, but hardware has to leave the desk. Here are four projects that actually made it out.',
+    bridgeSkills:
+      'Each project pushed me to develop a versatile set of technical and creative skills. Here’s a closer look at the skills that power everything I create.',
     projects: {
       kicker: '02 · ARTIFACTS OF THE DEEP',
       title: 'Physical builds, IoT systems, and custom tinkering.',
@@ -252,7 +394,16 @@ export const dict: Record<Lang, Dict> = {
     projectText: enProjectText,
   },
   id: {
-    nav: { about: 'tentang', projects: 'proyek', contact: 'kontak' },
+    nav: {
+      home: 'beranda',
+      about: 'tentang',
+      experience: 'pengalaman',
+      skills: 'keahlian',
+      projects: 'proyek',
+      phoneography: 'fotografi',
+      contact: 'kontak',
+      cv: 'cv',
+    },
     heroView: { lanyard: 'kartu id', girl: 'muse 3d' },
     hero: {
       role: 'teknik komputer · hardware & iot · frontend dev — bandung, id',
@@ -264,6 +415,20 @@ export const dict: Record<Lang, Dict> = {
       openValue: 'buat kolaborasi',
       ctaAbout: 'lihat karya gue →',
       ctaContact: 'sapa gue',
+      ctaCV: 'unduh CV ▾',
+      cvEN: 'English — Data-focused',
+      cvID: 'Indonesia',
+    },
+    lanyard: { load: '◉ panggil kartu id', loading: 'lagi merajut talinya…' },
+    prehero: { eyebrow: 'portofolio · vol. 01 — bandung, id', scroll: 'gulir untuk membuka' },
+    miku: {
+      hint: 'ketuk Miku — dia bisa ngomong',
+      lines: [
+        'Nyaa~ hai-hai! Gue Miku, kucing lab!',
+        'Tristan ngoprek teknologi aneh di sini.',
+        'Urocheck, Puresip, Techware, H2orizon — rakitan tangan semua!',
+        'Nyaa, regangin kaki dulu. Scroll pelan-pelan.',
+      ],
     },
     badge: 'mahasiswa',
     marquee: 'Perangkat Keras ✦ Sistem IoT ✦ Perangkat AI ✦ Frontend Kreatif',
@@ -277,9 +442,64 @@ export const dict: Record<Lang, Dict> = {
       ],
       quote: 'Bikin alat yang jalan, bungkus dengan tampilan yang masuk akal.',
       skillsKicker: 'matriks skill & teknologi',
+      skillGraph: {
+        hint: 'seret untuk putar · klik node',
+        level: 'Kemampuan',
+        linked: 'Skill terkait',
+        close: 'Tutup',
+        hubs: {
+          frontend: 'Frontend',
+          backend: 'Backend',
+          tools: 'Perkakas',
+          infrastructure: 'Infrastruktur',
+          devops: 'DevOps',
+          observability: 'Observabilitas',
+          soft: 'Soft Skills',
+          core: 'Simpul Inti',
+        },
+      },
+      experience: [
+        {
+          span: 'Top 10 · 2.700+',
+          title: 'Innovation Challenge 2024',
+          body: 'Akhir 2024, gue ikut Innovation Challenge: Generasi Terampil bareng tim Gentar (Tempest Tech) — gue, Saif, El, Atha, sama Sulthon. Dari 2.700+ peserta, kita bikin solusi buat masalah warga beneran dan tembus 10 tim yang tampil di Demo Day. Di sini gue belajar baca masalah, ngerancang solusi praktis, dan kolaborasi di bawah tekanan.',
+        },
+        {
+          span: 'Medali emas · Apr 2025',
+          title: 'H2ORIZON di JISF 2025',
+          body: 'April 2025, gue ngerancang dan presentasiin H2ORIZON, botol adventure pintar buat explorer — sensor hidrasi dan lingkungan real-time. Proyek ini dapet Gold Medal Innovation Science di Jakarta International Science Fair — bukti kalau ide jadi nyata pas teknologi, desain, dan kebutuhan manusia ketemu.',
+        },
+        {
+          span: 'Stage 4 · 10.000+',
+          title: 'Samsung Innovation Campus 6',
+          body: 'Kepilih dari 10.000+ pendaftar buat Samsung Innovation Campus Batch 6, gue gabung Tim Samsutron bareng Saif, Atha, sama Rado. Program intensif AI, IoT, dan programming ini ngebawa kita sampai Stage 4 dan nunjukin gimana software sama hardware nyambung jadi aplikasi dunia nyata.',
+        },
+        {
+          span: 'Juara 2 · Jun 2025',
+          title: 'Schools Reinventing Cities',
+          body: 'Juni 2025, gue ikut kompetisi global C40 Cities bareng Rakha sama Kafka, ngerancang konsep Integrated Low-Emission Zone buat Jakarta yang dapet juara 2 Jakarta Barat — ngeluarin perspektif gue dari produk satuan ke gimana teknologi dan desain ikut ngebentuk kota lestari.',
+        },
+        {
+          span: 'Arc baru · segera',
+          title: 'College arc: segera dibuka',
+          body: 'Chapter berikutnya: college arc gue di Fakultas Teknik Elektro, Telkom University. Lab baru, hardware baru, build baru — folder ini kebuka begitu semester jalan.',
+        },
+      ],
+      experienceUi: {
+        openFolder: 'buka folder',
+        photos: 'foto',
+        close: 'Tutup',
+        prev: 'Foto sebelumnya',
+        next: 'Foto berikutnya',
+        of: 'dari',
+        readMore: 'Selengkapnya',
+        showLess: 'Lebih sedikit',
+      },
     },
     bridgeBuilds:
-      'Ide emang gampang diomongin, tapi hardware harus dibuktikan. Tiga proyek ini berhasil jadi barang jadi — cek di bawah.',
+      'Ide emang gampang diomongin, tapi hardware harus dibuktikan. Empat proyek ini berhasil jadi barang jadi — cek di bawah.',
+    bridgeSkills:
+      'Setiap proyek mendorong gue mengasah skill teknis dan kreatif yang serbaguna. Ini sekilas tentang skill yang menopang semua yang gue buat.',
     projects: {
       kicker: '02 · ARTIFAK DARI KEDALAMAN',
       title: 'Rakitan fisik, sistem IoT, dan hasil otak-atik di lab.',

@@ -8,7 +8,7 @@
 // each paragraph owns its own scroll window, so the story reads little by
 // little, one paragraph at a time.
 'use client';
-import { useMemo, useRef, type ReactNode } from 'react';
+import { useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   motion,
   useMotionTemplate,
@@ -68,6 +68,16 @@ const ScrollReveal = ({
 }: ScrollRevealProps) => {
   const containerRef = useRef<HTMLHeadingElement>(null);
   const reduceMotion = useReducedMotion();
+  // Per-word blur() is the most expensive filter on phones: dozens of
+  // animated blurred spans force software rasterization while scrolling.
+  // Opacity-only reveal reads identically at 390px and stays on the GPU.
+  const [coarse] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 640px), (pointer: coarse)').matches,
+  );
+  const blurOn = enableBlur && !coarse;
+  const rotationOn = coarse ? 0 : baseRotation;
 
   const words = useMemo(() => {
     const text = typeof children === 'string' ? children : '';
@@ -82,7 +92,7 @@ const ScrollReveal = ({
     target: containerRef,
     offset: ['start 0.88', 'start 0.6'],
   });
-  const rotate = useTransform(scrollYProgress, [0, 1], [baseRotation, 0]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [rotationOn, 0]);
 
   const n = Math.max(1, words.filter((w) => !/^\s+$/.test(w)).length);
   let seen = 0;
@@ -104,8 +114,8 @@ const ScrollReveal = ({
         range={range}
         baseOpacity={baseOpacity}
         blurStrength={blurStrength}
-        enableBlur={enableBlur}
-      >
+        enableBlur={blurOn}
+        >
         {word}
       </Word>
     );

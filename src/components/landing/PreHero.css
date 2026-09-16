@@ -1,0 +1,76 @@
+/* PreHero: monumental name card. The in-flow section (100svh) is only a
+   spacer; while the hero travels up over us the inner card goes fixed and
+   full-viewport beneath it (layered pinning, pinSpacing:false equivalent).
+   The hero paints above by DOM order (both positioned, auto z-index). */
+.prehero {
+  position: relative;
+  height: 100svh;
+  z-index: 0;
+  overflow: clip;
+}
+.prehero-pin {
+  height: 100%;
+  display: flex;
+}
+.prehero-pin.is-fixed {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+.prehero-inner {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 2vh, 1.5rem);
+  padding: 0 4vw;
+  will-change: transform, opacity;
+}
+.prehero-eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent-amber);
+}
+.prehero-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(4rem, 19vw, 22rem);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--color-foreground);
+  will-change: transform;
+}
+.prehero-title span {
+  display: block;
+}
+.prehero-scroll {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.prehero-scroll span {
+  display: inline-block;
+  margin-left: 0.35rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .prehero-scroll span {
+    animation: prehero-bob 1.8s ease-in-out infinite;
+  }
+}
+@keyframes prehero-bob {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(6px); opacity: 1; }
+}

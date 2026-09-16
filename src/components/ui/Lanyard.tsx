@@ -51,9 +51,9 @@ export interface LanyardProps {
 }
 
 export default function Lanyard({
-  position = [0, 1, 22],
+  position = [0, 2.2, 26],
   gravity = [0, -40, 0],
-  fov = 20,
+  fov = 22,
   transparent = true,
   frontImage = null,
   backImage = null,
@@ -228,12 +228,14 @@ function Band({  maxSpeed = 50,
   const [dragged, drag] = useState<false | THREE.Vector3>(false);
   const [hovered, hover] = useState(false);
 
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
+  // Long hang: each segment 1.7 (≈5.1 total) so the card sits low in
+  // the frame like a real badge, not tucked under the ceiling.
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1.7]);
+  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1.7]);
+  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1.7]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
-    [0, 1.5, 0]
+    [0, 2.13, 0]
   ]);
 
   useEffect(() => {
@@ -276,7 +278,11 @@ function Band({  maxSpeed = 50,
 
   return (
     <>
-      <group position={[0, 4, 0]}>
+      {/* Anchor parked above the frustum top so the strap exits the
+          frame — reads as hanging from the page ceiling, never a floating
+          cut. y=8.5 with the widened camera ([0,2.2,26] fov=22, top ≈ 7.25)
+          keeps the card (~6.8) framed while the anchor stays out of view. */}
+      <group position={[0, 8.5, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
@@ -288,10 +294,10 @@ function Band({  maxSpeed = 50,
           <BallCollider args={[0.1]} />
         </RigidBody>
         <RigidBody position={[2, 0, 0]} ref={card} {...segmentProps} type={dragged ? 'kinematicPosition' : 'dynamic'}>
-          <CuboidCollider args={[0.8, 1.125, 0.01]} />
+          <CuboidCollider args={[1.14, 1.6, 0.01]} />
           <group
-            scale={2.25}
-            position={[0, -1.2, -0.05]}
+            scale={isMobile ? 3.2 : 4.4}
+            position={[0, -1.71, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
             onPointerUp={e => ((e.target as Element).releasePointerCapture(e.pointerId), drag(false))}
@@ -323,7 +329,7 @@ function Band({  maxSpeed = 50,
           resolution={isMobile ? [1000, 2000] : [1000, 1000]}
           useMap={!!lanyardImage}
           map={texture}
-          repeat={[-4, 1]}
+          repeat={[-6, 1]}
           lineWidth={lanyardWidth}
         />
       </mesh>

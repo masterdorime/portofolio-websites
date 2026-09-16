@@ -36,4 +36,16 @@ next-env.d.ts
 scripts/.tmp-models
 dev-*.log
 
+# local debug scratch (probes, bug shots, ref images, drafts)
+tmp-*
+tmp-bugs/
+tmp-ident/
+.playwright-mcp/
+ref*.png
+PRD.txt
+scripts/probe-*.mjs
+scripts/inspect-*.mjs
+scripts/shot-*.mjs
+
 .vercel
+.env*

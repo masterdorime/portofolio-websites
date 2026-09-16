@@ -68,6 +68,8 @@ out.push(`Skills kicker [EN]: ${en.about.skillsKicker}`);
 out.push(`Skills kicker [ID]: ${id.about.skillsKicker}`);
 out.push(`Bridge to builds [EN]: ${en.bridgeBuilds}`);
 out.push(`Bridge to builds [ID]: ${id.bridgeBuilds}`);
+out.push(`Bridge to skills [EN]: ${en.bridgeSkills}`);
+out.push(`Bridge to skills [ID]: ${id.bridgeSkills}`);
 out.push('');
 
 out.push('=== SKILLS MATRIX (same in both languages — tech terms) ===');

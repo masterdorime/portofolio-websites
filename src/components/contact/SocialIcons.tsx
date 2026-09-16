@@ -43,3 +43,30 @@ export function MailIcon() {
     </Base>
   );
 }
+
+export function LinkedInIcon() {
+  return (
+    <Base>
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4V8h4v2a6 6 0 0 1 2-2z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </Base>
+  );
+}
+
+export function XIcon() {
+  return (
+    <Base>
+      <path d="M4 4l16 16M20 4L4 20" />
+    </Base>
+  );
+}
+
+export function ThreadsIcon() {
+  return (
+    <Base>
+      <path d="M12 3c-4.5 0-7.5 3-7.5 7.5S8 18 12 18c1.5 0 3-.5 3.9-1.4.9-.9 1.4-2.1 1.4-3.6 0-2.8-2-4.5-4.6-4.5-2.3 0-4.2 1.7-4.2 4 0 2.2 1.6 3.8 3.7 3.8 1.9 0 3.3-1.4 3.3-3.3 0-1.7-1.2-2.9-2.9-2.9" />
+      <path d="M12 21c4.5 0 7.5-3 7.5-7.5" />
+    </Base>
+  );
+}

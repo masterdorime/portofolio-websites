@@ -1,5 +1,6 @@
 // Shared case-study body: used by the overlay and the standalone [slug] page (spec §4).
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Project } from '@/data/projects';
 import type { Dict } from '@/i18n/dict';
 
@@ -23,6 +24,31 @@ export default function CaseStudy({ project, t }: { project: Project; t: Dict })
       <h1 className="page-title">{project.name}</h1>
       <p className="relic-line">{text.relic}</p>
       <p className="page-lede">{text.description}</p>
+      <figure className="case-figure">
+        <Image
+          src={project.image}
+          alt={`${project.name} render`}
+          width={1400}
+          height={900}
+          sizes="(max-width: 900px) 100vw, 880px"
+          priority={false}
+        />
+      </figure>
+      {project.gallery?.length ? (
+        <div className="case-gallery">
+          {project.gallery.map((src) => (
+            <figure key={src} className="case-figure">
+              <Image
+                src={src}
+                alt={`${project.name} detail render`}
+                width={1400}
+                height={900}
+                sizes="(max-width: 900px) 100vw, 880px"
+              />
+            </figure>
+          ))}
+        </div>
+      ) : null}
       <div className="case-meta">
         {project.tech.map((tech) => (
           <span key={tech} className="tag tag--amber">{tech}</span>

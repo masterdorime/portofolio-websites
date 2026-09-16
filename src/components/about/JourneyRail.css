@@ -1,0 +1,325 @@
+/* JourneyRail: pinned horizontal journey strip. Full-bleed photos per panel
+   with a reading veil + caption. Breaks out of .page padding to go edge to
+   edge (same negative-margin trick as .projects-ambient). */
+.journey-rail {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  width: 100vw;
+  width: 100svw;
+  margin-left: -50vw;
+  margin-left: -50svw;
+  margin-right: -50vw;
+  margin-right: -50svw;
+  /* The stage GSAP pins: exactly one viewport tall, the pin spacer
+     ScrollTrigger adds provides the scroll distance. */
+  height: 100vh;
+  height: 100svh;
+}
+.journey-pin {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+.journey-track {
+  display: flex;
+  height: 100%;
+  width: max-content;
+  will-change: transform;
+}
+.journey-panel {
+  position: relative;
+  /* vw fallback first, svw wins where supported: stable against the
+     mobile URL bar and never wider than the visual viewport. The global
+     overflow-x: clip guard absorbs the desktop scrollbar delta. */
+  flex: 0 0 100vw;
+  flex-basis: 100svw;
+  width: 100vw;
+  width: 100svw;
+  height: 100%;
+  overflow: hidden;
+}
+.journey-panel img {
+  object-fit: cover;
+}
+/* Reading veil: dark where the caption sits, open where the photo breathes. */
+.journey-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(0deg, rgba(27, 38, 79, 0.72) 0%, rgba(27, 38, 79, 0.28) 38%, transparent 62%),
+    linear-gradient(90deg, rgba(27, 38, 79, 0.42) 0%, transparent 55%);
+}
+/* Foot row: caption text on the left, archive folder on the right — side
+   by side above the veil, instead of the folder floating over the photo. */
+.journey-foot {
+  position: absolute;
+  left: clamp(1.25rem, 6vw, 5rem);
+  right: clamp(1.25rem, 6vw, 5rem);
+  bottom: 8vh;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(1rem, 4vw, 3rem);
+}
+.journey-caption {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 38rem;
+  color: #f5f3f5;
+}
+.journey-span {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent-amber);
+  text-shadow: 0 1px 8px rgba(27, 38, 79, 0.85);
+}
+.journey-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  text-shadow: 0 2px 18px rgba(27, 38, 79, 0.9);
+}
+.journey-body {
+  margin: 0.875rem 0 0;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.618;
+  max-width: 32rem;
+  text-wrap: pretty;
+  text-shadow: 0 1px 12px rgba(27, 38, 79, 0.9);
+}
+.journey-cta {
+  margin-top: 1.25rem;
+}
+/* Archive folder: pinned to the right end of the foot row, beside the
+   text on every viewport (scaled down on small screens). */
+.journey-folder {
+  flex: 0 0 auto;
+  padding-bottom: 0.5rem;
+}
+@media (max-width: 900px) {
+  .journey-foot {
+    /* Clear the fixed bottom dock so the folder label never slides under it. */
+    bottom: max(6vh, 4.5rem);
+    gap: 0.75rem;
+  }
+  .journey-folder {
+    transform: scale(0.78);
+    transform-origin: bottom right;
+    padding-bottom: 0;
+    /* The folder's one-line label (~300px max-content) would eat the
+       whole 343px row and crush the caption to zero. Wrap the label so
+       the folder stays narrow and the text keeps its share. */
+    max-width: 38vw;
+  }
+  .journey-folder .folder__label {
+    max-width: 34vw;
+    text-align: center;
+    text-wrap: balance;
+  }
+}
+/* Fullscreen folder viewer: above nav (80) and grain (90). */
+.exp-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: rgba(10, 13, 26, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: zoom-out;
+}
+.exp-viewer__frame {
+  position: relative;
+  width: min(880px, 92vw);
+  height: min(80vh, 1100px);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--color-muted) 30%, transparent);
+  background: var(--color-surface);
+  cursor: default;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+}
+.exp-viewer__frame img {
+  object-fit: contain;
+}
+.exp-viewer__count {
+  position: absolute;
+  top: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.3rem 0.8rem;
+  border-radius: 9999px;
+  background: rgba(10, 13, 26, 0.65);
+  color: #f5f3f5;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+.exp-viewer__controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.875rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .exp-viewer__frame {
+    box-shadow: none;
+  }
+}
+/* Reduced-motion fallback: calm vertical stack, each panel a tall frame. */
+.journey-stack {
+  display: grid;
+  margin-inline: calc(-1 * clamp(1rem, 4vw, 4rem));
+}
+.journey-stack .journey-panel {
+  width: 100%;
+  height: 82svh;
+}
+
+/* College-arc teaser: logo art reads whole - never crop the wordmark. */
+.journey-panel--logo { background: #000; }
+.journey-panel--logo img { object-fit: contain !important; padding: clamp(1rem, 6vw, 5rem); }
+/* Inline bridge: single huge nowrap line extending to the right.
+   The pinned viewport clips overflow so the travelling line never
+   widens the page — hero-huge, one continuous SplitText sentence. */
+.journey-inline-bridge {
+  flex: 0 0 auto;
+  width: max-content;
+  max-width: none;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0 2rem 0 7rem;
+}
+.journey-inline-kicker {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent-amber);
+}
+.journey-inline-lines {
+  display: block;
+}
+.journey-inline-line {
+  margin: 0;
+  white-space: nowrap;
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #f5f3f5;
+  text-shadow: 0 2px 18px rgba(27, 38, 79, 0.9);
+}
+/* SplitText word shells: free-flying (no mask clip) so the scatter can
+   arrive from above AND below the line box. SplitText applies this class
+   via wordsClass on mount. */
+.bridge-word {
+  display: inline-block;
+  will-change: transform, opacity;
+  padding-bottom: 0.08em;
+}
+@media (max-width: 767px) {
+  .journey-inline-bridge {
+    max-width: none;
+    padding-left: 2.5rem;
+  }
+  .journey-inline-line {
+    font-size: clamp(2rem, 10vw, 3.2rem);
+  }
+}
+
+/* ── Mobile experience cleanup (≤767px) ──
+   Same pinned horizontal rail as desktop (full-bleed photo per panel),
+   but: sans title, clamped body + Read more, folder as a top-right chip
+   so caption text never fights the photo or the folder. */
+.journey-more { display: none; }
+@media (max-width: 767px) {
+  /* Stronger veil top (kicker over busy photo badges) and bottom. */
+  .journey-veil {
+    background:
+      linear-gradient(0deg, rgba(27, 38, 79, 0.85) 0%, rgba(27, 38, 79, 0.5) 42%, transparent 66%),
+      linear-gradient(180deg, rgba(27, 38, 79, 0.55) 0%, transparent 28%),
+      linear-gradient(90deg, rgba(27, 38, 79, 0.3) 0%, transparent 50%);
+  }
+  /* Foot dissolves: caption pins bottom, folder floats top-right. */
+  .journey-foot { display: contents; }
+  .journey-caption {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: max(6vh, 4.5rem);
+    max-width: none;
+    z-index: 2;
+  }
+  .journey-folder {
+    position: absolute;
+    top: max(4.25rem, 9vh);
+    right: 0.75rem;
+    z-index: 2;
+    transform: scale(0.68);
+    transform-origin: top right;
+    max-width: none;
+    padding-bottom: 0;
+  }
+  /* Chip only — the caption already carries the title. */
+  .journey-folder .folder__label { display: none; }
+  /* Sans title: grotesk semibold, compact, never clips. */
+  .journey-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.45rem, 6.5vw, 2rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 14px rgba(27, 38, 79, 0.9);
+  }
+  .journey-span { font-size: 0.68rem; }
+  /* Clamped body + toggle. */
+  .journey-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .journey-caption[data-expanded='true'] .journey-body {
+    display: block;
+  }
+  .journey-more {
+    display: inline-block;
+    margin-top: 0.5rem;
+    border: 1px solid color-mix(in oklab, var(--color-accent-amber) 55%, transparent);
+    border-radius: 9999px;
+    background: color-mix(in oklab, #1b264f 55%, transparent);
+    color: #f5f3f5;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+  }
+  .journey-cta { margin-top: 1rem; }
+}
+

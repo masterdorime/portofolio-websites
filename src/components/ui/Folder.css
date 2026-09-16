@@ -1,0 +1,164 @@
+/* Ported from react-bits -- MIT License. Yellow folder stays same
+   across themes (no theme flip) — fixed amber front/back. */
+.folder {
+  --folder-color: #EAB308;
+  --folder-back-color: #CA8A04;
+  --paper-1: color-mix(in oklab, var(--color-surface) 82%, var(--color-background));
+  --paper-2: color-mix(in oklab, var(--color-surface) 90%, var(--color-background));
+  --paper-3: var(--color-surface);
+  transition: transform 0.2s ease-in;
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.folder:not(.folder--click):hover {
+  transform: translateY(-8px);
+}
+
+.folder:not(.folder--click):hover .paper {
+  transform: translate(-50%, 0%);
+}
+
+.folder:not(.folder--click):hover .folder__front {
+  transform: skew(15deg) scaleY(0.6);
+}
+
+.folder:not(.folder--click):hover .right {
+  transform: skew(-15deg) scaleY(0.6);
+}
+
+.folder.open {
+  transform: translateY(-8px);
+}
+
+.folder.open .paper:nth-child(1) {
+  transform: translate(-120%, -70%) rotateZ(-15deg) translate(var(--magnet-x, 0px), var(--magnet-y, 0px));
+}
+
+.folder.open .paper:nth-child(1):hover {
+  transform: translate(-120%, -70%) rotateZ(-15deg) scale(1.1) translate(var(--magnet-x, 0px), var(--magnet-y, 0px));
+}
+
+.folder.open .paper:nth-child(2) {
+  transform: translate(10%, -70%) rotateZ(15deg) translate(var(--magnet-x, 0px), var(--magnet-y, 0px));
+  height: 80%;
+}
+
+.folder.open .paper:nth-child(2):hover {
+  transform: translate(10%, -70%) rotateZ(15deg) scale(1.1) translate(var(--magnet-x, 0px), var(--magnet-y, 0px));
+}
+
+.folder.open .paper:nth-child(3) {
+  transform: translate(-50%, -100%) rotateZ(5deg) translate(var(--magnet-x, 0px), var(--magnet-y, 0px));
+  height: 80%;
+}
+
+.folder.open .paper:nth-child(3):hover {
+  transform: translate(-50%, -100%) rotateZ(5deg) scale(1.1) translate(var(--magnet-x, 0px), var(--magnet-y, 0px));
+}
+
+.folder.open .folder__front {
+  transform: skew(15deg) scaleY(0.6);
+}
+
+.folder.open .right {
+  transform: skew(-15deg) scaleY(0.6);
+}
+
+.folder__back {
+  position: relative;
+  width: 100px;
+  height: 80px;
+  background: var(--folder-back-color);
+  border-radius: 0px 10px 10px 10px;
+}
+
+.folder__back::after {
+  position: absolute;
+  z-index: 0;
+  bottom: 98%;
+  left: 0;
+  content: '';
+  width: 30px;
+  height: 10px;
+  background: var(--folder-back-color);
+  border-radius: 5px 5px 0 0;
+}
+
+.paper {
+  position: absolute;
+  z-index: 2;
+  bottom: 10%;
+  left: 50%;
+  transform: translate(-50%, 10%);
+  width: 70%;
+  height: 80%;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: var(--paper-1);
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+  cursor: zoom-in;
+}
+
+.paper:nth-child(2) {
+  background: var(--paper-2);
+  width: 80%;
+  height: 70%;
+}
+
+.paper:nth-child(3) {
+  background: var(--paper-3);
+  width: 90%;
+  height: 60%;
+}
+
+.paper img {
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.folder__front {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  background: var(--folder-color);
+  border-radius: 5px 10px 10px 10px;
+  transform-origin: bottom;
+  transition: transform 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.folder__label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  text-shadow: 0 1px 8px rgba(27, 38, 79, 0.85);
+}
+
+.folder:focus-visible {
+  outline: 2px solid var(--color-foreground);
+  outline-offset: 4px;
+  border-radius: 10px;
+}
+
+.paper:focus-visible {
+  outline: 2px solid var(--color-accent-lavender);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .folder,
+  .paper,
+  .folder__front {
+    transition: none;
+  }
+}

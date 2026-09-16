@@ -17,6 +17,14 @@
   box-sizing: border-box;
 }
 
+/* Seamless globe: no visible cage. The backdrop, tile letterbox, viewer
+   letterbox and edge fades all resolve transparent, so the photos float
+   directly on the page ambient in both themes. An explicit
+   overlayBlurColor prop still overrides via inline custom property. */
+.sphere-root {
+  --overlay-blur-color: transparent;
+}
+
 .sphere,
 .item,
 .item__image {
@@ -162,7 +170,7 @@ main.sphere-main {
   z-index: 30;
   border-radius: var(--enlarge-radius, 32px);
   overflow: hidden;
-  background: #0e0e10;
+  background: var(--overlay-blur-color, #0e0e10);
   transition:
     transform 500ms ease,
     opacity 500ms ease;
@@ -170,12 +178,13 @@ main.sphere-main {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
-/* Full photo at natural aspect in the popup — cover would crop it. */
+/* Full photo at natural aspect in the popup — cover would crop it.
+   Letterbox melts into the themed backdrop instead of hard near-black. */
 .viewer .enlarge img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: #0e0e10;
+  background: var(--overlay-blur-color, #0e0e10);
   filter: var(--image-filter, none);
 }
 
