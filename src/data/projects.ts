@@ -6,6 +6,10 @@ export interface Project {
   name: string;
   tagline: string;
   description: string;
+  /** Cover render, served from public/. */
+  image: string;
+  /** Extra case-study renders (optional). */
+  gallery?: string[];
   category: ProjectCategory;
   tech: string[];
   problem: string;
@@ -19,6 +23,8 @@ export const PROJECTS: Project[] = [
     slug: 'urocheck',
     name: 'Urocheck',
     tagline: 'Portable AI urine analysis device',
+    image: '/images/projects/urocheck-analyzer.png',
+    gallery: ['/images/projects/urocheck-device.jpeg', '/images/projects/urocheck-blueprint.png'],
     description:
       'A portable, AI-powered urine checker designed for quick screening at home or in local clinics. It gives fast results right on the device without needing a bulky lab setup.',
     category: 'ai',
@@ -34,6 +40,7 @@ export const PROJECTS: Project[] = [
     slug: 'puresip',
     name: 'Puresip',
     tagline: 'Ultrafiltration straw with live sensors',
+    image: '/images/projects/puresip.png',
     description:
       'Portable ultrafiltration straw with multiple sensors ensuring safe drinkable water anywhere you go. It pairs a hollow-fiber membrane with live quality readouts, so the straw does not just filter — it testifies, sip by sip, that the water is actually safe.',
     category: 'hardware',
@@ -49,6 +56,7 @@ export const PROJECTS: Project[] = [
     slug: 'techware',
     name: 'Techware',
     tagline: 'AI-powered thermal jacket',
+    image: '/images/projects/techware-goku.jpeg',
     description:
       'AI-powered jacket with self-determining heat and cold control, ensuring perfect body temperature. Distributed thermal elements and skin sensors close the loop around comfort itself — clothing that notices you are about to overheat before you do.',
     category: 'iot',
@@ -60,7 +68,60 @@ export const PROJECTS: Project[] = [
     hardware: ['Thermal film elements', 'Skin + ambient temp sensors', 'BLE MCU', 'Flexible battery pack'],
     year: 2025,
   },
+  {
+    slug: 'h2orizon',
+    name: 'H2orizon',
+    tagline: 'Smart water bottle with ultrafiltration + micro-pump',
+    image: '/images/projects/h2orizon.png',
+    gallery: ['/images/projects/h2orizon.png'],
+    description:
+      'H2orizon is a next-generation smart water bottle that turns virtually any freshwater source into clean, drinkable water on the go. Compact, rugged, and intelligently designed, it combines advanced ultrafiltration technology with a built-in micro-pump and real-time purity sensing—so you can hydrate with confidence wherever you are.',
+    category: 'hardware',
+    tech: ['Ultrafiltration', 'Micro-pump', 'Purity sensing', 'Low-power MCU'],
+    problem:
+      'Adventurers, commuters, and communities near untreated freshwater cannot trust what they drink. Bottled water is wasteful and heavy to carry, while basic filters give no proof of safety and require constant sucking effort. When a source looks clear but is not, the risk is invisible.',
+    approach:
+      'A compact bottle integrating a hollow-fiber ultrafiltration stage, a quiet micro-pump that does the drawing for you, and inline purity sensing that reports in real time. The system verifies every fill before you sip and runs on a rugged low-power core built for trails, travel, and daily carry.',
+    hardware: ['Ultrafiltration membrane', 'Micro diaphragm pump', 'TDS + turbidity sensors', 'Rechargeable LiPo + sealed housing'],
+    year: 2025,
+  },
 ];
+
+/**
+ * Full showcase pool: all 9 vendored build renders plus the Urocheck
+ * blueprint, the Techware field shot, and the SIC6 stage photo. The
+ * DriftWall shuffles this pool per mount (Fisher-Yates, client-only);
+ * project cards and case studies keep their curated covers.
+ */
+export const SHOWCASE_IMAGES: string[] = [
+  '/images/projects/h2orizon.png',
+  '/images/projects/urocheck-device.jpeg',
+  '/images/projects/puresip.png',
+  '/images/projects/techware.png',
+  '/images/projects/urocheck-analyzer.png',
+  '/images/projects/showcase-gemini-01.jpeg',
+  '/images/projects/showcase-chatgpt-01.png',
+  '/images/projects/showcase-chatgpt-02.png',
+  '/images/projects/showcase-chatgpt-03.png',
+  '/images/projects/showcase-gemini-02.jpeg',
+  '/images/projects/urocheck-blueprint.png',
+  '/images/projects/techware-goku.jpeg',
+  '/images/experience/sic6/sic6-04.png',
+];
+
+/**
+ * Deterministic pool pick: FNV hash of the key, so the spread reads as
+ * shuffled yet stays identical across SSR and hydration (Math.random would
+ * mismatch). Case-study pages keep their curated image/gallery.
+ */
+export function showcaseImageFor(key: string): string {
+  let h = 2166136261;
+  for (let i = 0; i < key.length; i++) {
+    h ^= key.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return SHOWCASE_IMAGES[Math.abs(h) % SHOWCASE_IMAGES.length];
+}
 
 export function filterProjects(
   projects: Project[],

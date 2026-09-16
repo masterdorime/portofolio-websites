@@ -19,6 +19,9 @@ export interface DomeGalleryProps {
   minRadius?: number;
   maxRadius?: number;
   padFactor?: number;
+  // Optional explicit backdrop override. When omitted (the site default),
+  // DomeGallery.css owns it via theme tokens: flat surface in dark, page
+  // background in light (seamless, no glow).
   overlayBlurColor?: string;
   maxVerticalRotationDeg?: number;
   dragSensitivity?: number;
@@ -139,7 +142,7 @@ export default function DomeGallery({
   minRadius = 600,
   maxRadius = Infinity,
   padFactor = 0.25,
-  overlayBlurColor = '#120F17',
+  overlayBlurColor,
   maxVerticalRotationDeg = DEFAULTS.maxVerticalRotationDeg,
   dragSensitivity = DEFAULTS.dragSensitivity,
   enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
@@ -231,7 +234,10 @@ export default function DomeGallery({
       const viewerPad = Math.max(8, Math.round(minDim * padFactor));
       root.style.setProperty('--radius', `${lockedRadiusRef.current}px`);
       root.style.setProperty('--viewer-pad', `${viewerPad}px`);
-      root.style.setProperty('--overlay-blur-color', overlayBlurColor);
+      // Only override the CSS theme-owned backdrop when an explicit color
+      // was passed; otherwise the token default (dark surface / light page
+      // bg) stands.
+      if (overlayBlurColor) root.style.setProperty('--overlay-blur-color', overlayBlurColor);
       root.style.setProperty('--tile-radius', imageBorderRadius);
       root.style.setProperty('--enlarge-radius', openedImageBorderRadius);
       root.style.setProperty('--image-filter', grayscale ? 'grayscale(1)' : 'none');
@@ -419,7 +425,8 @@ export default function DomeGallery({
       const originalImg = overlay.querySelector('img');
       if (originalImg) {
         const img = originalImg.cloneNode() as HTMLImageElement;
-        img.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#0e0e10;';
+        img.style.cssText =
+          'width:100%;height:100%;object-fit:contain;background:var(--overlay-blur-color, #0e0e10);';
         animatingOverlay.appendChild(img);
       }
       overlay.remove();
@@ -631,7 +638,7 @@ export default function DomeGallery({
       style={{
         ['--segments-x' as string]: segments,
         ['--segments-y' as string]: segments,
-        ['--overlay-blur-color' as string]: overlayBlurColor,
+        ...(overlayBlurColor ? { ['--overlay-blur-color' as string]: overlayBlurColor } : {}),
         ['--tile-radius' as string]: imageBorderRadius,
         ['--enlarge-radius' as string]: openedImageBorderRadius,
         ['--image-filter' as string]: grayscale ? 'grayscale(1)' : 'none'

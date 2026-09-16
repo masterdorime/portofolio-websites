@@ -1,0 +1,28 @@
+/* ParticleText: canvas fills its wrapper; the wrapper inherits the
+   surrounding font/color so glyphs match the theme. Canvas is decorative —
+   pointer events pass through (repel tracks window pointer instead). */
+.particle-text {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.particle-text-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+/* Reduced-motion fallback: same massive cropped line as static text. */
+.particle-text-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(7rem, 24vw, 28rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  user-select: none;
+}

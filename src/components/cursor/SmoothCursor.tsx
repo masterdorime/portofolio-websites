@@ -126,6 +126,8 @@ export function SmoothCursor({
     const updateEnabled = () => {
       const nextIsEnabled = mediaQuery.matches;
       setIsEnabled(nextIsEnabled);
+      // Hide the native pointer everywhere while the smooth cursor drives.
+      document.documentElement.classList.toggle('custom-cursor', nextIsEnabled);
 
       if (!nextIsEnabled) {
         setIsVisible(false);
@@ -137,6 +139,7 @@ export function SmoothCursor({
 
     return () => {
       mediaQuery.removeEventListener('change', updateEnabled);
+      document.documentElement.classList.remove('custom-cursor');
     };
   }, []);
 

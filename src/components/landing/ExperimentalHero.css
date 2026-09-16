@@ -1,0 +1,549 @@
+/* Experimental hero (vol.02) — the landing-page hero.
+   Seamless with the ambient site canvas: transparent base + own soft glows,
+   no hard borders. Heavy centered title, 3-col stage, bottom-right CTAs.
+   Mouse parallax via --ex/--ey (-1..1) set on the section. */
+.experimental-hero {
+  --ex: 0;
+  --ey: 0;
+  position: relative;
+  overflow: clip;
+  padding: clamp(4rem, 8vw, 7rem) clamp(1rem, 4vw, 4rem) clamp(3rem, 6vw, 5rem);
+  isolation: isolate;
+}
+/* Clean layer: velvet radial glows over the ambient canvas. */
+.experimental-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 30%, rgba(87, 108, 168, 0.16), transparent 65%),
+    radial-gradient(ellipse 40% 35% at 15% 70%, rgba(212, 205, 171, 0.08), transparent 60%),
+    radial-gradient(ellipse 40% 35% at 85% 75%, rgba(39, 70, 144, 0.14), transparent 62%);
+}
+html[data-theme='light'] .experimental-hero::before {
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 30%, rgba(39, 70, 144, 0.1), transparent 65%),
+    radial-gradient(ellipse 40% 35% at 15% 70%, rgba(142, 155, 144, 0.14), transparent 60%),
+    radial-gradient(ellipse 40% 35% at 85% 75%, rgba(212, 205, 171, 0.2), transparent 62%);
+}
+.ex-hero-inner {
+  max-width: 76rem;
+  margin-inline: auto;
+}
+.ex-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent-amber);
+  text-align: center;
+  margin: 0 0 0.75rem;
+}
+/* Giant backdrop title: particle text on one line centered BEHIND the
+   diorama (transparent canvas, model occludes the middle). Type and color
+   inherit into the particle sampler so glyphs match the theme. */
+.ex-giant-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* Instrument Serif display face: long descenders extend the line
+     downward for a fuller particle field; weight 800 faux-bolds it.
+     Single color per theme: cream on dark, ink-navy on light. */
+  font-family: var(--font-display);
+  color: #f5f3f5;
+  transform: translate3d(calc(var(--ex) * 14px), calc(var(--ey) * 10px), 0);
+  transition: transform 0.2s ease-out;
+}
+html[data-theme='light'] .ex-giant-wrap {
+  color: #1b264f;
+}
+.ex-giant-wrap .particle-text {
+  overflow: visible;
+}
+/* Mobile: hide oversized "Tristan Edgina" particle title — too large
+   and distracts from the bio + 3D diorama at 390px. Desktop keeps it. */
+@media (max-width: 767px) {
+  .ex-giant-wrap {
+    display: none !important;
+  }
+}
+.ex-sub {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  text-align: center;
+  margin: 1rem auto 0;
+  max-width: 46rem;
+  text-wrap: pretty;
+}
+.ex-grid {
+  position: relative;
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+}
+/* Desktop: one shared row — the stage bleeds full-width behind while the
+   glass bio (left) overlaps the 3D via negative margins. The card sits
+above the canvas (z-index) so she dominates the middle. */
+@media (min-width: 1000px) {
+  /* Full-bleed breakout: the grid escapes the 76rem inner container so
+     the 3D stage spans 1 full desktop width edge-to-edge. (Section has
+     overflow: clip, so 100vw never causes page scroll.) Bio stays docked
+     at the viewport edge with padding, overlapping the canvas. */
+  .ex-grid {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    padding-inline: clamp(1rem, 4vw, 4rem);
+    box-sizing: border-box;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    align-items: center;
+  }
+  .ex-stage-reveal {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    z-index: 1;
+  }
+  .ex-bio-reveal {
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 2;
+    /* Nudged a bit up + right per request: higher off the platform and more inward. */
+    align-self: end;
+    justify-self: start;
+    width: 100%;
+    max-width: 340px;
+    margin-right: -10rem;
+    margin-left: 11.5rem;
+    margin-bottom: 4.25rem;
+  }
+}
+/* Glass bio card — 3D flip: front = bio text, back = photo grid.
+   Parallax lives on the flip wrapper so rotateY isn't clobbered. */
+.ex-bio-flip {
+  perspective: 1200px;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  transform: translate3d(calc(var(--ex) * -10px), calc(var(--ey) * -8px), 0);
+  transition: transform 0.2s ease-out;
+}
+.ex-bio-flip:focus-visible {
+  outline: 2px solid var(--color-accent-lavender);
+  outline-offset: 3px;
+  border-radius: 1.25rem;
+}
+.ex-bio-inner {
+  position: relative;
+  width: 100%;
+  min-height: 280px;
+  transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.ex-bio-flip:hover .ex-bio-inner,
+.ex-bio-flip:focus-visible .ex-bio-inner,
+.ex-bio-flip[data-flipped='true'] .ex-bio-inner {
+  transform: rotateY(180deg);
+}
+.ex-bio {
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in oklab, var(--color-foreground) 16%, transparent);
+  background: color-mix(in oklab, var(--color-surface) 42%, transparent);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  padding: 1.5rem 1.5rem 1.625rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.ex-bio--front {
+  position: relative;
+}
+.ex-bio--back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 0.75rem;
+  overflow: hidden;
+}
+.ex-bio-photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.ex-bio-photos--single {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  gap: 0;
+}
+.ex-bio-photos--single img {
+  border-radius: 0.875rem;
+}
+.ex-bio-photos img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in oklab, var(--color-foreground) 10%, transparent);
+  display: block;
+  background: var(--color-surface);
+}
+.ex-bio-flip-hint {
+  display: block;
+  margin-top: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  opacity: 0.85;
+}
+.ex-bio-flip-hint--back {
+  margin-top: auto;
+  text-align: center;
+  padding-top: 0.25rem;
+  margin-top: 0.5rem;
+}
+html[data-theme='light'] .ex-bio {
+  box-shadow: 0 10px 30px rgba(27, 38, 79, 0.12);
+  background: color-mix(in oklab, #ffffff 55%, transparent);
+}
+.ex-bio-head {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 0.875rem;
+}
+.ex-bio-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: var(--color-accent-lavender);
+  box-shadow: 0 0 12px var(--color-accent-lavender);
+}
+.ex-bio-lang {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.ex-bio-text {
+  margin: 0;
+  color: var(--color-foreground);
+  opacity: 0.92;
+  line-height: 1.65;
+  font-size: clamp(1.05rem, 1.1vw + 0.82rem, 1.28rem);
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+/* Center 3D stage — she dominates: tall canvas, height-fit diorama.
+   Extended bottom height so the grid platform sits fully in frame
+   with breathing room beneath the feet (reference: platform fully
+   visible). Canvas is full-bleed to the stage box; the hint overlays. */
+.ex-stage {
+  position: relative;
+  min-height: 560px;
+  height: clamp(660px, 86vh, 940px);
+  padding-bottom: 1.5rem;
+  box-sizing: border-box;
+}
+.ex-stage .blenderchan-stage {
+  position: absolute;
+  inset: 0;
+}
+.ex-stage .blenderchan-stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.ex-stage-hint {
+  position: absolute;
+  bottom: 0.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  opacity: 0.8;
+}
+/* Magnetic wrapper — inline-block so GSAP x/y rides the button itself. */
+.magnetic-btn {
+  display: inline-block;
+  will-change: transform;
+}
+/* ── Glass premium CTAs ──
+   Base: frosted pill with inner highlight + layered soft shadow.
+   Primary (check out my work) is ink-solid; secondary/ghost + CV are
+   translucent glass. Both lift on hover and keep the arrow breathing. */
+.ex-ctas--stage-right .btn,
+.ex-ctas--stage-right .cv-download__trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.82rem 1.45rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid color-mix(in oklab, var(--color-foreground) 10%, transparent);
+  background: color-mix(in oklab, var(--color-surface) 56%, transparent);
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  color: var(--color-foreground);
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.45) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.04) inset;
+  transition:
+    transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    color 0.28s ease;
+  overflow: hidden;
+  isolation: isolate;
+}
+.ex-ctas--stage-right .btn::before,
+.ex-ctas--stage-right .cv-download__trigger::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 58%);
+  pointer-events: none;
+  z-index: -1;
+}
+.ex-ctas--stage-right .btn:hover,
+.ex-ctas--stage-right .cv-download__trigger:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklab, var(--color-surface) 72%, transparent);
+  border-color: color-mix(in oklab, var(--color-accent-lavender) 26%, transparent);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.55) inset;
+}
+.ex-ctas--stage-right .btn:active,
+.ex-ctas--stage-right .cv-download__trigger:active {
+  transform: translateY(0);
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}
+.ex-ctas--stage-right .btn:focus-visible,
+.ex-ctas--stage-right .cv-download__trigger:focus-visible {
+  outline: 2px solid var(--color-accent-lavender);
+  outline-offset: 3px;
+}
+/* Primary: ink-solid with quiet sheen — reads as the lead action. */
+.ex-ctas--stage-right .btn:not(.btn--ghost) {
+  background: color-mix(in oklab, var(--color-foreground) 92%, transparent);
+  color: var(--color-background);
+  border-color: transparent;
+  box-shadow:
+    0 6px 22px rgba(0, 0, 0, 0.16),
+    0 1px 0 rgba(255, 255, 255, 0.18) inset;
+}
+.ex-ctas--stage-right .btn:not(.btn--ghost)::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, transparent 62%);
+}
+.ex-ctas--stage-right .btn:not(.btn--ghost):hover {
+  background: color-mix(in oklab, var(--color-foreground) 100%, transparent);
+  color: var(--color-background);
+  border-color: transparent;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.22) inset;
+}
+html[data-theme='light'] .ex-ctas--stage-right .btn:not(.btn--ghost) {
+  background: #1b264f;
+  color: #f5f3f5;
+}
+html[data-theme='light'] .ex-ctas--stage-right .btn:not(.btn--ghost):hover {
+  background: #162042;
+}
+/* Light-theme glass tune — whiter, airier. */
+html[data-theme='light'] .ex-ctas--stage-right .btn,
+html[data-theme='light'] .ex-ctas--stage-right .cv-download__trigger {
+  background: color-mix(in oklab, #ffffff 70%, transparent);
+  border-color: color-mix(in oklab, #1b264f 10%, transparent);
+  box-shadow:
+    0 4px 18px rgba(27, 38, 79, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.92) inset;
+}
+html[data-theme='light'] .ex-ctas--stage-right .btn:hover,
+html[data-theme='light'] .ex-ctas--stage-right .cv-download__trigger:hover {
+  background: color-mix(in oklab, #ffffff 86%, transparent);
+  border-color: color-mix(in oklab, #576ca8 22%, transparent);
+  box-shadow:
+    0 10px 26px rgba(27, 38, 79, 0.1),
+    0 1px 0 rgba(255, 255, 255, 1) inset;
+}
+/* Arrow breathes on hover — works with the "→" already in the label. */
+.ex-ctas--stage-right .btn {
+  gap: 0.5rem;
+}
+.ex-ctas--stage-right .btn:not(.btn--ghost):hover {
+  gap: 0.7rem;
+}
+/* CV chevron rotates when menu open — ties into CVDownload's data-open. */
+.ex-ctas--stage-right .cv-download[data-open='true'] .cv-download__trigger {
+  background: color-mix(in oklab, var(--color-surface) 78%, transparent);
+  border-color: color-mix(in oklab, var(--color-accent-lavender) 32%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ex-ctas--stage-right .btn,
+  .ex-ctas--stage-right .cv-download__trigger {
+    transition: none;
+  }
+  .ex-ctas--stage-right .btn:hover,
+  .ex-ctas--stage-right .cv-download__trigger:hover {
+    transform: none;
+  }
+}
+/* CTA cluster — vertical stack overlaying the RIGHT side of the BlenderChan
+   stage (desktop grid leaves col 3 open over the canvas). Above the canvas
+   (z-index) so buttons stay clickable; the strip beneath won't tilt the
+   diorama. Magnetic buttons drift toward the cursor (overwrite:'auto'). */
+.ex-ctas {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+  padding-bottom: 0.25rem;
+}
+.ex-ctas--stage-right {
+  position: absolute;
+  right: clamp(1rem, 4vw, 3rem);
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0;
+  padding: 0;
+}
+@media (max-width: 999px) {
+  /* Mobile: centered, tidy wrap — not right-docked. Right-docking left
+     uneven empty space and wrapped rows looked ragged at 390px. */
+  .ex-ctas--stage-right {
+    top: auto;
+    bottom: 2rem;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: min(calc(100% - 1.25rem), 380px);
+    gap: 0.625rem;
+    padding: 0 0.25rem;
+  }
+  .ex-stage {
+    min-height: 480px;
+    height: 62vh;
+    padding-bottom: 5.75rem;
+  }
+  .ex-ctas--stage-right .btn,
+  .ex-ctas--stage-right .cv-download__trigger {
+    min-height: 44px;
+    height: 44px;
+    padding: 0 1.25rem;
+    font-size: 0.72rem;
+  }
+  .ex-stage-hint {
+    bottom: 0.45rem;
+    font-size: 0.6rem;
+  }
+}
+@media (max-width: 640px) {
+  .ex-ctas {
+    justify-content: center;
+  }
+  .ex-stage {
+    min-height: 420px;
+    height: 58vh;
+    padding-bottom: 5rem;
+  }
+  .ex-ctas--stage-right {
+    bottom: 1.75rem;
+    width: min(calc(100% - 1rem), 360px);
+    gap: 0.55rem;
+  }
+  .ex-ctas--stage-right .btn,
+  .ex-ctas--stage-right .cv-download__trigger {
+    min-height: 42px;
+    height: 42px;
+    padding: 0 1.15rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+  .liquid-metal-cta {
+    max-width: 100%;
+  }
+  .ex-stage-hint {
+    bottom: 0.25rem;
+    font-size: 0.58rem;
+    white-space: normal;
+    text-align: center;
+    max-width: calc(100% - 2rem);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  /* 18px frosted blur + saturate on 4 hero surfaces is a per-frame GPU
+     tax while scrolling on phones — 8px reads the same at 390px. */
+  .ex-bio,
+  .ex-ctas--stage-right .btn,
+  .ex-ctas--stage-right .cv-download__trigger {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ex-bio-flip,
+  .ex-giant-wrap {
+    transform: none !important;
+  }
+  .ex-bio-inner {
+    transition: none;
+    transform: none !important;
+  }
+  .ex-bio-flip:hover .ex-bio-inner,
+  .ex-bio-flip:focus-visible .ex-bio-inner,
+  .ex-bio-flip[data-flipped='true'] .ex-bio-inner {
+    transform: none !important;
+  }
+  .ex-bio--back {
+    display: none;
+  }
+}

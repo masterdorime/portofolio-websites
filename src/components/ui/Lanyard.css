@@ -3,7 +3,9 @@
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  /* Visible so the strap can exit toward the hero ceiling instead of
+     cutting at the canvas box edge. */
+  overflow: visible;
 }
 
 .lanyard-wrapper canvas {

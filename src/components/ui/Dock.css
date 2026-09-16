@@ -1,0 +1,91 @@
+/* Ported from react-bits -- MIT License. Recolored for Tristan's palette.
+   Glass panel on theme surface; restrained lavender glow in dark, flat soft
+   shadow in light (support-kit rule). Tiles bottom-anchored so magnification
+   grows upward, macOS-style. */
+.dock-panel {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 18px;
+  border: 1px solid color-mix(in oklab, var(--color-muted) 28%, transparent);
+  background: color-mix(in oklab, var(--color-surface) 78%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+html:not([data-theme='light']) .dock-panel {
+  box-shadow:
+    0 0 32px color-mix(in oklab, var(--color-accent-lavender) 28%, transparent),
+    0 12px 40px rgba(0, 0, 0, 0.45);
+}
+html[data-theme='light'] .dock-panel {
+  box-shadow: 0 4px 16px rgba(27, 38, 79, 0.12);
+}
+.dock-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-foreground);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.dock-item:hover,
+.dock-item:focus-visible {
+  background: color-mix(in oklab, var(--color-accent-lavender) 18%, transparent);
+  border-color: color-mix(in oklab, var(--color-accent-lavender) 45%, transparent);
+  outline: none;
+}
+.dock-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+.dock-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.65rem;
+  border-radius: 9999px;
+  color: var(--color-foreground);
+  background: color-mix(in oklab, var(--color-surface) 94%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-accent-lavender) 50%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 5;
+}
+html:not([data-theme='light']) .dock-tip {
+  box-shadow: 0 0 18px color-mix(in oklab, var(--color-accent-lavender) 40%, transparent);
+}
+.dock-item:hover .dock-tip,
+.dock-item:focus-visible .dock-tip,
+.dock-item:focus-within .dock-tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.dock-divider {
+  align-self: center;
+  width: 1px;
+  height: 55%;
+  background: color-mix(in oklab, var(--color-muted) 35%, transparent);
+  margin: 0 2px;
+}
+@media (max-width: 420px) {
+  .dock-panel {
+    gap: 4px;
+    padding: 8px;
+    border-radius: 18px;
+  }
+}

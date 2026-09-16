@@ -1,0 +1,16 @@
+/* SiteDock: fixed bottom-center quick nav. Plain wrapper owns centering
+   (translate property, not transform) so the inner motion enter animation
+   never fights it. Sits below nav/grain, above page content. */
+.site-dock {
+  position: fixed;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  left: 50%;
+  translate: -50% 0;
+  z-index: 60;
+  pointer-events: auto;
+}
+@media (max-width: 640px) {
+  .site-dock {
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+}

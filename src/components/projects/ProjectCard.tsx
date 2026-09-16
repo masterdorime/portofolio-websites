@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { Project } from '@/data/projects';
 import { springBase } from '@/lib/motion';
@@ -22,6 +23,14 @@ export default function ProjectCard({ project }: { project: Project }) {
       exit={{ opacity: 0, scale: 0.96 }}
       className="card project-card media-aberration"
     >
+      <span className="project-cover" aria-hidden>
+        <Image
+          src={project.image}
+          alt=""
+          fill
+          sizes="(max-width: 760px) 100vw, 33vw"
+        />
+      </span>
       <span className={`tag tag--${project.category === 'ai' ? 'lavender' : project.category === 'iot' ? 'amber' : 'rose'}`}>
         {project.category}
       </span>
@@ -32,6 +41,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       </h3>
       <p>{text.tagline}</p>
       <p className="card-desc">{text.description}</p>
+      <p className="relic-line">{text.relic}</p>
       <div className="case-meta">
         <span className="tag">{project.year}</span>
         {project.tech.slice(0, 3).map((t) => (

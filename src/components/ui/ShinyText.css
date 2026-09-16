@@ -1,0 +1,30 @@
+/* Ported from react-bits -- MIT License. Recolored for Tristan's palette. */
+.shiny-text {
+  color: color-mix(in srgb, var(--color-muted) 60%, transparent);
+  background: linear-gradient(
+    120deg,
+    rgba(245, 243, 245, 0) 40%,
+    rgba(245, 243, 245, 0.85) 50%,
+    rgba(245, 243, 245, 0) 60%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine 5s linear infinite;
+}
+/* background-clip:text + text-shadow fight (the shadow paints over the
+   sheen and muddies it) — drop the shadow wherever shiny text is used
+   over a glowing backdrop. */
+@keyframes shine {
+  to {
+    background-position: -200% center;
+  }
+}
+.shiny-text.disabled {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shiny-text {
+    animation: none;
+  }
+}

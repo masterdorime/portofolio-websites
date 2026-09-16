@@ -1,4 +1,4 @@
-// Theme: dark (default, retro-dreamy obsidian) + stark-white light mode.
+// Theme: light (default, retro paper) + dark obsidian override.
 // Persisted in localStorage, applied as data-theme on <html> so both plain
 // CSS vars and Tailwind v4 utilities (which reference the same vars) flip.
 'use client';
@@ -10,11 +10,11 @@ export type Theme = 'dark' | 'light';
 const STORAGE_KEY = 'tristan-theme';
 
 export function getStoredTheme(): Theme {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === 'undefined') return 'light';
   try {
-    return window.localStorage.getItem(STORAGE_KEY) === 'light' ? 'light' : 'dark';
+    return window.localStorage.getItem(STORAGE_KEY) === 'dark' ? 'dark' : 'light';
   } catch {
-    return 'dark';
+    return 'light';
   }
 }
 
@@ -28,12 +28,15 @@ export function applyTheme(theme: Theme) {
 }
 
 export function useTheme(): Theme {
-  const [theme, setTheme] = useState<Theme>(() => getStoredTheme());
+  // SSR-first: the server always renders 'light', so the initial client pass
+  // must also render 'light' or hydration mismatches. Persisted theme is
+  // adopted post-mount.
+  const [theme, setTheme] = useState<Theme>('light');
 
   useEffect(() => {
-    setTheme(document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
+    setTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
     const io = new MutationObserver(() => {
-      setTheme(document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
+      setTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
     });
     io.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     return () => io.disconnect();

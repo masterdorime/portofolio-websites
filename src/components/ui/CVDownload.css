@@ -1,0 +1,87 @@
+.cv-download {
+  position: relative;
+  display: inline-flex;
+}
+
+.cv-download__trigger {
+  white-space: nowrap;
+}
+
+.cv-download__menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  min-width: 15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.375rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in oklab, var(--color-muted) 30%, transparent);
+  background: color-mix(in oklab, var(--color-surface) 96%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.32);
+  z-index: 20;
+}
+
+.cv-download__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: var(--color-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.cv-download__item:hover {
+  background: color-mix(in oklab, var(--color-accent-lavender) 14%, transparent);
+}
+
+.cv-download__hint {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  flex-shrink: 0;
+}
+
+/* Mobile: menu was clipped below the stage (overflow: clip on
+   .experimental-hero + bottom-docked CTAs). Flip upward and center. */
+@media (max-width: 999px) {
+  .cv-download__menu {
+    top: auto;
+    bottom: calc(100% + 0.6rem);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    min-width: 13.5rem;
+    max-width: min(18rem, 92vw);
+    width: max-content;
+  }
+}
+@media (max-width: 640px) {
+  .cv-download__menu {
+    bottom: calc(100% + 0.55rem);
+    min-width: 12rem;
+    max-width: min(16rem, 90vw);
+  }
+}
+/* Desktop: closer to the right edge — align menu's right edge to button
+   so a 15rem menu at right:1rem doesn't poke past the viewport. */
+@media (min-width: 1000px) {
+  .cv-download__menu {
+    left: auto;
+    right: 0;
+  }
+}
+
+/* Light theme tweak */
+html[data-theme='light'] .cv-download__menu {
+  background: color-mix(in oklab, #ffffff 92%, transparent);
+}

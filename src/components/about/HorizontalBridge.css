@@ -1,0 +1,50 @@
+/* HorizontalBridge: GSAP horizontal-text demo
+   (demos.gsap.com/demo/horizontal-text) rebuilt as a self-contained pinned
+   section. The pin viewport clips everything, so the travelling nowrap
+   line can never widen the page. */
+.hbridge {
+  position: relative;
+  margin-inline: calc(-1 * clamp(1rem, 4vw, 4rem));
+}
+
+.hbridge-pin {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.hbridge-text {
+  margin: 0;
+  white-space: nowrap;
+  will-change: transform;
+  /* Start inset from the page gutter so the line enters from the right. */
+  padding-left: clamp(1rem, 4vw, 4rem);
+  padding-right: clamp(1rem, 4vw, 4rem);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 7vw, 6rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-foreground);
+  text-wrap: nowrap;
+}
+
+/* Reduced-motion / no-JS fallback: static wrapped statement, no pinning. */
+.hbridge--static .hbridge-pin {
+  height: auto;
+  min-height: 0;
+  padding: 4rem clamp(1rem, 4vw, 4rem);
+}
+.hbridge--static .hbridge-text {
+  white-space: normal;
+  text-wrap: balance;
+}
+
+@media (max-width: 640px) {
+  .hbridge-text {
+    font-size: clamp(1.9rem, 9vw, 2.6rem);
+  }
+}

@@ -1,0 +1,165 @@
+/* FlyingPosters — React Bits port. Section-embed shell: fills its parent,
+   keeps page scroll working (vertical touch scroll passes through). */
+.flying-posters {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  overflow: clip;
+  border-radius: 24px;
+  background: color-mix(in oklab, var(--color-muted) 8%, transparent);
+}
+
+.flying-posters__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.flying-posters__canvas:active {
+  cursor: grabbing;
+}
+
+.flying-posters__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  pointer-events: none;
+}
+
+/* Lightbox — click a poster to enlarge; hover already lifts the tile
+   in WebGL (Media hoverTarget 1.06). This is the DOM counterpart. */
+.flying-posters__lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  background: color-mix(in oklab, #0a0a12 78%, transparent);
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  animation: fp-lightbox-in 0.22s ease;
+}
+
+@keyframes fp-lightbox-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.flying-posters__lightbox-inner {
+  position: relative;
+  max-width: min(92vw, 980px);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.flying-posters__lightbox-img {
+  display: block;
+  max-width: 100%;
+  max-height: 76vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.45),
+    0 0 0 1px color-mix(in oklab, white 10%, transparent);
+  background: #111;
+}
+
+.flying-posters__lightbox-caption {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: color-mix(in oklab, white 82%, transparent);
+  text-align: center;
+  max-width: 48ch;
+}
+
+.flying-posters__lightbox-count {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, white 55%, transparent);
+}
+
+.flying-posters__lightbox-close {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in oklab, white 14%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, white 10%, transparent);
+  color: white;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.flying-posters__lightbox-close:hover {
+  background: color-mix(in oklab, white 18%, transparent);
+  transform: scale(1.06);
+}
+
+.flying-posters__lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in oklab, white 14%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, #0a0a12 55%, white 6%);
+  color: white;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s ease;
+}
+
+.flying-posters__lightbox-nav:hover {
+  background: color-mix(in oklab, white 18%, transparent);
+}
+
+.flying-posters__lightbox-nav--prev { left: -1rem; }
+.flying-posters__lightbox-nav--next { right: -1rem; }
+
+@media (max-width: 640px) {
+  .flying-posters {
+    min-height: 280px;
+    border-radius: 16px;
+  }
+  .flying-posters__lightbox-nav--prev { left: 0.25rem; }
+  .flying-posters__lightbox-nav--next { right: 0.25rem; }
+  .flying-posters__lightbox-close { top: 0.25rem; right: 0.25rem; }
+  .flying-posters__lightbox-inner { max-width: 94vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flying-posters__lightbox { animation: none; }
+}

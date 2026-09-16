@@ -73,7 +73,7 @@ const DriftWall = ({
   fade = 0.6,
   dim = 0.55,
   grayscale = false,
-  overlayColor = '#070709',
+  overlayColor = '#1b264f',
   className = '',
   style
 }: DriftWallProps) => {
@@ -94,6 +94,18 @@ const DriftWall = ({
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeIdRef = useRef<string | null>(null);
   const [reduced, setReduced] = useState(false);
+  // True per-mount shuffle (Fisher-Yates, client-only): first paint uses
+  // the deterministic prop order so SSR and hydration match, then the pool
+  // reshuffles once mounted so every visit reads differently.
+  const [shuffled, setShuffled] = useState<DriftItem[] | null>(null);
+  useEffect(() => {
+    const arr = items.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    setShuffled(arr);
+  }, [items]);
 
   useEffect(() => {
     setReduced(prefersReducedMotion());
@@ -104,10 +116,11 @@ const DriftWall = ({
   }, []);
 
   const columnItems = useMemo(() => {
+    const source = shuffled ?? items;
     const cols: DriftItem[][] = Array.from({ length: columns }, () => []);
-    items.forEach((item, i) => cols[i % columns].push(item));
-    return cols.map(col => (col.length ? col : items.slice(0, 1)));
-  }, [items, columns]);
+    source.forEach((item, i) => cols[i % columns].push(item));
+    return cols.map(col => (col.length ? col : source.slice(0, 1)));
+  }, [items, shuffled, columns]);
 
   const columnMeta = useMemo(() => {
     const unit = tileHeight + gap;
