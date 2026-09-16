@@ -19,6 +19,9 @@ html {
   background: var(--color-background);
   color: var(--color-foreground);
   scrollbar-color: var(--color-muted) var(--color-background);
+  /* Stop mobile browsers inflating footer type (giant clipped wordmark). */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* Horizontal-overflow guard: full-bleed strips (100vw journey panels,
@@ -610,10 +613,23 @@ html.custom-cursor * {
   .footer__connect { grid-column: 1 / -1; }
 }
 @media (max-width: 640px) {
-  .footer__top { grid-template-columns: 1fr; gap: 2rem; }
+  /* Compact mobile footer (ref: Vercel/Linear mobile footers): brand row on
+     top, Explore|Connect side by side, tight bottom bar. Halves the height
+     of the old stacked single column. */
+  .footer__inner { padding-top: 1.5rem; }
+  .footer__top { grid-template-columns: 1fr 1fr; gap: 1.5rem 1rem; padding-bottom: 1.5rem; }
+  .footer__brand { grid-column: 1 / -1; }
+  .footer__wordmark { font-size: 1.6rem; }
+  .footer__tagline { font-size: 0.62rem; }
+  .footer__email { font-size: 0.78rem; margin-top: 0.75rem; }
+  .footer__availability { font-size: 0.62rem; margin-top: 0.75rem; }
   .footer__connect { grid-column: auto; }
-  .footer__inner { padding-top: 2rem; }
-  .footer__bottom { flex-direction: column; align-items: flex-start; }
+  .footer__eyebrow { margin-bottom: 0.75rem; }
+  .footer__links { gap: 0.5rem; }
+  .footer__link { font-size: 0.78rem; }
+  .footer__cta { margin-top: 1rem; }
+  .footer__bottom { flex-direction: column; align-items: flex-start; gap: 0.9rem; }
+  .footer__legal-type { display: none; }
   .footer__bottom-actions { margin-left: 0; width: 100%; justify-content: space-between; }
   .footer--polished .footer__thanks-static { display: block; text-align: center; text-wrap: balance; font-size: 0.64rem; letter-spacing: 0.06em; padding-block: 1.1rem; }
 }
