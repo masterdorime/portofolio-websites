@@ -23,7 +23,7 @@ export const PROJECTS: Project[] = [
     slug: 'urocheck',
     name: 'Urocheck',
     tagline: 'Portable AI urine analysis device',
-    image: '/images/projects/urocheck-analyzer.png',
+    image: '/images/projects/urocheck-analyzer.webp',
     gallery: ['/images/projects/urocheck-device.jpeg', '/images/projects/urocheck-blueprint.png'],
     description:
       'A portable, AI-powered urine checker designed for quick screening at home or in local clinics. It gives fast results right on the device without needing a bulky lab setup.',
@@ -40,7 +40,7 @@ export const PROJECTS: Project[] = [
     slug: 'puresip',
     name: 'Puresip',
     tagline: 'Ultrafiltration straw with live sensors',
-    image: '/images/projects/puresip.png',
+    image: '/images/projects/puresip.webp',
     description:
       'Portable ultrafiltration straw with multiple sensors ensuring safe drinkable water anywhere you go. It pairs a hollow-fiber membrane with live quality readouts, so the straw does not just filter — it testifies, sip by sip, that the water is actually safe.',
     category: 'hardware',
@@ -72,8 +72,8 @@ export const PROJECTS: Project[] = [
     slug: 'h2orizon',
     name: 'H2orizon',
     tagline: 'Smart water bottle with ultrafiltration + micro-pump',
-    image: '/images/projects/h2orizon.png',
-    gallery: ['/images/projects/h2orizon.png'],
+    image: '/images/projects/h2orizon.webp',
+    gallery: ['/images/projects/h2orizon.webp'],
     description:
       'H2orizon is a next-generation smart water bottle that turns virtually any freshwater source into clean, drinkable water on the go. Compact, rugged, and intelligently designed, it combines advanced ultrafiltration technology with a built-in micro-pump and real-time purity sensing—so you can hydrate with confidence wherever you are.',
     category: 'hardware',
@@ -94,15 +94,15 @@ export const PROJECTS: Project[] = [
  * project cards and case studies keep their curated covers.
  */
 export const SHOWCASE_IMAGES: string[] = [
-  '/images/projects/h2orizon.png',
+  '/images/projects/h2orizon.webp',
   '/images/projects/urocheck-device.jpeg',
-  '/images/projects/puresip.png',
-  '/images/projects/techware.png',
-  '/images/projects/urocheck-analyzer.png',
+  '/images/projects/puresip.webp',
+  '/images/projects/techware.webp',
+  '/images/projects/urocheck-analyzer.webp',
   '/images/projects/showcase-gemini-01.jpeg',
-  '/images/projects/showcase-chatgpt-01.png',
-  '/images/projects/showcase-chatgpt-02.png',
-  '/images/projects/showcase-chatgpt-03.png',
+  '/images/projects/showcase-chatgpt-01.webp',
+  '/images/projects/showcase-chatgpt-02.webp',
+  '/images/projects/showcase-chatgpt-03.webp',
   '/images/projects/showcase-gemini-02.jpeg',
   '/images/projects/urocheck-blueprint.png',
   '/images/projects/techware-goku.jpeg',

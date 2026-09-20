@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { EXPERIENCE } from './experience';
 
-const IMAGE_RE = /^\/images\/(experience\/[a-z0-9]+\/[a-z0-9-]+\.(jpg|jpeg|png|webp)|projects\/[a-z0-9-]+\.(png|jpeg))$/;
+const IMAGE_RE = /^\/images\/(experience\/[a-z0-9]+\/[a-z0-9-]+\.(jpg|jpeg|png|webp)|projects\/[a-z0-9-]+\.(png|jpeg|webp))$/;
 
 describe('EXPERIENCE', () => {
   it('has 5 unique slugs, one per competition plus the college-arc teaser', () => {

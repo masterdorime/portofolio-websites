@@ -37,7 +37,7 @@ export const EXPERIENCE: ExperienceSlide[] = [
     slug: 'sic6',
     main: '/images/experience/sic6/sic6-main.png',
     extras: [
-      '/images/projects/urocheck-analyzer.png',
+      '/images/projects/urocheck-analyzer.webp',
       '/images/experience/sic6/sic6-01.jpeg',
       '/images/experience/sic6/sic6-02.jpeg',
       '/images/experience/sic6/sic6-03.png',
