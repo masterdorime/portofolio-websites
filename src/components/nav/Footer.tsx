@@ -1,28 +1,15 @@
-// Footer: polished editorial footing — decorative WisprFlow+Umaru stream
-// (desktop) / static thanks (mobile) on top, then brand / navigation /
-// connect columns + bottom legal bar. Keeps the glb + RAF gated on mobile
-// (no FOUC, no 4.3 MB fetch at 390px).
+// Footer: static editorial thank-you — zero WebGL, zero canvas, zero RAF.
+// The retired WisprFlow+Umaru stream cost a GLB fetch, a WebGL context and
+// two animation loops at the quiet end of the page; the footer is now free
+// at runtime. Brand / navigation / connect columns + legal bar unchanged.
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import { SITE } from '@/data/site';
 import { useDict, useLanguage } from '@/i18n/LanguageProvider';
-import WisprFlow, { THANK_YOU_PHRASES } from '@/components/ui/WisprFlow';
-import UmaruVacuum from '@/components/three/UmaruVacuum';
 
 export default function Footer() {
   const t = useDict();
   const lang = useLanguage();
-  const vacuumRef = useRef(false);
-  const [vacuuming, setVacuuming] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px), (pointer: coarse)');
-    const update = () => setIsMobile(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
 
   const year = new Date().getFullYear();
 
@@ -43,24 +30,10 @@ export default function Footer() {
 
   return (
     <footer className="footer footer--polished" aria-label="Site footer">
-      {/* Decorative stream — desktop only (CSS+JS gated) */}
-      {!isMobile ? (
-        <div className="footer__flow-wrap" aria-hidden="false">
-          <WisprFlow
-            phrases={THANK_YOU_PHRASES}
-            className="wispr-flow--bleed"
-            ariaLabel={t.contact.socials}
-            vacuumRef={vacuumRef}
-            vacuuming={vacuuming}
-          />
-          <UmaruVacuum vacuumRef={vacuumRef} onVacuumChange={setVacuuming} />
-        </div>
-      ) : (
-        <p className="footer__thanks-static" aria-label={t.contact.socials}>
-          <span className="footer__thanks-spark" aria-hidden="true">✦</span>
-          {THANK_YOU_PHRASES.slice(0, 8).join(' · ')} · …
-        </p>
-      )}
+      <p className="footer__thanks">
+        <span className="footer__thanks-title">{t.footer.thanks}</span>
+        <span className="footer__thanks-sub">{t.footer.thanksSub}</span>
+      </p>
 
       <div className="footer__inner">
         <div className="footer__top">
