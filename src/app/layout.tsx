@@ -45,6 +45,7 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', title: 'Tristan Edgina — Creative Engineer' },
   icons: {
     icon: '/favicon-dark.jpeg',
+    shortcut: ['/favicon-dark.jpeg'],
   },
 };
 

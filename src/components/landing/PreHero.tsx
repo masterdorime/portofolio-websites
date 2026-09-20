@@ -50,11 +50,24 @@ export default function PreHero() {
       if (!el) return;
       const r = el.getBoundingClientRect();
       const vh = window.innerHeight;
-      // Pin exactly while the hero is travelling up over us.
-      setPinned(r.top <= 0 && r.top > -vh);
+      // Pin exactly while the hero is travelling up over us. Change-checked:
+      // scroll fires every frame, but the boolean flips at most twice, so
+      // almost every event is a cheap rect read with no re-render.
+      const next = r.top <= 0 && r.top > -vh;
+      setPinned((prev) => (prev === next ? prev : next));
     };
     update();
-    window.addEventListener('scroll', update, { passive: true });
+    // rAF-throttled scroll: coalesce the per-frame event burst into one
+    // rect read + (rarely) one state flip per frame.
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        update();
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', update);
     window.addEventListener('load', update);
     // Late chunk arrivals (the 460vh intro mounts after this tiny chunk
@@ -65,12 +78,13 @@ export default function PreHero() {
     const t1 = window.setTimeout(update, 500);
     const t2 = window.setTimeout(update, 2500);
     return () => {
-      window.removeEventListener('scroll', update);
+      window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', update);
       window.removeEventListener('load', update);
       ro.disconnect();
       window.clearTimeout(t1);
       window.clearTimeout(t2);
+      cancelAnimationFrame(raf);
     };
   }, [reduceMotion]);
 

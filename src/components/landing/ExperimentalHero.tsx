@@ -11,13 +11,17 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import BlenderChan from '@/components/three/BlenderChan';
 import CVDownload from '@/components/ui/CVDownload';
 import ParticleText from '@/components/ui/ParticleText';
 import MagneticButton from '@/components/motion/MagneticButton';
-import { LiquidMetalButton } from '@/components/ui/liquid-metal-button';
+// Shaders split: @paper-design/shaders must not join the hero chunk —
+// lazy so the diorama paints first, the metal CTA upgrades when ready.
+const LiquidMetalButton = lazy(() =>
+  import('@/components/ui/liquid-metal-button').then((m) => ({ default: m.LiquidMetalButton })),
+);
 import Reveal from '@/components/motion/Reveal';
 import { useDict, useLanguage } from '@/i18n/LanguageProvider';
 import './ExperimentalHero.css';
@@ -151,7 +155,7 @@ export default function ExperimentalHero() {
                 <aside className="ex-bio ex-bio--back" aria-label="Photo">
                   <div className="ex-bio-photos ex-bio-photos--single" aria-hidden="true">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/images/lanyard-photo.jpg" alt="Tristan Edgina portrait" loading="lazy" />
+                    <img src="/images/lanyard-photo.jpg" alt="Tristan Edgina portrait" loading="lazy" decoding="async" width={1200} height={676} />
                   </div>
                   <span className="ex-bio-flip-hint ex-bio-flip-hint--back" aria-hidden="true">
                     ← back to bio
@@ -166,7 +170,17 @@ export default function ExperimentalHero() {
               <BlenderChan />
               <div className="ex-ctas ex-ctas--stage-right" aria-label="Calls to action">
                 {metalCta ? (
-                  <LiquidMetalButton label={t.hero.ctaAbout} widthPx={ctaWidth} heightPx={ctaHeight} onClick={goProjects} />
+                  <Suspense
+                    fallback={
+                      <MagneticButton>
+                        <Link href="#projects" className="btn">
+                          {t.hero.ctaAbout}
+                        </Link>
+                      </MagneticButton>
+                    }
+                  >
+                    <LiquidMetalButton label={t.hero.ctaAbout} widthPx={ctaWidth} heightPx={ctaHeight} onClick={goProjects} />
+                  </Suspense>
                 ) : (
                   <MagneticButton>
                     <Link href="#projects" className="btn">

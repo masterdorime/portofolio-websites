@@ -306,7 +306,7 @@ export default function ParticleText({
 
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
-      if (!visible || !running) return;
+      if (!visible || !running || document.hidden) return;
       // 30fps gate on phones — particle drift is slow, halves draw cost.
       if (lite) {
         if (now - lastTick < 33) return;

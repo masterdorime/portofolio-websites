@@ -28,11 +28,14 @@ function GearIcon() {
 export default function GrainOverlay() {
   // Full-screen feTurbulence + steps() shift animation is a constant GPU
   // tax on phones — default OFF on small/coarse screens, still toggleable.
-  const [on, setOn] = useState(
-    () =>
-      typeof window === 'undefined' ||
-      !window.matchMedia('(max-width: 767px), (pointer: coarse)').matches,
-  );
+  // Initialized true (matching the server) and corrected in an effect, so
+  // server and first client render agree and hydration never mismatches.
+  const [on, setOn] = useState(true);
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 767px), (pointer: coarse)').matches) {
+      setOn(false);
+    }
+  }, []);
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const boxRef = useRef<HTMLDivElement>(null);

@@ -125,7 +125,7 @@ export interface Dict {
     terminalLabel: string;
     terminalInput: string;
   };
-  footer: { rights: string };
+  footer: { rights: string; thanks: string; thanksSub: string };
   notfound: { kicker: string; title: string; lede: string; back: string };
   terminal: TerminalText;
   projectText: Record<string, ProjectText>;
@@ -361,7 +361,11 @@ export const dict: Record<Lang, Dict> = {
       terminalLabel: 'Interactive terminal — type help for commands',
       terminalInput: 'Terminal command input',
     },
-    footer: { rights: 'built by hand' },
+    footer: {
+      rights: 'built by hand',
+      thanks: 'thank you.',
+      thanksSub: 'for staying until the end — built with curiosity, code, hardware, and a little chaos.',
+    },
     notfound: {
       kicker: '404 · signal lost',
       title: 'nothing here.',
@@ -544,7 +548,11 @@ export const dict: Record<Lang, Dict> = {
       terminalLabel: 'Terminal interaktif — ketik help untuk perintah',
       terminalInput: 'Input perintah terminal',
     },
-    footer: { rights: 'dirakit sendiri' },
+    footer: {
+      rights: 'dirakit sendiri',
+      thanks: 'makasih.',
+      thanksSub: 'udah mampir sampai akhir — dirakit dengan rasa penasaran, kode, hardware, dan sedikit kekacauan.',
+    },
     notfound: {
       kicker: '404 · sinyal ilang',
       title: 'gak ada apa-apa di sini.',

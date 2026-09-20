@@ -337,10 +337,13 @@ function BentoCardGrid({ children, gridRef }: { children: React.ReactNode; gridR
 function useMobileDetection() {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
+    // matchMedia instead of a resize listener: zero per-frame cost, the
+    // browser pushes updates only when the breakpoint actually flips.
+    const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
   }, []);
   return isMobile;
 }

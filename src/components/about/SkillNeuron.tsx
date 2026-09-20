@@ -9,6 +9,7 @@
 
 import {
   Suspense,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -268,13 +269,14 @@ function makeHaloTexture(): THREE.CanvasTexture {
   return new THREE.CanvasTexture(c);
 }
 
-class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+class ErrorBoundary extends Component<{ children: ReactNode; onError?: () => void }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
   }
   componentDidCatch() {
     this.setState({ failed: true });
+    this.props.onError?.();
   }
   render() {
     if (this.state.failed) {
@@ -297,6 +299,7 @@ function Graph({
   onSelect,
   onHover,
   hubNames,
+  onReady,
 }: {
   frozen: boolean;
   selected: string | null;
@@ -304,7 +307,14 @@ function Graph({
   onSelect: (key: string | null) => void;
   onHover: (key: string | null) => void;
   hubNames: Record<SkillHubId, string>;
+  onReady?: () => void;
 }) {
+  // Procedural scene builds synchronously in the memos below: mount means
+  // the cloud is ready — signal the stage overlay off.
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
+
   const camera = useThree((s) => s.camera);
   const gl = useThree((s) => s.gl);
   const size = useThree((s) => s.size);
@@ -656,6 +666,9 @@ export default function SkillNeuron() {
   const wrapRef = useRef<HTMLDivElement>(null);
   // Re-render (and re-tint the sim) whenever the theme flips.
   useTheme();
+  // Dismisses the stage overlay the moment the graph mounts (post-suspense).
+  const [modelReady, setModelReady] = useState(false);
+  const handleModelReady = useCallback(() => setModelReady(true), []);
 
   const lookup = useMemo(() => {
     const m = new Map<string, { name: string; hub: SkillHubId; level: number; isHub: boolean }>();
@@ -694,7 +707,7 @@ export default function SkillNeuron() {
 
   return (
     <div ref={wrapRef} className="neuron-stage">
-      <ErrorBoundary>
+      <ErrorBoundary onError={handleModelReady}>
         <Canvas
           dpr={isMobile ? [1, 1.5] : [1, 1.75]}
           camera={{ position: [0, 0.5, 9.5], fov: 42 }}
@@ -716,11 +729,17 @@ export default function SkillNeuron() {
               onSelect={setSelectedId}
               onHover={setHoveredId}
               hubNames={t.about.skillGraph.hubs}
+              onReady={handleModelReady}
             />
           </Suspense>
           <AdaptiveDpr />
         </Canvas>
       </ErrorBoundary>
+      {!modelReady && (
+        <div className="stage-loader" aria-hidden="true">
+          <div className="loader" />
+        </div>
+      )}
       <p className="neuron-hint" aria-hidden="true">
         {t.about.skillGraph.hint}
       </p>

@@ -5,7 +5,7 @@ export default function GlowSkeleton({
   label = 'loading',
 }: {
   width?: string | number;
-  height?: number;
+  height?: number | string;
   label?: string;
 }) {
   return <div className="sup-skeleton" role="status" aria-label={label} style={{ width, height }} />;

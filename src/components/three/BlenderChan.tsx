@@ -14,7 +14,7 @@
 // would swing the edges). Reduced motion: still frame. Mobile: capped DPR.
 'use client';
 
-import { Component, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { Component, Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { AdaptiveDpr } from '@react-three/drei';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -40,13 +40,14 @@ const GROUND_OFFSET = 0.08;
 const TILT_Y = 0.12;
 const TILT_X = 0.05;
 
-class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+class ErrorBoundary extends Component<{ children: ReactNode; onError?: () => void }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
   }
   componentDidCatch() {
     this.setState({ failed: true });
+    this.props.onError?.();
   }
   render() {
     if (this.state.failed) {
@@ -233,7 +234,17 @@ function TelkomOrbit({ frozen, fitScale }: { frozen: boolean; fitScale: number }
   );
 }
 
-function BlenderChanModel({ modelUrl, frozen }: { modelUrl: string; frozen: boolean }) {
+function BlenderChanModel({
+  modelUrl,
+  frozen,
+  telkomActive,
+  onReady,
+}: {
+  modelUrl: string;
+  frozen: boolean;
+  telkomActive: boolean;
+  onReady?: () => void;
+}) {
   const gltf = useLoader(GLTFLoader, modelUrl, (loader) => {
     loader.setMeshoptDecoder(MeshoptDecoder);
   });
@@ -270,6 +281,13 @@ function BlenderChanModel({ modelUrl, frozen }: { modelUrl: string; frozen: bool
     };
   }, [gltf]);
 
+  // Tiered GLB: this effect runs when the model mounts, which is AFTER the
+  // blender_chan fetch + suspense resolve — so the parent only starts the
+  // telkom.glb fetch once the hero diorama is actually ready.
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
+
   const parallax = useMemo(() => ({ x: 0, y: 0 }), []);
 
   useFrame((state, delta) => {
@@ -293,7 +311,7 @@ function BlenderChanModel({ modelUrl, frozen }: { modelUrl: string; frozen: bool
   return (
     <group ref={group} scale={fit.s} position={fit.base.toArray()}>
       <primitive object={gltf.scene} />
-      <TelkomOrbit frozen={frozen} fitScale={fit.s} />
+      {telkomActive && <TelkomOrbit frozen={frozen} fitScale={fit.s} />}
     </group>
   );
 }
@@ -311,6 +329,14 @@ export default function BlenderChan({
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
   );
   const wrapRef = useRef<HTMLDivElement>(null);
+  // Tiered GLB: telkom.glb fetch starts only after BlenderChanModel mounts
+  // (i.e. blender_chan.glb resolved), never in parallel on hero activation.
+  const [telkomActive, setTelkomActive] = useState(false);
+  const handleStageReady = useCallback(() => setTelkomActive(true), []);
+  // Loader dismissal on failure must NOT start the telkom fetch — it only
+  // drops the overlay so the boundary fallback is visible.
+  const [stageFailed, setStageFailed] = useState(false);
+  const handleStageError = useCallback(() => setStageFailed(true), []);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)');
@@ -329,9 +355,9 @@ export default function BlenderChan({
 
   return (
     <div ref={wrapRef} className={['blenderchan-stage', className].filter(Boolean).join(' ')}>
-      <ErrorBoundary>
+      <ErrorBoundary onError={handleStageError}>
         <Canvas
-          dpr={isMobile ? [1, 1.5] : [1, 2]}
+          dpr={isMobile ? [1, 1.5] : [1, 1.75]}
           camera={{ position: [0, 0.35, 4.7], fov: 36 }}
           frameloop={inView ? 'always' : 'never'}
           aria-label={ariaLabel}
@@ -342,11 +368,19 @@ export default function BlenderChan({
           <directionalLight position={[4, 5, 4]} intensity={0.9} color="#f5f3f5" />
           <directionalLight position={[-4, 3, -2]} intensity={0.4} color="#576ca8" />
           <Suspense fallback={null}>
-            <BlenderChanModel modelUrl={modelUrl} frozen={reduced} />
+            <BlenderChanModel modelUrl={modelUrl} frozen={reduced} telkomActive={telkomActive} onReady={handleStageReady} />
           </Suspense>
           <AdaptiveDpr />
         </Canvas>
       </ErrorBoundary>
+      {/* Silent overlay while blender_chan.glb streams in: model mount
+          (handleStageReady) unmounts it. Announcement already happened via
+          the dynamic loading state, so this stays aria-hidden. */}
+      {!telkomActive && !stageFailed && (
+        <div className="stage-loader" aria-hidden="true">
+          <div className="loader" />
+        </div>
+      )}
     </div>
   );
 }

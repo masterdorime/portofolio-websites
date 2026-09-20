@@ -127,7 +127,7 @@ const SpecularButton = ({
     const fx = fxRef.current;
     if (!btn || !fx) return;
 
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const renderer = new Renderer({ alpha: true, premultipliedAlpha: true, antialias: true, dpr });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
@@ -193,7 +193,18 @@ const SpecularButton = ({
       const t = Math.max(0, 1 - dist / Math.max(propsRef.current.proximity, 1));
       proximityT = t * t * (3 - 2 * t);
     };
-    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+
+    // Visibility gate: a hidden button skips GPU renders (RAF tick itself
+    // is one branch + clock reset, so resume is seamless).
+    let visible = true;
+    let io: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+      });
+      io.observe(btn);
+    }
 
     let angle = 2.4;
     let idleAngle = 2.4;
@@ -206,6 +217,10 @@ const SpecularButton = ({
 
     const update = (now: number) => {
       raf = requestAnimationFrame(update);
+      if (!visible || document.hidden) {
+        last = now;
+        return;
+      }
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       const p = propsRef.current;
@@ -235,6 +250,7 @@ const SpecularButton = ({
 
     return () => {
       cancelAnimationFrame(raf);
+      io?.disconnect();
       ro.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
       if (gl.canvas.parentNode === fx) fx.removeChild(gl.canvas);

@@ -3,7 +3,7 @@
 // Click the trio (or skip) to transition into the main page.
 'use client';
 
-import { Suspense, useEffect, useMemo, useRef, useState, Component, type ReactNode, type MutableRefObject } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, Component, type ReactNode, type MutableRefObject } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { AdaptiveDpr } from '@react-three/drei';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -33,21 +33,36 @@ const CAM_NEAR: [number, number, number] = [1.0, 1.7, -2.1];
 const LOOK_FAR: [number, number, number] = [0, 0.35, 0];
 const LOOK_NEAR: [number, number, number] = [0.35, -0.2, -2.4];
 
-class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+class ErrorBoundary extends Component<{ children: ReactNode; onError?: () => void }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
   }
   componentDidCatch() {
     this.setState({ failed: true });
+    this.props.onError?.();
   }
   render() {
-    if (this.state.failed) return null;
+    if (this.state.failed) {
+      return (
+        <div className="poster-fallback" role="img" aria-label="Intro diorama unavailable">
+          the blooms failed to boot — descend anyway, the page is below.
+        </div>
+      );
+    }
     return this.props.children;
   }
 }
 
-function TrioModel({ onEnter, progressRef }: { onEnter: () => void; progressRef: MutableRefObject<number> }) {
+function TrioModel({
+  onEnter,
+  progressRef,
+  onReady,
+}: {
+  onEnter: () => void;
+  progressRef: MutableRefObject<number>;
+  onReady?: () => void;
+}) {
   const gltf = useLoader(GLTFLoader, MODEL_URL, (loader) => {
     loader.setMeshoptDecoder(MeshoptDecoder);
   });
@@ -195,6 +210,12 @@ function TrioModel({ onEnter, progressRef }: { onEnter: () => void; progressRef:
       disposeScene(flat);
     };
   }, [flat]);
+
+  // Model mount runs post-suspense, i.e. trio.glb resolved: signal the
+  // stage overlay off.
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
 
   return (
     <group
@@ -504,21 +525,56 @@ function BedGlow({
   );
 }
 
+// Gate glow driven imperatively (no React state per scroll tick): the old
+// setPhase(v) re-rendered the whole intro on every scroll change. Only the
+// 0.6 threshold still uses state (pastGate), flipping at most twice.
+function GateLight({ progressRef }: { progressRef: MutableRefObject<number> }) {
+  const ref = useRef<THREE.PointLight>(null);
+  useFrame(() => {
+    if (ref.current) ref.current.intensity = 1 + THREE.MathUtils.clamp(progressRef.current, 0, 1) * 5;
+  });
+  return <pointLight ref={ref} position={[0.7, -0.5, -3.2]} intensity={1} color="#d4cdab" distance={9} />;
+}
+
 export default function IntroScene({ onEnter }: { onEnter: () => void }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
   const reduceMotion = useReducedMotion();
   const theme = useTheme();
   const { scrollYProgress } = useScroll({ target: wrapRef, offset: ['start start', 'end end'] });
-  const [phase, setPhase] = useState(0);
+  const [pastGate, setPastGate] = useState(false);
+  // Dismisses the stage overlay the moment the trio mounts (post-suspense).
+  const [modelReady, setModelReady] = useState(false);
+  const handleModelReady = useCallback(() => setModelReady(true), []);
+  // Coarse pointers skip MSAA — the intro is fullscreen and AA is the most
+  // expensive per-pixel cost on mobile GPUs.
+  const [coarse] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
+  );
 
   useEffect(() => {
     const unsub = scrollYProgress.on('change', (v) => {
       progressRef.current = v;
-      setPhase(v);
+      setPastGate((prev) => {
+        const next = v > 0.6;
+        return next === prev ? prev : next;
+      });
     });
     return unsub;
   }, [scrollYProgress]);
+
+  // Intro never remounts (entered never resets), so evict trio.glb from the
+  // R3F loader cache on unmount — frees the ~5MB ArrayBuffer after the
+  // descent. TrioModel's disposeScene(flat) already frees GPU resources.
+  useEffect(() => {
+    return () => {
+      try {
+        useLoader.clear(GLTFLoader, MODEL_URL);
+      } catch {
+        /* loader cache already clear */
+      }
+    };
+  }, []);
 
   const glowOpacity = useTransform(scrollYProgress, [0.45, 1], [0, 1]);
   const bg = theme === 'light' ? '#dce2bd' : '#1b264f';
@@ -526,27 +582,27 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
   return (
     <div ref={wrapRef} className="intro-wrap">
       <div className="intro-sticky">
-        <ErrorBoundary>
+        <ErrorBoundary onError={handleModelReady}>
           <Canvas
             dpr={[1, 1.5]}
             camera={{ position: CAM_FAR, fov: 42, near: 0.1, far: 80 }}
             aria-label="Reg, Riko and Nanachi in a flower bed, scroll to descend"
-            gl={{ antialias: true, alpha: false }}
+            gl={{ antialias: !coarse, alpha: false }}
           >
             <color attach="background" args={[bg]} />
             <ambientLight intensity={0.55} />
             <directionalLight position={[4, 8, 5]} intensity={1.2} color="#f3f0ea" />
             <directionalLight position={[-4, 2, 3]} intensity={0.45} color="#576ca8" />
-            <pointLight position={[0.7, -0.5, -3.2]} intensity={1 + phase * 5} color="#d4cdab" distance={9} />
+            <GateLight progressRef={progressRef} />
             <Suspense fallback={null}>
-              <TrioModel onEnter={onEnter} progressRef={progressRef} />
+              <TrioModel onEnter={onEnter} progressRef={progressRef} onReady={handleModelReady} />
             </Suspense>
-      {!reduceMotion && <Petals />}
+      {!reduceMotion && <Petals count={coarse ? 90 : 220} />}
             {!reduceMotion && (
               <BedGlow
                 progressRef={progressRef}
                 seed={1}
-                count={700}
+                count={coarse ? 280 : 700}
                 radius={7}
                 yBase={-2.8}
                 ySpan={3.0}
@@ -559,7 +615,7 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
               <BedGlow
                 progressRef={progressRef}
                 seed={7}
-                count={420}
+                count={coarse ? 180 : 420}
                 radius={3.2}
                 yBase={-1.6}
                 ySpan={2.6}
@@ -568,11 +624,16 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
                 opacity={0.95}
               />
             )}
-            {!reduceMotion && <HaloGlow progressRef={progressRef} />}
+            {!reduceMotion && <HaloGlow progressRef={progressRef} count={coarse ? 50 : 110} />}
             <CameraRig progressRef={progressRef} />
             <AdaptiveDpr />
           </Canvas>
         </ErrorBoundary>
+        {!modelReady && (
+          <div className="stage-loader" aria-hidden="true">
+            <div className="loader" />
+          </div>
+        )}
         <motion.div className="intro-glow" style={{ opacity: glowOpacity }} aria-hidden />
         <motion.div
           aria-hidden
@@ -599,12 +660,12 @@ export default function IntroScene({ onEnter }: { onEnter: () => void }) {
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
             color: 'var(--color-muted)',
-            opacity: phase > 0.6 ? 0 : 1,
+            opacity: pastGate ? 0 : 1,
           }}
         >
           scroll to descend
         </p>
-        {phase > 0.6 && (
+        {pastGate && (
           <div className="intro-hint-wrap">
             <SpecularButton size="md" radius={9999} onClick={onEnter} autoAnimate lineColor="#c4b5fd" textColor="#e2e8f0">
               descend into the blooms

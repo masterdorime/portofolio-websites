@@ -8,8 +8,12 @@ import { useMemo, type ReactNode } from 'react';
 import { SITE } from '@/data/site';
 import { useTheme } from '@/components/theme/ThemeToggle';
 import { useDict } from '@/i18n/LanguageProvider';
+import ContentLoader from '@/components/motion/ContentLoader';
 
-const LogoLoop = dynamic(() => import('@/components/ui/LogoLoop'), { ssr: false });
+const LogoLoop = dynamic(() => import('@/components/ui/LogoLoop'), {
+  ssr: false,
+  loading: () => <ContentLoader height={56} label="Loading social links" />,
+});
 
 const SIZE = 30;
 
@@ -38,8 +42,7 @@ export const SOCIAL_ENTRIES: SocialEntry[] = [
   { slug: 'github', alt: 'GitHub', href: SITE.github },
 ];
 
-/** Shared LogoLoop material for the socials — reused by SocialLoop marquee
-    and the footer WisprFlow strip so both stay in sync. */
+/** Shared LogoLoop material for the socials marquee. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type LogoItemAny = any;
 export function buildSocialLogos(color: string, size = SIZE): LogoItemAny[] {

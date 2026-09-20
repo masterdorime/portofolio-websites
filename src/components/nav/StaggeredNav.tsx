@@ -8,9 +8,11 @@ import { useTheme } from '@/components/theme/ThemeToggle';
 import { toggleThemeWithWipe } from '@/components/theme/themeWipe';
 import { SITE } from '@/data/site';
 import './StaggeredNav.css';
+import ContentLoader from '@/components/motion/ContentLoader';
 
 const StaggeredMenu: any = dynamic(() => import('@/components/ui/StaggeredMenu').then((m: any) => m.StaggeredMenu), {
   ssr: false,
+  loading: () => <ContentLoader height={64} label="Loading navigation" />,
 });
 
 function Stroke({ children, ...rest }: SVGProps<SVGSVGElement>) {

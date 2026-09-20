@@ -9,7 +9,7 @@
 // before offsets compose, so nothing can accumulate frame-over-frame.
 'use client';
 
-import { Suspense, useEffect, useMemo, useRef, useState, Component, type ReactNode, type MutableRefObject } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, Component, type ReactNode, type MutableRefObject } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { AdaptiveDpr } from '@react-three/drei';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -30,13 +30,14 @@ const HEAD_PITCH = 0.1;
 // two-frame loop that visibly vibrates when looped, so it is never played.
 const PARK_T = 0;
 
-class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+class ErrorBoundary extends Component<{ children: ReactNode; onError?: () => void }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
   }
   componentDidCatch() {
     this.setState({ failed: true });
+    this.props.onError?.();
   }
   render() {
     if (this.state.failed) {
@@ -57,7 +58,15 @@ interface DanceState {
   talking: MutableRefObject<boolean>;
 }
 
-function MikuCatModel({ dance, frozen }: { dance: DanceState; frozen: boolean }) {
+function MikuCatModel({
+  dance,
+  frozen,
+  onReady,
+}: {
+  dance: DanceState;
+  frozen: boolean;
+  onReady?: () => void;
+}) {
   const gltf = useLoader(GLTFLoader, MODEL_URL, (loader) => {
     loader.setMeshoptDecoder(MeshoptDecoder);
   });
@@ -242,6 +251,12 @@ function MikuCatModel({ dance, frozen }: { dance: DanceState; frozen: boolean })
       (baseY.current ?? 0) + (mode.current === 'park' ? Math.sin(t * 1.4) * 0.02 : 0);
   });
 
+  // Model mount runs post-suspense, i.e. the GLB resolved: signal the
+  // stage overlay off.
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
+
   return (
     <group
       ref={group}
@@ -277,6 +292,9 @@ export default function MikuCat() {
   }, []);
   const wrapRef = useRef<HTMLDivElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Dismisses the stage overlay the moment the model mounts (post-suspense).
+  const [modelReady, setModelReady] = useState(false);
+  const handleModelReady = useCallback(() => setModelReady(true), []);
   const dance = useMemo<DanceState>(
     () => ({
       envelope: { current: 0 } as MutableRefObject<number>,
@@ -328,7 +346,7 @@ export default function MikuCat() {
         }
       }}
     >
-      <ErrorBoundary>
+      <ErrorBoundary onError={handleModelReady}>
         <Canvas
           dpr={isMobile ? [1, 1.5] : [1, 1.75]}
           camera={{ position: [0, 0.4, 5.2], fov: 36 }}
@@ -343,11 +361,16 @@ export default function MikuCat() {
           <directionalLight position={[5, 3, 2]} intensity={0.85} color="#fff4e0" />
           <directionalLight position={[-3, 2, -3]} intensity={0.45} color="#b9c8ff" />
           <Suspense fallback={null}>
-            <MikuCatModel dance={dance} frozen={reduced} />
+            <MikuCatModel dance={dance} frozen={reduced} onReady={handleModelReady} />
           </Suspense>
           <AdaptiveDpr pixelated={isMobile} />
         </Canvas>
       </ErrorBoundary>
+      {!modelReady && (
+        <div className="stage-loader" aria-hidden="true">
+          <div className="loader" />
+        </div>
+      )}
       <div className="miku-bubble" data-visible={bubbleText !== null} aria-live="polite">
         {bubbleText !== null && (
           <>

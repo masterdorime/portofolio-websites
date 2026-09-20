@@ -117,7 +117,6 @@ const useAnimationLoop = (
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-
     const seqSize = isVertical ? seqHeight : seqWidth;
 
     if (seqSize > 0) {
@@ -128,7 +127,24 @@ const useAnimationLoop = (
       track.style.transform = transformValue;
     }
 
+    // Visibility gate: skip all marquee work while off-screen. The RAF tick
+    // itself is one branch — resume is seamless (offset preserved, clock reset).
+    let visible = true;
+    const host = track.parentElement ?? track;
+    let io: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+      });
+      io.observe(host);
+    }
+
     const animate = (timestamp: number) => {
+      rafRef.current = requestAnimationFrame(animate);
+      if (!visible) {
+        lastTimestampRef.current = timestamp;
+        return;
+      }
       if (lastTimestampRef.current === null) {
         lastTimestampRef.current = timestamp;
       }
@@ -151,8 +167,6 @@ const useAnimationLoop = (
           : `translate3d(${-offsetRef.current}px, 0, 0)`;
         track.style.transform = transformValue;
       }
-
-      rafRef.current = requestAnimationFrame(animate);
     };
 
     rafRef.current = requestAnimationFrame(animate);
@@ -162,6 +176,7 @@ const useAnimationLoop = (
         cancelAnimationFrame(rafRef.current);
         rafRef.current = null;
       }
+      io?.disconnect();
       lastTimestampRef.current = null;
     };
   }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical, trackRef]);
