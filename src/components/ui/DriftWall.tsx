@@ -94,6 +94,18 @@ const DriftWall = ({
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeIdRef = useRef<string | null>(null);
   const [reduced, setReduced] = useState(false);
+  // Visibility gate: the marquee RAF runs ONLY while the wall is on screen.
+  // Off-screen the effect below returns early and cancels the loop.
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([entry]) => {
+      setVisible((prev) => (prev === entry.isIntersecting ? prev : entry.isIntersecting));
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   // True per-mount shuffle (Fisher-Yates, client-only): first paint uses
   // the deterministic prop order so SSR and hydration match, then the pool
   // reshuffles once mounted so every visit reads differently.
@@ -166,6 +178,16 @@ const DriftWall = ({
   );
 
   useEffect(() => {
+    if (!visible) return;
+    if (reduced) {
+      // Static pose, written once — no RAF at all for reduced motion.
+      for (let c = 0; c < trackRefs.current.length; c++) {
+        const el = trackRefs.current[c];
+        const meta = columnMeta[c];
+        if (el && meta) el.style.transform = `translate3d(0, ${-(offsetsRef.current[c] ?? 0)}px, 0)`;
+      }
+      return;
+    }
     const animate = (ts: number) => {
       if (lastTsRef.current === null) lastTsRef.current = ts;
       const dt = Math.min(0.05, Math.max(0, ts - lastTsRef.current) / 1000);
@@ -179,29 +201,21 @@ const DriftWall = ({
       pointerDampedRef.current.y += (targetY - pointerDampedRef.current.y) * damp;
       applyPlaneTransform(pointerDampedRef.current.x, pointerDampedRef.current.y);
 
-      if (!reduced) {
-        for (let c = 0; c < trackRefs.current.length; c++) {
-          const meta = columnMeta[c];
-          if (!meta) continue;
-          const paused = wallHoveredRef.current && pauseOnHover;
-          const factor = paused || hoveredColRef.current === c ? 0 : 1;
-          const target = baseVelocities[c] * factor;
+      for (let c = 0; c < trackRefs.current.length; c++) {
+        const meta = columnMeta[c];
+        if (!meta) continue;
+        const paused = wallHoveredRef.current && pauseOnHover;
+        const factor = paused || hoveredColRef.current === c ? 0 : 1;
+        const target = baseVelocities[c] * factor;
 
-          const ease = 1 - Math.exp(-dt / (target === 0 ? 0.16 : 0.28));
-          velocitiesRef.current[c] += (target - velocitiesRef.current[c]) * ease;
-          let next = (offsetsRef.current[c] ?? 0) + velocitiesRef.current[c] * dt;
-          next = ((next % meta.copyHeight) + meta.copyHeight) % meta.copyHeight;
-          offsetsRef.current[c] = next;
+        const ease = 1 - Math.exp(-dt / (target === 0 ? 0.16 : 0.28));
+        velocitiesRef.current[c] += (target - velocitiesRef.current[c]) * ease;
+        let next = (offsetsRef.current[c] ?? 0) + velocitiesRef.current[c] * dt;
+        next = ((next % meta.copyHeight) + meta.copyHeight) % meta.copyHeight;
+        offsetsRef.current[c] = next;
 
-          const el = trackRefs.current[c];
-          if (el) el.style.transform = `translate3d(0, ${-next}px, 0)`;
-        }
-      } else {
-        for (let c = 0; c < trackRefs.current.length; c++) {
-          const el = trackRefs.current[c];
-          const meta = columnMeta[c];
-          if (el && meta) el.style.transform = `translate3d(0, ${-(offsetsRef.current[c] ?? 0)}px, 0)`;
-        }
+        const el = trackRefs.current[c];
+        if (el) el.style.transform = `translate3d(0, ${-next}px, 0)`;
       }
 
       rafRef.current = requestAnimationFrame(animate);
@@ -213,7 +227,7 @@ const DriftWall = ({
       rafRef.current = null;
       lastTsRef.current = null;
     };
-  }, [baseVelocities, columnMeta, pauseOnHover, parallax, reduced, applyPlaneTransform]);
+  }, [baseVelocities, columnMeta, pauseOnHover, parallax, reduced, visible, applyPlaneTransform]);
 
   const activate = useCallback((id: string, index: number) => {
     activeIdRef.current = id;
@@ -274,7 +288,10 @@ const DriftWall = ({
   const renderTile = (item: DriftItem, id: string, colIndex: number) => {
     const inner = (
       <span className="drift-wall__inner">
-        <img src={item.image} alt={item.title ?? ''} loading="lazy" decoding="async" draggable={false} />
+        {/* Explicit dims = aspect-ratio hint pre-CSS/paint: kills the
+            load-time shift + the image-aspect-ratio audit. Display size is
+            still 100%/cover from CSS, so no visual change. */}
+        <img src={item.image} alt={item.title ?? ''} loading="lazy" decoding="async" draggable={false} width={tileWidth} height={tileHeight} />
         <span className="drift-wall__overlay" aria-hidden="true" />
       </span>
     );

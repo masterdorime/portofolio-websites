@@ -9,27 +9,22 @@ import * as THREE from 'three';
 
 export function flattenScene(scene: THREE.Object3D): THREE.Group {
   const flat = new THREE.Group();
-  const baked = new Set<THREE.BufferGeometry>();
   scene.updateWorldMatrix(true, true);
-  const meshes: THREE.Mesh[] = [];
   scene.traverse((obj) => {
     const mesh = obj as THREE.Mesh;
-    if (mesh.isMesh && mesh.geometry) meshes.push(mesh);
+    if (!mesh.isMesh || !mesh.geometry) return;
+    // Clone geometry before baking: the loader cache owns the originals —
+    // mutating them (or stealing the meshes) leaves remounts empty/missing.
+    // ponytail: per-mesh clone, share materials (callers clone before mutate).
+    const geo = mesh.geometry.clone();
+    geo.applyMatrix4(mesh.matrixWorld);
+    geo.computeBoundingBox();
+    geo.computeBoundingSphere();
+    const m = new THREE.Mesh(geo, mesh.material);
+    m.name = mesh.name;
+    m.visible = mesh.visible;
+    flat.add(m);
   });
-  for (const mesh of meshes) {
-    if (!baked.has(mesh.geometry)) {
-      mesh.geometry.applyMatrix4(mesh.matrixWorld);
-      mesh.geometry.computeBoundingBox();
-      mesh.geometry.computeBoundingSphere();
-      baked.add(mesh.geometry);
-    }
-    mesh.position.set(0, 0, 0);
-    mesh.quaternion.identity();
-    mesh.scale.set(1, 1, 1);
-    mesh.updateMatrix();
-    mesh.removeFromParent();
-    flat.add(mesh);
-  }
   return flat;
 }
 
