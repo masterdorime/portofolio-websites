@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://tristanedgina-portofolio.vercel.app">Live Site</a>
+  <a href="https://tristan-portfolio-omega.vercel.app/">Live Site</a>
   ·
   <a href="https://github.com/masterdorime/portofolio-websites">Source</a>
 </p>
